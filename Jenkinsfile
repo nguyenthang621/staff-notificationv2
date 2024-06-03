@@ -41,14 +41,14 @@ pipeline {
         stage('Test staff-notification-v2') {
             steps {
                 echo 'Running tests staff-notification-v2...'
-                sh 'cd /var/lib/jenkins/workspace/spoofing-test-vm54_dev/inbound-traffic/ && /opt/apache-maven-3.9.6/bin/mvn test'
+                sh 'cd /var/lib/jenkins/workspace/staff-notification-v2_main/ && /opt/apache-maven-3.9.6/bin/mvn test'
             }
         }
         stage('Build staff-notification-v2') {
             steps {
                 script {
                     echo 'Starting the build process...'
-                    sh 'cd /var/lib/jenkins/workspace/spoofing-test-vm54_dev/inbound-traffic/ && /opt/apache-maven-3.9.6/bin/mvn clean install'
+                    sh 'cd /var/lib/jenkins/workspace/staff-notification-v2_main/ && /opt/apache-maven-3.9.6/bin/mvn clean install'
                 }
             }
         }
@@ -57,7 +57,7 @@ pipeline {
                 echo 'Deploying the application...'
                 script {
                     sh 'whoami'
-                    sh 'cp /var/lib/jenkins/workspace/spoofing-test-vm54_dev/inbound-traffic/target/inbound-traffic-0.0.1-SNAPSHOT.jar /home/rnd/'
+                    sh 'cp /var/lib/jenkins/workspace/staff-notification-v2_main/target/staff-notification-v2-0.0.1-SNAPSHOT.jar /home/rnd/'
                     sh 'sudo systemctl restart staff-notification-v2'
                     // check status service
                     def serviceStatus = sh(script: 'service staff-notification-v2 status', returnStatus: true)
@@ -71,18 +71,18 @@ pipeline {
         }
 
     }
-    post {
-        always {
-            echo 'Checking service staff-notification-v2...'
-            script {
-                def serviceStatus = sh(script: 'service staff-notification-v2 status', returnStatus: true)
-                if (serviceStatus == 0) {
-                    echo 'Service staff-notification-v2 is running.'
-                } else {
-                    echo 'Service staff-notification-v2 is not running.'
-                }
-            }
+    // post {
+    //     always {
+    //         echo 'Checking service staff-notification-v2...'
+    //         script {
+    //             def serviceStatus = sh(script: 'service staff-notification-v2 status', returnStatus: true)
+    //             if (serviceStatus == 0) {
+    //                 echo 'Service staff-notification-v2 is running.'
+    //             } else {
+    //                 echo 'Service staff-notification-v2 is not running.'
+    //             }
+    //         }
  
-        }
-    }
+    //     }
+    // }
 }
