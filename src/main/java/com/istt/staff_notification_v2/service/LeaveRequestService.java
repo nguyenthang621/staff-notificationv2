@@ -67,6 +67,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			} else { // map new employee
 
 				Employee employeeExits = employeeRepo.findByEmail(leaveRequestDTO.getEmployee().getEmail());
+				System.out.println("employeeExits= " + employeeExits);
 				if (employeeExits != null) {
 					throw new BadRequestAlertException("Employees already have an account, please log in", ENTITY_NAME,
 							"User exits");

@@ -15,6 +15,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.MailDTO;
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 
@@ -45,12 +46,16 @@ class MailServiceImpl implements MailService {
 		MailDTO mailDTO = new MailDTO();
 
 		try {
+			Employee employeeSender = employeeRepo.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId()).get();
 
-			String sender = attendanceDTO.getEmployee().getEmail();
-			String department_name = attendanceDTO.getEmployee().getDepartment().getDepartment_name();
-			String receiver_name = receiver.getEmail();
+			System.out.println("employeeSender: " + employeeSender);
+			String sender = employeeSender.getEmail();
+			String department_name = employeeSender.getDepartment().getDepartment_name();
+			System.out.println("sender: " + sender + "   " + department_name);
+			String receiver_name = receiver.getFullname();
+			System.out.println(2);
 			String receiver_email = receiver.getEmail();
-
+			System.out.println(3);
 			System.err.println("department_name " + department_name);
 			System.err.println("sender " + sender);
 			System.err.println("receiver_name " + receiver_name);
@@ -72,12 +77,14 @@ class MailServiceImpl implements MailService {
 
 			context.setVariable("content", mailDTO.getContent());
 			String html = templateEngine.process("email-reason", context);
+			System.out.println("html: " + html);
 			/// send email
-			System.out.println(receiver_email + "  " + mailDTO.getFrom());
+			System.out.println(mailDTO.getFrom() + " to -> " + receiver_email);
 			helper.setTo(receiver_email);
 			helper.setText(html, true);
 			helper.setSubject(mailDTO.getSubject());
 			helper.setFrom(mailDTO.getFrom());
+			System.out.println("Sending.....");
 			javaMailSender.send(email);
 
 			System.out.println("END... Email sent success");
