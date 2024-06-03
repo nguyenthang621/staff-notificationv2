@@ -34,7 +34,8 @@ public class LeaveRequest {
 
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date request_date;
+	@Column(name = "request_date")
+	private Date requestDate;
 
 	private float duration;
 

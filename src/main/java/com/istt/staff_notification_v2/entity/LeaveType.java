@@ -18,7 +18,8 @@ public class LeaveType {
 	@Column(name = "leavetype_id", updatable = false, nullable = false)
 	private String leavetypeId;
 
-	private String leavetype_name;
+	@Column(name = "leavetype_name")
+	private String leavetypeName;
 
 	private String description;
 }

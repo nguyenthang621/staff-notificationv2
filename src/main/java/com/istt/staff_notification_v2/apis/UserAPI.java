@@ -34,6 +34,7 @@ public class UserAPI {
 		}
 		userService.create(userDTO);
 		return ResponseDTO.<UserDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(userDTO).build();
+
 	}
 
 	@GetMapping("/{id}")

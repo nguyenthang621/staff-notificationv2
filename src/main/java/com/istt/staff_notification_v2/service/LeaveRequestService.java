@@ -1,6 +1,5 @@
 package com.istt.staff_notification_v2.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.NoResultException;
@@ -15,64 +14,73 @@ import org.springframework.web.client.ResourceAccessException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
-import com.istt.staff_notification_v2.dto.AttendanceDTO;
-import com.istt.staff_notification_v2.entity.Attendance;
+import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.entity.LeaveRequest;
 import com.istt.staff_notification_v2.entity.User;
-import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
+import com.istt.staff_notification_v2.repository.LeaveRequestRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 
-public interface AttendanceService {
-	AttendanceDTO create(AttendanceDTO reasonDTO);
+public interface LeaveRequestService {
 
-	AttendanceDTO update(AttendanceDTO reason);
+	LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO);
 
-	AttendanceDTO delete(Integer id);
+	LeaveRequestDTO update(LeaveRequestDTO leaveRequest);
 
-	AttendanceDTO deleteAll(List<Integer> ids);
+	LeaveRequestDTO delete(String id);
 
-	AttendanceDTO get(String id);
+	LeaveRequestDTO get(String id);
 
 }
 
 @Service
-class AttendanceServiceImpl implements AttendanceService {
-	@Autowired
-	AttendanceRepo attendanceRepo;
+class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Autowired
-	ApplicationProperties props;
+	LeaveRequestRepo leaveRequestRepo;
 
 	@Autowired
 	EmployeeRepo employeeRepo;
 
 	@Autowired
+	ApplicationProperties props;
+
+	@Autowired
 	private UserRepo userRepo;
 
+	private static final String ENTITY_NAME = "isttLeaveRequestType";
+
 	@Override
-	public AttendanceDTO create(AttendanceDTO attendanceDTO) {
+	public LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO) {
 		try {
 			ModelMapper mapper = new ModelMapper();
-			Attendance attendance = mapper.map(attendanceDTO, Attendance.class);
-			attendance.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
+			LeaveRequest leaveRequest = mapper.map(leaveRequestDTO, LeaveRequest.class);
+			leaveRequest.setLeaveqequestId(UUID.randomUUID().toString().replaceAll("-", ""));
 
-			if (attendanceDTO.getEmployee().getEmployeeId() != null) { // map employee
-				Employee employee = employeeRepo.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId())
+			if (leaveRequestDTO.getEmployee().getEmployeeId() != null) { // map employee
+				Employee employee = employeeRepo.findByEmployeeId(leaveRequestDTO.getEmployee().getEmployeeId())
 						.orElseThrow(NoResultException::new);
-				attendance.setEmployee(employee);
+				leaveRequest.setEmployee(employee);
 			} else { // map new employee
+
+				Employee employeeExits = employeeRepo.findByEmail(leaveRequestDTO.getEmployee().getEmail());
+				if (employeeExits != null) {
+					throw new BadRequestAlertException("Employees already have an account, please log in", ENTITY_NAME,
+							"User exits");
+				}
 
 				// creatte new user
 				User user = new User();
 				String user_id = UUID.randomUUID().toString().replaceAll("-", "");
 				user.setUserId(user_id);
-				user.setUsername(attendanceDTO.getEmployee().getEmail());
+				user.setUsername(leaveRequestDTO.getEmployee().getEmail());
 				user.setPassword(new BCryptPasswordEncoder().encode("abcd456789"));
 
-				// map employee
-				Employee employee = attendanceDTO.getEmployee();
+				// map new employee
+				Employee employee = leaveRequestDTO.getEmployee();
 				employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
 				employee.setEmail(user.getUsername());
 				employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
@@ -82,11 +90,11 @@ class AttendanceServiceImpl implements AttendanceService {
 				// commit save
 				userRepo.save(user);
 
-				attendance.setEmployee(employee);
+				leaveRequest.setEmployee(employee);
 			}
 
-			attendanceRepo.save(attendance);
-			return attendanceDTO;
+			leaveRequestRepo.save(leaveRequest);
+			return leaveRequestDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
@@ -96,25 +104,19 @@ class AttendanceServiceImpl implements AttendanceService {
 	}
 
 	@Override
-	public AttendanceDTO update(AttendanceDTO reason) {
+	public LeaveRequestDTO update(LeaveRequestDTO leaveRequest) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public AttendanceDTO delete(Integer id) {
+	public LeaveRequestDTO delete(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public AttendanceDTO deleteAll(List<Integer> ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AttendanceDTO get(String id) {
+	public LeaveRequestDTO get(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

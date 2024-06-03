@@ -20,6 +20,12 @@ public class ApplicationProperties {
 		SUSPEND, STOP, ACTIVE
 	}
 
+	private List<String> STATUS_LEAVER_REQUEST = Arrays.asList("NOT_APPROVED", "APPROVED", "REJECT");
+
+	public enum StatusLeaveRequestRef {
+		NOT_APPROVED, APPROVED, REJECT
+	}
+
 	@PostConstruct
 	protected void init() {
 		System.out.println(" == Application Reloaded: " + this);

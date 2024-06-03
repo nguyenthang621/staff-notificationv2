@@ -14,36 +14,35 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
-import com.istt.staff_notification_v2.dto.LevelDTO;
-import com.istt.staff_notification_v2.entity.Level;
-import com.istt.staff_notification_v2.repository.LevelRepo;
+import com.istt.staff_notification_v2.dto.LeaveTypeDTO;
+import com.istt.staff_notification_v2.entity.LeaveType;
+import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
 
-public interface LevelService {
-	LevelDTO create(LevelDTO levelDTO);
+public interface LeaveTypeService {
+	LeaveTypeDTO create(LeaveTypeDTO leaveTypeDTO);
 
-	LevelDTO delete(String id);
-
+	LeaveTypeDTO delete(String id);
 }
 
 @Service
-class LevelServiceImpl implements LevelService {
+class LeaveTypeServiceImpl implements LeaveTypeService {
 
 	@Autowired
-	private LevelRepo levelRepo;
+	private LeaveTypeRepo leaveTypeRepo;
 
-	private static final String ENTITY_NAME = "isttLevel";
+	private static final String ENTITY_NAME = "isttLeaveType";
 
 	@Override
-	public LevelDTO create(LevelDTO levelDTO) {
+	public LeaveTypeDTO create(LeaveTypeDTO leaveTypeDTO) {
 		try {
-			if (levelRepo.findByLevelNameorLevelCode(levelDTO.getLevelName(), levelDTO.getLevelCode()).isPresent()) {
-				throw new BadRequestAlertException("Level Name or Level code already exists", ENTITY_NAME, "exist");
+			if (leaveTypeRepo.findByLeavetypeName(leaveTypeDTO.getLeavetypeName()).isPresent()) {
+				throw new BadRequestAlertException("LeaveType Name already exists", ENTITY_NAME, "exist");
 			}
 			ModelMapper mapper = new ModelMapper();
-			Level level = mapper.map(levelDTO, Level.class);
-			level.setLevelId(UUID.randomUUID().toString().replaceAll("-", ""));
-			levelRepo.save(level);
-			return levelDTO;
+			LeaveType leaveType = mapper.map(leaveTypeDTO, LeaveType.class);
+			leaveType.setLeavetypeId(UUID.randomUUID().toString().replaceAll("-", ""));
+			leaveTypeRepo.save(leaveType);
+			return leaveTypeDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
@@ -52,12 +51,12 @@ class LevelServiceImpl implements LevelService {
 	}
 
 	@Override
-	public LevelDTO delete(String id) {
+	public LeaveTypeDTO delete(String id) {
 		try {
-			Level level = levelRepo.findByLevelId(id).orElseThrow(NoResultException::new);
-			if (level != null) {
-				levelRepo.deleteById(id);
-				return new ModelMapper().map(level, LevelDTO.class);
+			LeaveType leaveType = leaveTypeRepo.findByLeavetypeId(id).orElseThrow(NoResultException::new);
+			if (leaveType != null) {
+				leaveTypeRepo.deleteById(id);
+				return new ModelMapper().map(leaveType, LeaveTypeDTO.class);
 			}
 			return null;
 		} catch (ResourceAccessException e) {

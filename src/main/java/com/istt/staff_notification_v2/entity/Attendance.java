@@ -33,4 +33,8 @@ public class Attendance {
 	private String reason;
 
 	private String status;
+
+	private String receiver;
+
+	private String approver;
 }
