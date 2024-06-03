@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class PayloadToken {
 
-	private String user_id;
+	private String userId;
 
 	private String username;
 

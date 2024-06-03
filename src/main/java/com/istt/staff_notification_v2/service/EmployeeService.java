@@ -34,7 +34,7 @@ public interface EmployeeService {
 
 	Boolean deleteAll(List<Integer> ids);
 
-	EmployeeDTO get(Integer id);
+	EmployeeDTO get(String id);
 }
 
 @Service
@@ -42,13 +42,15 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
+	private static final String ENTITY_NAME = "isttEmployee";
+
 	@Transactional
 	@Override
 	public EmployeeDTO create(EmployeeDTO employeeDTO) {
 		try {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
-			employee.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
 			employeeRepo.save(employee);
 			return employeeDTO;
 		} catch (ResourceAccessException e) {
@@ -103,9 +105,17 @@ class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public EmployeeDTO get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public EmployeeDTO get(String id) {
+		try {
+			Employee employee = employeeRepo.findByEmployeeId(id).orElseThrow(NoResultException::new);
+			EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
+			return employeeDTO;
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 }

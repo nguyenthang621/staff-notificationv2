@@ -3,6 +3,7 @@ package com.istt.staff_notification_v2.service;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,8 @@ import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.dto.UserDTO;
+import com.istt.staff_notification_v2.dto.UserResponse;
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
 
@@ -35,14 +38,14 @@ public interface UserService {
 
 	Boolean deleteAll(List<Integer> ids);
 
-	UserDTO get(Integer id);
+	UserResponse get(String id);
 }
 
 @Service
 class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserRepo useRepo;
+	private UserRepo userRepo;
 
 	@Autowired
 	ApplicationProperties props;
@@ -52,18 +55,37 @@ class UserServiceImpl implements UserService {
 	public UserDTO create(UserDTO userDTO) {
 		try {
 			ModelMapper mapper = new ModelMapper();
+			// creatte user
 			User user = mapper.map(userDTO, User.class);
-			String employee_id = UUID.randomUUID().toString().replaceAll("-", "");
-			user.setUser_id(UUID.randomUUID().toString().replaceAll("-", ""));
+			String user_id = UUID.randomUUID().toString().replaceAll("-", "");
+			user.setUserId(user_id);
 			user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-			useRepo.save(user);
-			return userDTO;
+
+			// map employee
+			Employee employee = new Employee();
+			if (user.getEmployee() != null) {
+				employee = user.getEmployee();
+				if (!props.getSTATUS_EMPLOYEE().contains(user.getEmployee().getStatus())) { // Validate if not contain
+																							// set default suspend
+					employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
+				}
+			} else {
+				employee.setEmail(user.getUsername());
+				employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
+			}
+			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
+
+			user.setEmployee(employee);
+
+			// commit save
+			userRepo.save(user);
+			return mapper.map(user, UserDTO.class);
+
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
-
 	}
 
 	@Override
@@ -103,9 +125,19 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO get(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public UserResponse get(String id) {
+		try {
+			User user = userRepo.findByUserId(id).orElseThrow(NoResultException::new);
+			UserResponse userResponse = new ModelMapper().map(user, UserResponse.class);
+			return userResponse;
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+
 	}
 
 }

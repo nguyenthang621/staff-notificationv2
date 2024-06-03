@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class EmployeeDTO {
-	private String employee_id;
+	private String employeeId;
 
 	private String fullname;
 

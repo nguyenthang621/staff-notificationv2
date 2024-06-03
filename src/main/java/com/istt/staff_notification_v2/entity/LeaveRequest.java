@@ -11,18 +11,18 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
 @Table(name = "leaveqequest")
+@EqualsAndHashCode(callSuper = false)
 public class LeaveRequest {
 
 	@Id
 	@Column(name = "leaveqequest_id", updatable = false, nullable = false)
-	private String leaveqequest_id;
+	private String leaveqequestId;
 
 	@ManyToOne
 	@JoinColumn(name = "employee_id", nullable = false)
@@ -32,7 +32,7 @@ public class LeaveRequest {
 	@JoinColumn(name = "leavetype_id")
 	private LeaveType leavetype;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date request_date;
 

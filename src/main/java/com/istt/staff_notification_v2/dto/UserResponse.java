@@ -8,14 +8,9 @@ import com.istt.staff_notification_v2.entity.Employee;
 import lombok.Data;
 
 @Data
-public class UserDTO {
-
+public class UserResponse {
 	private String id;
 	private String username;
-	private String password;
 	private Employee employee;
 	private Set<RoleDTO> roles = new HashSet<>();
-	private String accessToken;
-	private String refreshToken;
-
 }

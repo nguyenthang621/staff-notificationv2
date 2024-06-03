@@ -36,4 +36,7 @@ public class ResponseDTO<T> {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String refreshToken; // Thêm trường token
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String accessToken; // Thêm trường token
+
 }

@@ -3,10 +3,14 @@ package com.istt.staff_notification_v2.dto;
 import lombok.Data;
 
 @Data
-public class RoleDTO {
+public class LevelDTO {
 
-	private String roleId;
-	private String role;
+	private String levelId;
+
 	private String description;
+
+	private String levelName;
+
+	private Long levelCode;
 
 }

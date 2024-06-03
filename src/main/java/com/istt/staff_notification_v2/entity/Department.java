@@ -15,7 +15,8 @@ import lombok.EqualsAndHashCode;
 public class Department {
 	@Id
 	@Column(name = "department_id", updatable = false, nullable = false)
-	private String department_id;
+	private String departmentId;
 
 	private String department_name;
+
 }

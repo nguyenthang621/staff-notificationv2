@@ -30,7 +30,7 @@ class DepartmentServiceImpl implements DepartmentService {
 	public DepartmentDTO create(DepartmentDTO departmentDTO) {
 		ModelMapper mapper = new ModelMapper();
 		Department department = mapper.map(departmentDTO, Department.class);
-		department.setDepartment_id(UUID.randomUUID().toString().replaceAll("-", ""));
+		department.setDepartmentId(UUID.randomUUID().toString().replaceAll("-", ""));
 		departmentRepo.save(department);
 		return departmentDTO;
 	}

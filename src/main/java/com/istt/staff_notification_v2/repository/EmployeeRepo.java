@@ -1,5 +1,7 @@
 package com.istt.staff_notification_v2.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +19,9 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	@Query("SELECT e FROM Employee e WHERE e.email = :x ")
 	Employee findByEmail(@Param("x") String value);
+
+	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x ")
+	Optional<Employee> findByEmployeeId(@Param("x") String employeeId);
 
 	Boolean existsByEmail(String email);
 

@@ -16,21 +16,25 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "role")
+@Table(name = "level")
 @EqualsAndHashCode(callSuper = false)
-public class Role {
+public class Level {
 
 	@Id
-	@Column(name = "role_id", updatable = false, nullable = false)
-	private String roleId;
-
-	private String role;
+	@Column(name = "level_id", updatable = false, nullable = false)
+	private String levelId;
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
+	@Column(name = "levelname", nullable = false)
+	private String levelName;
+
+	@Column(name = "levelcode", nullable = false)
+	private Long levelCode;
+
 	@JsonIgnore
-	@ManyToMany(mappedBy = "roles")
-	private Set<User> users = new HashSet<>();
+	@ManyToMany(mappedBy = "levels")
+	private Set<Employee> employees = new HashSet<>();
 
 }

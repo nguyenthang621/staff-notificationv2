@@ -12,29 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
+import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
-import com.istt.staff_notification_v2.dto.RoleDTO;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
-import com.istt.staff_notification_v2.service.RoleService;
+import com.istt.staff_notification_v2.service.LevelService;
 
 @RestController
-@RequestMapping("/role")
-public class RoleAPI {
+@RequestMapping("/level")
+public class LevelAPI {
 	@Autowired
-	private RoleService roleService;
+	private LevelService levelService;
 
-	private static final String ENTITY_NAME = "isttRole";
+	private static final String ENTITY_NAME = "isttLevel";
 
 	@PostMapping("")
 //	@PreAuthorize("hasAuthority('ADMIN') and hasAuthority('USER')")
-	public ResponseDTO<RoleDTO> create(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
-
-		if (roleDTO.getRole() == null) {
-			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_role");
+	public ResponseDTO<LevelDTO> create(@RequestBody LevelDTO levelDTO) throws URISyntaxException {
+		if (levelDTO.getLevelCode() == null || levelDTO.getLevelName() == null) {
+			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
 		}
-		roleService.create(roleDTO);
-		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
+		levelService.create(levelDTO);
+		return ResponseDTO.<LevelDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(levelDTO).build();
 	}
 
 	@DeleteMapping("/{id}")
@@ -43,7 +42,8 @@ public class RoleAPI {
 		if (id == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_id");
 		}
-		roleService.delete(id);
+		levelService.delete(id);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
+
 }

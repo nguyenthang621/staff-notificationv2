@@ -1,12 +1,20 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,29 +22,30 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "user")
-@EqualsAndHashCode(callSuper = false, exclude = "employee")
+@EqualsAndHashCode(callSuper = false, exclude = { "roles", "employee" })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User {
 
 	@Id
 	@Column(name = "user_id", updatable = false, nullable = false)
-	private String user_id;
+	private String userId;
 
-	@Column(name = "username", unique = true)
+	@Column(name = "username", nullable = false, unique = true)
 	private String username;
 
-	@Column(name = "password", unique = true)
+	@Column(name = "password", nullable = false)
 	private String password;
-
-	@OneToMany(mappedBy = "user")
-	Set<UserRole> role;
 
 	private String accessToken;
 
 	private String refreshToken;
 
-	@Override
-	public String toString() {
-		return "User{" + "user_id=" + user_id + ", username='" + username + '\'' + ", password='" + password + '\''
-				+ '\'' + ", accessToken=" + accessToken + ", refreshToken='" + refreshToken + '}';
-	}
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "employeeId", referencedColumnName = "employee_id")
+	private Employee employee;
+
 }
