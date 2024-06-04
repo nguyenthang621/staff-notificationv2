@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h2>Đơn xin nghỉ phép</h2>
+    <p>Kính gửi <span th:text="${receiverName}"></span>,</p>
+
+    <p>Em là <span th:text="${senderName}"></span>, hiện đang làm việc tại phòng 
+    <span th:text="${senderDepartment}"></span>. Em viết email này để xin phép được nghỉ phép từ ngày 
+    <span th:text="${startDate}"></span> đến ngày 
+    <span th:text="${endDate}"></span> do 
+    <span th:text="${reason}"></span>.</p>
+
+    <p>Trong thời gian em vắng mặt, nếu có vấn đề khẩn cấp, Anh/Chị có thể liên lạc với em qua email hoặc số điện thoại <span th:text="${senderNumber}"></span>.</p>
+
+    <p>Em xin cam kết sẽ trở lại làm việc đúng thời gian và tiếp tục hoàn thành tốt các nhiệm vụ được giao.</p>
+
+    <p>Rất mong Anh/Chị xem xét và chấp thuận đơn xin nghỉ phép của em.</p>
+
+    <p>Em xin chân thành cảm ơn.</p>
+
+    <p>Trân trọng,</p>
+
+    <p><span th:text="${senderName}"></span></p>
+    <p><span th:text="${senderLevel}"></span></p>
+    <p><span th:text="${senderDepartment}"></span></p>
+    <p><span th:text="${senderNumber}"></span></p>
+    <p><span th:text="${senderEmail}"></span></p>
+</body>
+</html>

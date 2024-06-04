@@ -23,6 +23,9 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x ")
 	Optional<Employee> findByEmployeeId(@Param("x") String employeeId);
 
+	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x or e.email = :y")
+	Optional<Employee> findByEmployeeIdOrEmail(@Param("x") String employeeId, @Param("y") String email);
+
 	Boolean existsByEmail(String email);
 
 }

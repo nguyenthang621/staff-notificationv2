@@ -25,7 +25,6 @@ public interface MailService {
 
 @Service
 class MailServiceImpl implements MailService {
-//	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private JavaMailSender javaMailSender;
@@ -41,53 +40,54 @@ class MailServiceImpl implements MailService {
 
 	@Override
 	public void sendEmail(AttendanceDTO attendanceDTO, EmployeeDTO receiver, String subject) {
-		// User user =
-		// userRepo.findByUsernameForgotPassword(userDTO.getUsername()).orElseThrow(NoResultException::new);
 		MailDTO mailDTO = new MailDTO();
 
 		try {
 			Employee employeeSender = employeeRepo.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId()).get();
 
-			System.out.println("employeeSender: " + employeeSender);
-			String sender = employeeSender.getEmail();
-			String department_name = employeeSender.getDepartment().getDepartment_name();
-			System.out.println("sender: " + sender + "   " + department_name);
-			String receiver_name = receiver.getFullname();
-			System.out.println(2);
-			String receiver_email = receiver.getEmail();
-			System.out.println(3);
-			System.err.println("department_name " + department_name);
-			System.err.println("sender " + sender);
-			System.err.println("receiver_name " + receiver_name);
-			System.err.println("receiver_email " + receiver_email);
+			String senderEmail = employeeSender.getEmail();
+			String senderDepartment = employeeSender.getDepartment().getDepartment_name();
+			String senderName = employeeSender.getFullname();
+//			System.out.println("---> " + employeeSender.getLevels().iterator().next());
+
+			String senderLevel = "Master";
+			System.out.println(11);
+
+			Employee employeeReceiver = employeeRepo
+					.findByEmployeeIdOrEmail(receiver.getEmployeeId(), receiver.getEmail()).get();
+			String receiverName = employeeReceiver.getFullname();
+			String receiverEmail = employeeReceiver.getEmail();
 
 			mailDTO.setSubject(subject);
 
-			System.err.println("subject " + mailDTO.getSubject());
 			MimeMessage email = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(email, StandardCharsets.UTF_8.name());
 
 			mailDTO.setContent(attendanceDTO.getReason());
-			System.err.println("Content " + mailDTO.getContent());
-			// load template email with content
-			Context context = new Context();
-			context.setVariable("receiver_name", receiver_name);
-			context.setVariable("sender_name", sender);
-			context.setVariable("department_name", department_name);
 
-			context.setVariable("content", mailDTO.getContent());
-			String html = templateEngine.process("email-reason", context);
-			System.out.println("html: " + html);
-			/// send email
-			System.out.println(mailDTO.getFrom() + " to -> " + receiver_email);
-			helper.setTo(receiver_email);
+			// Load template email with content
+			Context context = new Context();
+			context.setVariable("senderName", senderName);
+			context.setVariable("senderEmail", senderEmail);
+			context.setVariable("senderDepartment", senderDepartment);
+//			context.setVariable("senderLevel", senderLevel);
+			context.setVariable("reason", attendanceDTO.getReason());
+			context.setVariable("startDate", attendanceDTO.getDate());
+			context.setVariable("endDate", attendanceDTO.getDate());
+			context.setVariable("receiverName", receiverName);
+			System.out.println(22);
+
+			String html = templateEngine.process("email", context);
+			System.out.println(33);
+
+			// Send email
+			helper.setTo(receiverEmail);
 			helper.setText(html, true);
 			helper.setSubject(mailDTO.getSubject());
-			helper.setFrom(mailDTO.getFrom());
-			System.out.println("Sending.....");
+			helper.setFrom(senderEmail);
+
 			javaMailSender.send(email);
 
-			System.out.println("END... Email sent success");
 		} catch (MessagingException e) {
 			System.out.println("Email sent with error: " + e.getMessage());
 		}
