@@ -25,6 +25,7 @@ import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
+import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
 import com.istt.staff_notification_v2.entity.LeaveType;
@@ -46,7 +47,7 @@ public interface LeaveRequestService {
 
 	LeaveRequestDTO get(String id);
 
-	Long returnCheckCount();
+	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
 }
 
@@ -221,13 +222,19 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public Long returnCheckCount() {
+	public List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
 		try {
-			Optional<Long> countOptional = leaveRequestRepo.returnCheckCount();
-			if (countOptional.isPresent())
-				return countOptional.get();
+//			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null && searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEndDate() == null) {
+			Employee employee = employeeRepo.findByEmail(searchLeaveRequest.getEmail());
+			if (employee == null)
+				throw new BadRequestAlertException("Bad request: Email nost found", ENTITY_NAME, "Not found");
+//			}
 
-			return (long) 0;
+			List<LeaveRequest> leaveRequestsOptional = leaveRequestRepo.findByEmployee(employee).get();
+
+			return leaveRequestsOptional.stream()
+					.map(leaveRequest -> new ModelMapper().map(leaveRequest, LeaveRequestDTO.class))
+					.collect(Collectors.toList());
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {

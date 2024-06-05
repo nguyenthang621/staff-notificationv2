@@ -1,19 +1,21 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
+import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
+import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.service.LeaveRequestService;
 
 @RestController
@@ -49,10 +51,10 @@ public class LeaveRequestAPI {
 				.data(responseLeaveRequest).build();
 	}
 
-	@GetMapping("/countRequest")
-	public ResponseDTO<Long> get() {
-		return ResponseDTO.<Long>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.returnCheckCount()).build();
+	@PostMapping("/getLeaveRequest")
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest(@RequestBody SearchLeaveRequest searchLeaveRequest) {
+		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
 
 }
