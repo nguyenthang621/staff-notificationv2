@@ -32,7 +32,6 @@ public class EmployeeAPI {
 
 	@PostMapping("")
 	public ResponseDTO<EmployeeDTO> create(@RequestBody @Valid EmployeeDTO employeeDTO) throws URISyntaxException {
-		System.out.println("email: " + employeeDTO.getEmail());
 		if (employeeDTO.getEmail() == null || employeeDTO.getFullname() == null
 				|| employeeDTO.getDepartment() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing");

@@ -20,10 +20,10 @@ public class ApplicationProperties {
 		SUSPEND, STOP, ACTIVE
 	}
 
-	private List<String> STATUS_LEAVER_REQUEST = Arrays.asList("NOT_APPROVED", "APPROVED", "REJECT");
+	private List<String> STATUS_LEAVER_REQUEST = Arrays.asList("WAITING", "NOT_APPROVED", "APPROVED", "REJECT");
 
 	public static enum StatusLeaveRequestRef {
-		NOT_APPROVED, APPROVED, REJECT
+		WAITING, NOT_APPROVED, APPROVED, REJECT
 	}
 
 	@PostConstruct

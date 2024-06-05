@@ -51,4 +51,7 @@ public class LeaveRequest {
 	@Column(name = "start_date")
 	private Date startDate;
 
+	@JoinColumn(name = "employee_response")
+	private String responseBy;
+
 }

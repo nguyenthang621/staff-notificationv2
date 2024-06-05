@@ -106,17 +106,18 @@ class EmployeeServiceImpl implements EmployeeService {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
-
 			Set<Level> levels = new HashSet<Level>();
 			for (Level level : employeeDTO.getLevels()) {
 				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
 			}
+			System.out.println(1111);
 			employee.setLevels(levels);
 
 			if (!props.getSTATUS_EMPLOYEE().contains(employee.getStatus())) {
 				employee.setStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()));
 			}
 			filterEmployeeDependence(employee);
+
 			employee.setEmployeeDependence(filterEmployeeDependence(employee));
 			employeeRepo.save(employee);
 
@@ -133,7 +134,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			user.setEmployee(employee);
 
 			// commit save
-//			userRepo.save(user);
+			userRepo.save(user);
 			return employeeDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
@@ -180,15 +181,6 @@ class EmployeeServiceImpl implements EmployeeService {
 			mapper.createTypeMap(EmployeeDTO.class, Employee.class).setProvider(p -> employeeRepo
 					.findByEmployeeId(employeeDTO.getEmployeeId()).orElseThrow(NoResultException::new));
 			Employee employee = mapper.map(employeeDTO, Employee.class);
-
-//			for (String id : employeeDTO.getEmployeeDependence()) {
-//
-//				System.out.println("id >>>>>" + id);
-//			}
-			for (String id : employee.getEmployeeDependence()) {
-
-				System.out.println("id >>>>>" + id);
-			}
 			employeeRepo.save(employee);
 			return employeeDTO;
 		} catch (ResourceAccessException e) {

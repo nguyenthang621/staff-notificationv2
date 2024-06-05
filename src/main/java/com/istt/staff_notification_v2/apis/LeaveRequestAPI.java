@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
 import com.istt.staff_notification_v2.service.LeaveRequestService;
 
 @RestController
@@ -34,6 +35,17 @@ public class LeaveRequestAPI {
 		leaveRequestService.create(mailRequestDTO);
 		return ResponseDTO.<MailRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(mailRequestDTO)
 				.build();
+	}
+
+	@PostMapping("/changeStatusLeaveRequest")
+	public ResponseDTO<ResponseLeaveRequest> changeStatusLeaveRequest(
+			@RequestBody ResponseLeaveRequest responseLeaveRequest) throws URISyntaxException {
+		if (responseLeaveRequest.getLeaveqequestId() == null || responseLeaveRequest.getStatus() == null) {
+			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_data");
+		}
+		leaveRequestService.changeStatusLeaveRequest(responseLeaveRequest);
+		return ResponseDTO.<ResponseLeaveRequest>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(responseLeaveRequest).build();
 	}
 
 }
