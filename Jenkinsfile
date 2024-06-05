@@ -61,9 +61,9 @@ pipeline {
                     // check status service
                     def serviceStatus = sh(script: 'service staff-notification-v2 status', returnStatus: true)
                     if (serviceStatus == 0) {
-                        echo 'Service inbound start success.'
+                        echo 'Service staff-notification-v2 start success.'
                     } else {
-                        error 'Service inbound start fail.'
+                        error 'Service staff-notification-v2 start fail.'
                     }
                 }
             }
