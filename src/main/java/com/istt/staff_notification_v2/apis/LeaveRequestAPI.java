@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +47,12 @@ public class LeaveRequestAPI {
 		leaveRequestService.changeStatusLeaveRequest(responseLeaveRequest);
 		return ResponseDTO.<ResponseLeaveRequest>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(responseLeaveRequest).build();
+	}
+
+	@GetMapping("/countRequest")
+	public ResponseDTO<Long> get() {
+		return ResponseDTO.<Long>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(leaveRequestService.returnCheckCount()).build();
 	}
 
 }

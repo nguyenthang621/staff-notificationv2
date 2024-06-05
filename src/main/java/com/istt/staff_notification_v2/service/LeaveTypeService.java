@@ -22,6 +22,7 @@ public interface LeaveTypeService {
 	LeaveTypeDTO create(LeaveTypeDTO leaveTypeDTO);
 
 	LeaveTypeDTO delete(String id);
+
 }
 
 @Service

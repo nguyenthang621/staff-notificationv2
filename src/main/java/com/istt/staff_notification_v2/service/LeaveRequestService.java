@@ -46,6 +46,8 @@ public interface LeaveRequestService {
 
 	LeaveRequestDTO get(String id);
 
+	Long returnCheckCount();
+
 }
 
 @Service
@@ -211,6 +213,21 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 			return responseLeaveRequest;
 
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	public Long returnCheckCount() {
+		try {
+			Optional<Long> countOptional = leaveRequestRepo.returnCheckCount();
+			if (countOptional.isPresent())
+				return countOptional.get();
+
+			return (long) 0;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
