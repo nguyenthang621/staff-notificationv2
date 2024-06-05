@@ -3,6 +3,8 @@ package com.istt.staff_notification_v2.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +15,18 @@ import com.istt.staff_notification_v2.entity.Employee;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, String> {
-//	@Query("SELECT e FROM Employee e WHERE e.username LIKE :x ")
-//	Page<Employee> searchByUsername(@Param("x") String s);
-//
-//	@Query("SELECT e FROM Employee e WHERE e.username LIKE :x ")
-//	Page<Employee> find(@Param("x") String value);
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x ")
+	Page<Employee> searchByFullname(@Param("x") String s, Pageable pageable);
+
+	@Query("SELECT u FROM Employee u WHERE u.email LIKE :x ")
+	Page<Employee> searchByEmail(@Param("x") String s, Pageable pageable);
+
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.email LIKE :y ")
+	Page<Employee> searchByFullnameAndEmail(@Param("x") String name, @Param("y") String email, Pageable pageable);
+
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y ")
+	Page<Employee> searchByFullnameAndDepartment(@Param("x") String name, @Param("y") String department,
+			Pageable pageable);
 
 	@Query("SELECT e FROM Employee e WHERE e.email = :x ")
 	Employee findByEmail(@Param("x") String value);

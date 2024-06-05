@@ -17,6 +17,7 @@ public class Department {
 	@Column(name = "department_id", updatable = false, nullable = false)
 	private String departmentId;
 
-	private String department_name;
+	@Column(name = "department_name", nullable = false, unique = true)
+	private String departmentName;
 
 }

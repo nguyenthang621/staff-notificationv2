@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.DepartmentDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.service.DepartmentService;
 
 @RestController
@@ -44,6 +46,11 @@ public class DepartmentAPI {
 		}
 		departmentService.delete(id);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+	}
+
+	@PostMapping("/search")
+	public ResponseDTO<List<DepartmentDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
+		return departmentService.search(searchDTO);
 	}
 
 }

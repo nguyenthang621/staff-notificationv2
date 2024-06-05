@@ -1,6 +1,9 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.LevelService;
@@ -44,6 +48,11 @@ public class LevelAPI {
 		}
 		levelService.delete(id);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+	}
+
+	@PostMapping("/search")
+	public ResponseDTO<List<LevelDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
+		return levelService.search(searchDTO);
 	}
 
 }

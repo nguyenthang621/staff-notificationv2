@@ -1,19 +1,26 @@
 package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -24,6 +31,8 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.Level;
 import com.istt.staff_notification_v2.entity.User;
@@ -51,6 +60,8 @@ public interface EmployeeService {
 	List<String> filterEmployeeDependence(Employee employee);
 
 	List<EmployeeDTO> getEmployeeDependence(String employeeId);
+
+	ResponseDTO<List<EmployeeDTO>> search(SearchDTO searchDTO);
 }
 
 @Service
@@ -245,6 +256,64 @@ class EmployeeServiceImpl implements EmployeeService {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	public ResponseDTO<List<EmployeeDTO>> search(SearchDTO searchDTO) {
+		List<Sort.Order> orders = Optional.ofNullable(searchDTO.getOrders()).orElseGet(Collections::emptyList).stream()
+				.map(order -> {
+					if (order.getOrder().equals(SearchDTO.ASC))
+						return Sort.Order.asc(order.getProperty());
+
+					return Sort.Order.desc(order.getProperty());
+				}).collect(Collectors.toList());
+		Pageable pageable = PageRequest.of(searchDTO.getPage(), searchDTO.getSize(), Sort.by(orders));
+
+		String email = null;
+		String department = null;
+
+		if (StringUtils.hasText(searchDTO.getFilterBys().get("email"))) {
+			System.out.println("1 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
+			email = String.valueOf(searchDTO.getFilterBys().get("email"));
+
+			Page<Employee> page = employeeRepo.searchByFullnameAndEmail(searchDTO.getValue(), email, pageable);
+
+			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+			for (Employee employee : page.getContent()) {
+				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
+				employeeDTOs.add(employeeDTO);
+			}
+			ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
+			responseDTO.setData(employeeDTOs);
+
+			return responseDTO;
+		} else if (StringUtils.hasText(searchDTO.getFilterBys().get("department_name"))) {
+			System.out.println("3 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
+			department = String.valueOf(searchDTO.getFilterBys().get("department_name"));
+			Page<Employee> page = employeeRepo.searchByFullnameAndDepartment(searchDTO.getValue(), department,
+					pageable);
+
+			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+			for (Employee employee : page.getContent()) {
+				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
+				employeeDTOs.add(employeeDTO);
+			}
+			ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
+			responseDTO.setData(employeeDTOs);
+			return responseDTO;
+
+		} else {
+			System.out.println("5");
+			Page<Employee> page = employeeRepo.searchByFullname(searchDTO.getValue(), pageable);
+			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+			for (Employee employee : page.getContent()) {
+				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
+				employeeDTOs.add(employeeDTO);
+			}
+			ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
+			responseDTO.setData(employeeDTOs);
+			return responseDTO;
 		}
 	}
 

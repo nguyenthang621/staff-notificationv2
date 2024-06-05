@@ -43,7 +43,7 @@ class MailServiceImpl implements MailService {
 					.get();
 
 			String senderEmail = employeeSender.getEmail();
-			String senderDepartment = employeeSender.getDepartment().getDepartment_name();
+			String senderDepartment = employeeSender.getDepartment().getDepartmentName();
 			String senderName = employeeSender.getFullname();
 //			System.out.println("---> " + employeeSender.getLevels().iterator().next());
 

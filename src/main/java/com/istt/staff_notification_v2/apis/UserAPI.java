@@ -59,7 +59,6 @@ public class UserAPI {
 	}
 
 	@PostMapping("/search")
-//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<List<UserResponse>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return userService.search(searchDTO);
 	}

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.service.EmployeeService;
 
 @RestController
@@ -75,5 +76,11 @@ public class EmployeeAPI {
 		employeeService.update(employeeDTO);
 		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeDTO).build();
 
+	}
+
+	@PostMapping("/search")
+//	 @PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseDTO<List<EmployeeDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
+		return employeeService.search(searchDTO);
 	}
 }
