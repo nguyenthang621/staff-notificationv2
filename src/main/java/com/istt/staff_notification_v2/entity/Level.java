@@ -37,4 +37,7 @@ public class Level {
 	@ManyToMany(mappedBy = "levels")
 	private Set<Employee> employees = new HashSet<>();
 
+	@Column(name = "leveldependency")
+	private String levelDependency;
+
 }

@@ -27,13 +27,11 @@ public class MailAPI {
 			for (int i = 0; i < mailRequestDTO.getRecceiverList().size(); i++) {
 				EmployeeDTO receiver = new EmployeeDTO();
 				receiver = mailRequestDTO.getRecceiverList().get(i);
-				mailService.sendEmail(mailRequestDTO.getAttendanceDTO(), receiver, mailRequestDTO.getSubject());
-
+				mailService.sendEmail(mailRequestDTO.getLeaveRequestDTO(), receiver, mailRequestDTO.getSubject());
 			}
 			return ResponseEntity.status(HttpStatus.OK).body("Email sent successfully");
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email");
 
 		}

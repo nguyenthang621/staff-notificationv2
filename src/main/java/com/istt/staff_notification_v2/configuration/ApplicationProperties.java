@@ -16,13 +16,13 @@ public class ApplicationProperties {
 
 	private List<String> STATUS_EMPLOYEE = Arrays.asList("SUSPEND", "STOP", "ACTIVE");
 
-	public enum StatusEmployeeRef {
+	public static enum StatusEmployeeRef {
 		SUSPEND, STOP, ACTIVE
 	}
 
 	private List<String> STATUS_LEAVER_REQUEST = Arrays.asList("NOT_APPROVED", "APPROVED", "REJECT");
 
-	public enum StatusLeaveRequestRef {
+	public static enum StatusLeaveRequestRef {
 		NOT_APPROVED, APPROVED, REJECT
 	}
 

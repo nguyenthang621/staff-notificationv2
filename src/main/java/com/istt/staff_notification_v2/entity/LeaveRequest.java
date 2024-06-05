@@ -47,4 +47,8 @@ public class LeaveRequest {
 	@Column(columnDefinition = "TEXT")
 	private String anrreason;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "start_date")
+	private Date startDate;
+
 }

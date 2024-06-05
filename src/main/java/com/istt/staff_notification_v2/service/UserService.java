@@ -24,7 +24,9 @@ import org.springframework.web.client.ResourceAccessException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
+import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.dto.UserResponse;
@@ -63,6 +65,8 @@ class UserServiceImpl implements UserService {
 	@Autowired
 	ApplicationProperties props;
 
+	private static final String ENTITY_NAME = "isttUser";
+
 	@Override
 	@Transactional
 	public UserDTO create(UserDTO userDTO) {
@@ -74,20 +78,24 @@ class UserServiceImpl implements UserService {
 			user.setUserId(user_id);
 			user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
 
+			if (userRepo.findByUsername(userDTO.getUsername()).isPresent()) {
+				throw new BadRequestAlertException("Bad request: USER already exists", ENTITY_NAME, "USER exists");
+
+			}
 			// map employee
 			Employee employee = new Employee();
-			if (user.getEmployee() != null) {
-				employee = user.getEmployee();
-				if (!props.getSTATUS_EMPLOYEE().contains(user.getEmployee().getStatus())) { // Validate if not contain
-																							// set default suspend
-					employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
-				}
-			} else {
+			if (user.getEmployee() == null) {
+				throw new BadRequestAlertException("Bad request: Missing employee", ENTITY_NAME, "Missing employee");
+			}
+			employee = user.getEmployee();
+			if (!props.getSTATUS_EMPLOYEE().contains(user.getEmployee().getStatus())) { // Validate if status not
+				// contain
+				// set default status
 				employee.setEmail(user.getUsername());
-				employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
+				employee.setStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()));
 			}
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
-
+			System.out.println("employee: " + employee);
 			user.setEmployee(employee);
 
 			// commit save

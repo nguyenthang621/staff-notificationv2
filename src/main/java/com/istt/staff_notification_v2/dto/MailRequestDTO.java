@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class MailRequestDTO {
-	private AttendanceDTO attendanceDTO;
+	private LeaveRequestDTO leaveRequestDTO;
 	private List<EmployeeDTO> recceiverList;
 	private String subject;
 }

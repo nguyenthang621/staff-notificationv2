@@ -1,13 +1,19 @@
 package com.istt.staff_notification_v2.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -16,17 +22,22 @@ import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
+import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusLeaveRequestRef;
+import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
+import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
-import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.entity.LeaveType;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LeaveRequestRepo;
+import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 
 public interface LeaveRequestService {
 
-	LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO);
+//	LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO);
+	LeaveRequestDTO create(@RequestBody MailRequestDTO mailRequestDTO);
 
 	LeaveRequestDTO update(LeaveRequestDTO leaveRequest);
 
@@ -51,11 +62,36 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private MailService mailService;
+
+	@Autowired
+	private LeaveTypeRepo leaveTypeRepo;
+
 	private static final String ENTITY_NAME = "isttLeaveRequestType";
 
-	@Override
-	public LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO) {
+	private ResponseEntity<String> sendNotification(@RequestBody MailRequestDTO mailRequestDTO) {
+
 		try {
+			System.err.println(mailRequestDTO.getRecceiverList().size());
+			for (int i = 0; i < mailRequestDTO.getRecceiverList().size(); i++) {
+				EmployeeDTO receiver = new EmployeeDTO();
+				receiver = mailRequestDTO.getRecceiverList().get(i);
+				mailService.sendEmail(mailRequestDTO.getLeaveRequestDTO(), receiver, mailRequestDTO.getSubject());
+			}
+			return ResponseEntity.status(HttpStatus.OK).body("Email sent successfully");
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email");
+
+		}
+
+	}
+
+	@Override
+	public LeaveRequestDTO create(@RequestBody MailRequestDTO mailRequestDTO) {
+		try {
+			LeaveRequestDTO leaveRequestDTO = mailRequestDTO.getLeaveRequestDTO();
 			ModelMapper mapper = new ModelMapper();
 			LeaveRequest leaveRequest = mapper.map(leaveRequestDTO, LeaveRequest.class);
 			leaveRequest.setLeaveqequestId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -64,37 +100,43 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				Employee employee = employeeRepo.findByEmployeeId(leaveRequestDTO.getEmployee().getEmployeeId())
 						.orElseThrow(NoResultException::new);
 				leaveRequest.setEmployee(employee);
-			} else { // map new employee
 
-				Employee employeeExits = employeeRepo.findByEmail(leaveRequestDTO.getEmployee().getEmail());
-				System.out.println("employeeExits= " + employeeExits);
-				if (employeeExits != null) {
-					throw new BadRequestAlertException("Employees already have an account, please log in", ENTITY_NAME,
-							"User exits");
+				if (leaveRequestDTO.getLeavetype().getLeavetypeId() == null)
+					throw new BadRequestAlertException("Bad request: Missing LeaveRequestId", ENTITY_NAME, "Missing");
+
+				LeaveType leaveType = leaveTypeRepo.findByLeavetypeId(leaveRequestDTO.getLeavetype().getLeavetypeId())
+						.orElseThrow(NoResultException::new);
+
+				if (leaveType.isSpecialType()) {
+					leaveRequest
+							.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal()));
+				} else {
+					leaveRequest.setStatus(
+							props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.NOT_APPROVED.ordinal()));
 				}
 
-				// creatte new user
-				User user = new User();
-				String user_id = UUID.randomUUID().toString().replaceAll("-", "");
-				user.setUserId(user_id);
-				user.setUsername(leaveRequestDTO.getEmployee().getEmail());
-				user.setPassword(new BCryptPasswordEncoder().encode("abcd456789"));
+//				Handle send mail:
+				Optional<List<Employee>> employeesRaw = employeeRepo
+						.findByEmployeeIds(employee.getEmployeeDependence());
+				System.out.println("level: " + employee.getLevels().stream().collect(Collectors.toList()).getClass());
 
-				// map new employee
-				Employee employee = leaveRequestDTO.getEmployee();
-				employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
-				employee.setEmail(user.getUsername());
-				employee.setStatus(props.getSTATUS_EMPLOYEE().get(0));
+				if (employeesRaw.isEmpty())
+					throw new BadRequestAlertException("Bad request: Not found employee in employee` department",
+							ENTITY_NAME, "Not found");
+//				List employees = employeesRaw.get().stream().filter(e -> Integer.valueOf(e.getLevels().stream().sorted())).collect(Collectors.toList());
+				List<Employee> employees = new ArrayList<>();
 
-				user.setEmployee(employee);
+//				for (Employee e : employeesRaw.get()) {
+//					for (Level l : e.getLevels()) {
+//						System.out.println(e.getEmail() + "-l: " + l.getLevelCode() + " " + l.getLevelName());
+//					}
+//				}
 
-				// commit save
-				userRepo.save(user);
-
-				leaveRequest.setEmployee(employee);
+			} else {
+				throw new BadRequestAlertException("Bad request: Employee not found!", ENTITY_NAME, "Not Found!");
 			}
 
-			leaveRequestRepo.save(leaveRequest);
+//			leaveRequestRepo.save(leaveRequest);
 			return leaveRequestDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();

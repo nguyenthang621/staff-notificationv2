@@ -12,15 +12,14 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailDTO;
 import com.istt.staff_notification_v2.entity.Employee;
-import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 
 public interface MailService {
-	void sendEmail(AttendanceDTO attendanceDTO, EmployeeDTO receiver, String subject);
+	void sendEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO receiver, String subject);
 }
 
 @Service
@@ -35,15 +34,13 @@ class MailServiceImpl implements MailService {
 	@Autowired
 	EmployeeRepo employeeRepo;
 
-	@Autowired
-	AttendanceRepo attendanceRepo;
-
 	@Override
-	public void sendEmail(AttendanceDTO attendanceDTO, EmployeeDTO receiver, String subject) {
+	public void sendEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO receiver, String subject) {
 		MailDTO mailDTO = new MailDTO();
 
 		try {
-			Employee employeeSender = employeeRepo.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId()).get();
+			Employee employeeSender = employeeRepo.findByEmployeeId(leaveRequestDTO.getEmployee().getEmployeeId())
+					.get();
 
 			String senderEmail = employeeSender.getEmail();
 			String senderDepartment = employeeSender.getDepartment().getDepartment_name();
@@ -63,7 +60,7 @@ class MailServiceImpl implements MailService {
 			MimeMessage email = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(email, StandardCharsets.UTF_8.name());
 
-			mailDTO.setContent(attendanceDTO.getReason());
+			mailDTO.setContent(leaveRequestDTO.getReason());
 
 			// Load template email with content
 			Context context = new Context();
@@ -71,9 +68,9 @@ class MailServiceImpl implements MailService {
 			context.setVariable("senderEmail", senderEmail);
 			context.setVariable("senderDepartment", senderDepartment);
 //			context.setVariable("senderLevel", senderLevel);
-			context.setVariable("reason", attendanceDTO.getReason());
-			context.setVariable("startDate", attendanceDTO.getDate());
-			context.setVariable("endDate", attendanceDTO.getDate());
+			context.setVariable("reason", leaveRequestDTO.getReason());
+			context.setVariable("startDate", leaveRequestDTO.getStartDate());
+			context.setVariable("endDate", leaveRequestDTO.getStartDate());
 			context.setVariable("receiverName", receiverName);
 			System.out.println(22);
 

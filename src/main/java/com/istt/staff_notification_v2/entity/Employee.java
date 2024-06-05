@@ -2,10 +2,12 @@ package com.istt.staff_notification_v2.entity;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.istt.staff_notification_v2.utils.StringListConverter;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -61,7 +64,11 @@ public class Employee {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date offdate;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@Convert(converter = StringListConverter.class)
+	@Column(name = "employeeDependence")
+	private List<String> employeeDependence;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_level", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "level_id"))
 	private Set<Level> levels = new HashSet<>();
 

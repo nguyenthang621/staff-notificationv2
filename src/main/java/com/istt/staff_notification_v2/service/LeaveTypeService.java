@@ -40,7 +40,9 @@ class LeaveTypeServiceImpl implements LeaveTypeService {
 			}
 			ModelMapper mapper = new ModelMapper();
 			LeaveType leaveType = mapper.map(leaveTypeDTO, LeaveType.class);
+			System.out.println("leaveType: " + leaveType);
 			leaveType.setLeavetypeId(UUID.randomUUID().toString().replaceAll("-", ""));
+
 			leaveTypeRepo.save(leaveType);
 			return leaveTypeDTO;
 		} catch (ResourceAccessException e) {

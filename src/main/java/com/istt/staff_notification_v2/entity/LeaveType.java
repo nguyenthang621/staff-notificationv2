@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,4 +24,9 @@ public class LeaveType {
 	private String leavetypeName;
 
 	private String description;
+
+	@Column(name = "special_type", nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean specialType;
+
 }
