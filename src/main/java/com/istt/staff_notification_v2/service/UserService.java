@@ -27,7 +27,9 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
+import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.dto.UpdatePassword;
 import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.dto.UserResponse;
 import com.istt.staff_notification_v2.entity.Employee;
@@ -51,9 +53,9 @@ public interface UserService {
 
 	UserResponse get(String id);
 
-	UserResponse updatePassword(UserDTO userDTO);
+	UserResponse updatePassword(UpdatePassword updatePassword);
 
-	List<UserResponse> search(SearchDTO searchDTO);
+	ResponseDTO<List<UserResponse>> search(SearchDTO searchDTO);
 }
 
 @Service
@@ -163,10 +165,14 @@ class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public UserResponse updatePassword(UserDTO userDTO) {
+	public UserResponse updatePassword(UpdatePassword updatePassword) {
 		try {
-			User user = userRepo.findByUserId(userDTO.getId()).orElseThrow(NoResultException::new);
-			user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+			User user = userRepo.findByUserId(updatePassword.getUserId()).orElseThrow(NoResultException::new);
+			if (updatePassword.getNewPassword().equals(updatePassword.getConfirmPassword())) {
+				throw new BadRequestAlertException("Bad request: Password do not match", ENTITY_NAME,
+						"Invalid password");
+			}
+			user.setPassword(new BCryptPasswordEncoder().encode(updatePassword.getNewPassword()));
 			userRepo.save(user);
 			UserResponse userResponse = new ModelMapper().map(user, UserResponse.class);
 			return userResponse;
@@ -180,7 +186,7 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserResponse> search(SearchDTO searchDTO) {
+	public ResponseDTO<List<UserResponse>> search(SearchDTO searchDTO) {
 		try {
 			List<Sort.Order> orders = Optional.ofNullable(searchDTO.getOrders()).orElseGet(Collections::emptyList)
 					.stream().map(order -> {
@@ -194,12 +200,6 @@ class UserServiceImpl implements UserService {
 
 			Page<User> page = userRepo.search(searchDTO.getValue(), pageable);
 
-			// Chuyển đổi từ Page<User> sang List<UserDTO>
-//			List<UserDTO> userDTOList = page.getContent().stream().map(user -> convert(user))
-//					.collect(Collectors.toList());
-//			List<UserDTO> userDTOList = page.getContent().stream().map(user -> new UserDTO())
-//					.collect(Collectors.toList());
-
 			List<UserResponse> userDTOList = new ArrayList<>();
 
 			for (User user : page.getContent()) {
@@ -207,7 +207,10 @@ class UserServiceImpl implements UserService {
 				userDTOList.add(userResponse);
 			}
 
-			return userDTOList;
+			ResponseDTO<List<UserResponse>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
+			responseDTO.setData(userDTOList);
+
+			return responseDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
