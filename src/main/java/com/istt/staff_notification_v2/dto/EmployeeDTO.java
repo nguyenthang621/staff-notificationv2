@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +39,8 @@ public class EmployeeDTO {
 	private Set<Level> levels = new HashSet<>();
 
 	private List<String> employeeDependence;
+
+	private List<EmployeeDTO> subordinates = new ArrayList<>();
 
 //	@JsonBackReference
 	private User user;

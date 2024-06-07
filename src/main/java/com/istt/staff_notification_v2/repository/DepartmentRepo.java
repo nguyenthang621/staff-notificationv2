@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,5 +21,8 @@ public interface DepartmentRepo extends JpaRepository<Department, String> {
 	Optional<Department> findByDepartmentName(@Param("x") String name);
 
 	Department searchByDepartmentId(String id);
+
+	@Query("SELECT d FROM Department d")
+	Optional<List<Department>> getAll();
 
 }

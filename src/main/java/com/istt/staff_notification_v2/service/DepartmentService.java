@@ -50,6 +50,7 @@ class DepartmentServiceImpl implements DepartmentService {
 			ModelMapper mapper = new ModelMapper();
 			Department department = mapper.map(departmentDTO, Department.class);
 			department.setDepartmentId(UUID.randomUUID().toString().replaceAll("-", ""));
+			department.setDepartmentName(departmentDTO.getDepartmentName().toUpperCase());
 			departmentRepo.save(department);
 			return departmentDTO;
 		} catch (ResourceAccessException e) {

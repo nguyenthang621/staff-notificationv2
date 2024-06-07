@@ -83,4 +83,10 @@ public class EmployeeAPI {
 	public ResponseDTO<List<EmployeeDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return employeeService.search(searchDTO);
 	}
+
+	@GetMapping("/employeeRelationship")
+	public ResponseDTO<List<EmployeeDTO>> getEmployeeRelationship() {
+		return ResponseDTO.<List<EmployeeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(employeeService.getEmployeeRelationship()).build();
+	}
 }

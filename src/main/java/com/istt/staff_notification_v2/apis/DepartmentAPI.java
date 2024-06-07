@@ -31,7 +31,7 @@ public class DepartmentAPI {
 	@PostMapping("")
 	public ResponseDTO<DepartmentDTO> create(@RequestBody @Valid DepartmentDTO departmentDTO)
 			throws URISyntaxException {
-		if (departmentDTO.getDepartment_name() == null) {
+		if (departmentDTO.getDepartmentName() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missin_name");
 		}
 		departmentService.create(departmentDTO);

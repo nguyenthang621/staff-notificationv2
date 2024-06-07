@@ -47,4 +47,6 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	@Query("SELECT e FROM Employee e WHERE e.employeeId in :ids")
 	Optional<List<Employee>> findByEmployeeIds(@Param("ids") List<String> employeeIds);
 
+	@Query("SELECT e FROM Employee e WHERE e.status = :x")
+	Optional<List<Employee>> getByEmployeeStatus(@Param("x") String x);
 }

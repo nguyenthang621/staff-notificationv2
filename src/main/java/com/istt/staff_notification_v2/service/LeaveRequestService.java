@@ -132,7 +132,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			// Handle send mail:
 //			Optional<List<Employee>> employeeDependences = employeeRepo
 //					.findByEmployeeIds(employee.getEmployeeDependence());
-			System.out.println("length list: " + mailRequestDTO.getRecceiverList().size());
+
 			Optional<List<Employee>> employeeDependences = employeeRepo.findByEmployeeIds(mailRequestDTO
 					.getRecceiverList().stream().map(item -> item.getEmployeeId()).collect(Collectors.toList()));
 
