@@ -34,6 +34,8 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
+import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Department;
@@ -68,7 +70,9 @@ public interface EmployeeService {
 
 	ResponseDTO<List<EmployeeDTO>> search(SearchDTO searchDTO);
 
-	List<EmployeeDTO> getEmployeeRelationship();
+	List<List<EmployeeRelationshipResponse>> getEmployeeRelationship();
+
+	List<EmployeeDTO> test();
 
 //	NodeDepartment buildDepartmentTree(List<Employee> employees);
 
@@ -105,7 +109,8 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<String> filterEmployeeDependence(Employee employeeCurrent) { // return list dependence employeeId
-		Optional<List<Employee>> employeesRaw = employeeRepo.findAllByDepartmentId(employeeCurrent.getDepartment());
+		Optional<List<Employee>> employeesRaw = employeeRepo.findAllByDepartmentId(employeeCurrent.getDepartment(),
+				StatusEmployeeRef.ACTIVE.toString());
 		if (employeesRaw.isEmpty())
 			throw new BadRequestAlertException("Bad request: Not found employee in employee` department", ENTITY_NAME,
 					"Not found");
@@ -128,11 +133,11 @@ class EmployeeServiceImpl implements EmployeeService {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
+
 			Set<Level> levels = new HashSet<Level>();
-			for (Level level : employeeDTO.getLevels()) {
+			for (LevelDTO level : employeeDTO.getLevels()) {
 				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
 			}
-			System.out.println(1111);
 			employee.setLevels(levels);
 
 			if (!props.getSTATUS_EMPLOYEE().contains(employee.getStatus())) {
@@ -199,10 +204,20 @@ class EmployeeServiceImpl implements EmployeeService {
 				}
 			}
 			ModelMapper mapper = new ModelMapper();
+			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
+					.orElseThrow(NoResultException::new);
 
 			mapper.createTypeMap(EmployeeDTO.class, Employee.class).setProvider(p -> employeeRepo
 					.findByEmployeeId(employeeDTO.getEmployeeId()).orElseThrow(NoResultException::new));
+
 			Employee employee = mapper.map(employeeDTO, Employee.class);
+
+			Set<Level> levels = new HashSet<Level>();
+			for (LevelDTO level : employeeDTO.getLevels()) {
+				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
+			}
+			employee.setLevels(levels);
+
 			employeeRepo.save(employee);
 			return employeeDTO;
 		} catch (ResourceAccessException e) {
@@ -216,9 +231,10 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	@Override
 	public Boolean delete(String id) {
-		Employee employee = employeeRepo.findById(id).orElseThrow(NoResultException::new);
+		Employee employee = employeeRepo.findByEmployeeId(id).orElseThrow(NoResultException::new);
 		if (employee != null) {
-			employeeRepo.delete(employee);
+			employee.setStatus(StatusEmployeeRef.SUSPEND.toString());
+			employeeRepo.save(employee);
 			return true;
 		}
 		return false;
@@ -315,7 +331,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			return responseDTO;
 
 		} else {
-			System.out.println("5");
+
 			Page<Employee> page = employeeRepo.searchByFullname(searchDTO.getValue(), pageable);
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
 			for (Employee employee : page.getContent()) {
@@ -328,23 +344,105 @@ class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-	private EmployeeDTO getNodeDepartment(Department department) {
-		List<Employee> employeesInDepartment = employeeRepo.findAllByDepartmentId(department)
+//	private EmployeeDTO getNodeDepartment(Department department) {
+//		List<Employee> employeesInDepartment = employeeRepo.findAllByDepartmentId(department)
+//				.orElseThrow(NoResultException::new);
+//		List<EmployeeDTO> employeesInDepartmentDTO = employeesInDepartment.stream()
+//				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
+//
+//		Map<Long, List<EmployeeDTO>> employeesByLevel = new HashMap<>();
+//
+//		for (EmployeeDTO employeeDTO : employeesInDepartmentDTO) {
+//			List<LevelDTO> levels = employeeDTO.getLevels().stream().collect(Collectors.toList());
+//
+//			for (LevelDTO level : levels) {
+//				if (!employeesByLevel.containsKey(level.getLevelCode())) {
+//					employeesByLevel.put(level.getLevelCode(), new ArrayList<>());
+//				}
+//				employeesByLevel.get(level.getLevelCode()).add(employeeDTO);
+//			}
+//
+//		}
+//
+//		// Sort levels in descending order
+//		List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
+//				.collect(Collectors.toList());
+//
+//		for (Long i : sortedLevels) {
+//			System.out.println("i :" + i);
+//		}
+//
+//		System.out.println("department: " + department.getDepartmentName());
+//		if (sortedLevels.size() > 0) {
+//			System.out.println("length " + department.getDepartmentName() + " " + sortedLevels.size());
+//			for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
+//				if (i != 0) {
+//					System.out.println("level: " + sortedLevels.get(i));
+//					for (EmployeeDTO employeeDTO : employeesByLevel.get(sortedLevels.get(i))) {
+//						System.out.println("employeeDTO: " + employeeDTO.getEmail());
+//						employeeDTO.setSubordinates(employeesByLevel.get(sortedLevels.get(i - 1)));
+//					}
+//				}
+//			}
+//			Collections.reverse(sortedLevels);
+//
+//			return employeesByLevel.get(sortedLevels.get(0)).get(0);
+//		}
+//		return null;
+//	}
+//	
+
+//	@Override
+//	public List<EmployeeDTO> getEmployeeRelationship() {
+//		try {
+//			// get list employees:
+//			List<Employee> employees = employeeRepo
+//					.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
+//					.orElseThrow(NoResultException::new);
+//			// get list department:
+//			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
+//
+////			Set<Department> DepartmentSet = new HashSet<Department>();
+////			Set<NodeDepartment> nodeDepartments = new HashSet<NodeDepartment>();
+//
+//			List<EmployeeDTO> nodeByDepartment = new ArrayList<>();
+//			for (Department department : departments) {
+//				nodeByDepartment.add(getNodeDepartment(department));
+//			}
+//			return nodeByDepartment;
+//
+//		} catch (ResourceAccessException e) {
+//			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+//		} catch (HttpServerErrorException | HttpClientErrorException e) {
+//			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+//		}
+//
+//	}
+
+	private List<EmployeeRelationshipResponse> getNodeDepartment(Department department) {
+		List<Employee> employeesInDepartment = employeeRepo
+				.findAllByDepartmentId(department, StatusEmployeeRef.ACTIVE.toString())
 				.orElseThrow(NoResultException::new);
 		List<EmployeeDTO> employeesInDepartmentDTO = employeesInDepartment.stream()
 				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
 
-		Map<Long, List<EmployeeDTO>> employeesByLevel = new HashMap<>();
+		Map<Long, List<EmployeeRelationshipResponse>> employeesByLevel = new HashMap<>();
 
-		for (EmployeeDTO employeeDTO : employeesInDepartmentDTO) {
-			List<Level> levels = employeeDTO.getLevels().stream().collect(Collectors.toList());
+		for (EmployeeDTO employeeDTO : employeesInDepartmentDTO) { // loop all employee in department
+//			List<LevelDTO> levels = employeeDTO.getLevels().stream().collect(Collectors.toList());
 
-			for (Level level : levels) {
-				if (!employeesByLevel.containsKey(level.getLevelCode())) {
-					employeesByLevel.put(level.getLevelCode(), new ArrayList<>());
-				}
-				employeesByLevel.get(level.getLevelCode()).add(employeeDTO);
+			List<LevelDTO> levels = employeeDTO.getLevels().stream()
+					.sorted(Comparator.comparingLong((LevelDTO level) -> level.getLevelCode()).reversed())
+					.collect(Collectors.toList());
+
+			if (!employeesByLevel.containsKey(levels.get(0).getLevelCode())) { // add key level into map
+																				// employeesByLevel if
+				// // not found
+				employeesByLevel.put(levels.get(0).getLevelCode(), new ArrayList<>());
+
 			}
+			employeesByLevel.get(levels.get(0).getLevelCode())
+					.add(new ModelMapper().map(employeeDTO, EmployeeRelationshipResponse.class));
 
 		}
 
@@ -352,12 +450,87 @@ class EmployeeServiceImpl implements EmployeeService {
 		List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
 				.collect(Collectors.toList());
 
-		System.out.println("department: " + department.getDepartmentName());
 		if (sortedLevels.size() > 0) {
-			System.out.println("length " + department.getDepartmentName() + " " + sortedLevels.size());
+
 			for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
 				if (i != 0) {
-					System.out.println("level: " + sortedLevels.get(i));
+					for (EmployeeRelationshipResponse employeeRelationshipResponse : employeesByLevel
+							.get(sortedLevels.get(i))) {
+						employeeRelationshipResponse.setSubordinates(employeesByLevel.get(sortedLevels.get(i - 1)));
+					}
+				}
+			}
+//			Collections.reverse(sortedLevels); // sắp xếp lại từ lớn đến nhỏ
+
+			return employeesByLevel.get(sortedLevels.get(sortedLevels.size() - 1));
+		}
+		return null;
+	}
+
+	@Override
+	public List<List<EmployeeRelationshipResponse>> getEmployeeRelationship() {
+		try {
+			// get list employees:
+//			List<Employee> employees = employeeRepo
+//					.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
+//					.orElseThrow(NoResultException::new);
+			// get list department:
+			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
+
+//		Set<Department> DepartmentSet = new HashSet<Department>();
+//		Set<NodeDepartment> nodeDepartments = new HashSet<NodeDepartment>();
+
+			List<List<EmployeeRelationshipResponse>> nodeByDepartment = new ArrayList<>();
+			for (Department department : departments) {
+				System.err.println("department: " + department.getDepartmentName());
+				nodeByDepartment.add(getNodeDepartment(department));
+			}
+			return nodeByDepartment;
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+
+	}
+
+	@Override
+	public List<EmployeeDTO> test() {
+		List<Employee> employeesInDepartment = employeeRepo
+				.findAllByDepartmentId(departmentRepo.findByDepartmentName("RnD").get(),
+						StatusEmployeeRef.ACTIVE.toString())
+				.orElseThrow(NoResultException::new);
+		List<EmployeeDTO> employeesInDepartmentDTO = employeesInDepartment.stream()
+				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
+
+		Map<Long, List<EmployeeDTO>> employeesByLevel = new HashMap<>();
+
+		for (EmployeeDTO employeeDTO : employeesInDepartmentDTO) { // loop all employee in department
+//			List<LevelDTO> levels = employeeDTO.getLevels().stream().collect(Collectors.toList());
+
+			List<LevelDTO> levels = employeeDTO.getLevels().stream()
+					.sorted(Comparator.comparingLong((LevelDTO level) -> level.getLevelCode()).reversed())
+					.collect(Collectors.toList());
+
+			if (!employeesByLevel.containsKey(levels.get(0).getLevelCode())) { // add key level into map
+																				// employeesByLevel if
+				// // not found
+				employeesByLevel.put(levels.get(0).getLevelCode(), new ArrayList<>());
+
+			}
+			employeesByLevel.get(levels.get(0).getLevelCode()).add(employeeDTO);
+
+		}
+
+		// Sort levels in descending order
+		List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
+				.collect(Collectors.toList());
+
+		if (sortedLevels.size() > 0) {
+
+			for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
+				if (i != 0) {
 					for (EmployeeDTO employeeDTO : employeesByLevel.get(sortedLevels.get(i))) {
 						employeeDTO.setSubordinates(employeesByLevel.get(sortedLevels.get(i - 1)));
 					}
@@ -365,76 +538,12 @@ class EmployeeServiceImpl implements EmployeeService {
 			}
 			Collections.reverse(sortedLevels);
 
-			return employeesByLevel.get(sortedLevels.get(0)).get(0);
+//			Long SetEmployeeBylevel = employeesByLevel.keySet().stream().mapToLong(v -> v).max()
+//					.orElseThrow(NoSuchElementException::new);
+
+			return employeesByLevel.get(sortedLevels.get(0));
 		}
 		return null;
-	}
-
-	@Override
-	public List<EmployeeDTO> getEmployeeRelationship() {
-		try {
-			// get list employees:
-			List<Employee> employees = employeeRepo
-					.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
-					.orElseThrow(NoResultException::new);
-			// get list department:
-			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
-
-//			Set<Department> DepartmentSet = new HashSet<Department>();
-//			Set<NodeDepartment> nodeDepartments = new HashSet<NodeDepartment>();
-
-			List<EmployeeDTO> nodeByDepartment = new ArrayList<>();
-			for (Department department : departments) {
-				nodeByDepartment.add(getNodeDepartment(department));
-			}
-			return nodeByDepartment;
-
-//			List<Employee> employeesInDepartment = employeeRepo
-//					.findAllByDepartmentId(departmentRepo.findByDepartmentName("RnD").get())
-//					.orElseThrow(NoResultException::new);
-//			List<EmployeeDTO> employeesInDepartmentDTO = employeesInDepartment.stream()
-//					.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
-//
-//			Map<Long, List<EmployeeDTO>> employeesByLevel = new HashMap<>();
-//
-//			for (EmployeeDTO employeeDTO : employeesInDepartmentDTO) {
-//				List<Level> levels = employeeDTO.getLevels().stream().collect(Collectors.toList());
-//
-//				for (Level level : levels) {
-//					if (!employeesByLevel.containsKey(level.getLevelCode())) {
-//						employeesByLevel.put(level.getLevelCode(), new ArrayList<>());
-//					}
-//					employeesByLevel.get(level.getLevelCode()).add(employeeDTO);
-//				}
-//
-//			}
-//
-//			// Sort levels in descending order
-//			List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
-//					.collect(Collectors.toList());
-//
-////			System.out.println("department: " + department.getDepartmentName());
-//			if (sortedLevels.size() > 0) {
-////				System.out.println("length " + department.getDepartmentName() + " " + sortedLevels.size());
-//				for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
-//					if (i != 0) {
-//						System.out.println("level: " + sortedLevels.get(i));
-//						for (EmployeeDTO employeeDTO : employeesByLevel.get(sortedLevels.get(i))) {
-//							employeeDTO.setSubordinates(employeesByLevel.get(sortedLevels.get(i - 1)));
-//						}
-//					}
-//				}
-//			}
-//			Collections.reverse(sortedLevels);
-//
-//			return employeesByLevel.get(sortedLevels.get(0)).get(0);
-
-//			return employeesByLevel;
-		} catch (ResourceAccessException e) {
-			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
-		} catch (HttpServerErrorException | HttpClientErrorException e) {
-			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
-		}
 
 	}
 

@@ -41,8 +41,8 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	Boolean existsByEmployeeId(String employeeId);
 
-	@Query("SELECT e FROM Employee e WHERE e.department = :x ")
-	Optional<List<Employee>> findAllByDepartmentId(@Param("x") Department department);
+	@Query("SELECT e FROM Employee e WHERE e.department = :x AND e.status = :y")
+	Optional<List<Employee>> findAllByDepartmentId(@Param("x") Department department, @Param("y") String status);
 
 	@Query("SELECT e FROM Employee e WHERE e.employeeId in :ids")
 	Optional<List<Employee>> findByEmployeeIds(@Param("ids") List<String> employeeIds);

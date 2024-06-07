@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.service.EmployeeService;
@@ -85,8 +86,14 @@ public class EmployeeAPI {
 	}
 
 	@GetMapping("/employeeRelationship")
-	public ResponseDTO<List<EmployeeDTO>> getEmployeeRelationship() {
+	public ResponseDTO<List<List<EmployeeRelationshipResponse>>> getEmployeeRelationship() {
+		return ResponseDTO.<List<List<EmployeeRelationshipResponse>>>builder()
+				.code(String.valueOf(HttpStatus.OK.value())).data(employeeService.getEmployeeRelationship()).build();
+	}
+
+	@GetMapping("/test")
+	public ResponseDTO<List<EmployeeDTO>> test() {
 		return ResponseDTO.<List<EmployeeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(employeeService.getEmployeeRelationship()).build();
+				.data(employeeService.test()).build();
 	}
 }
