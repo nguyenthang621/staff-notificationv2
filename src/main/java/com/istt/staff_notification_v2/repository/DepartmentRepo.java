@@ -17,12 +17,18 @@ public interface DepartmentRepo extends JpaRepository<Department, String> {
 	@Query("SELECT u FROM Department u WHERE u.departmentName LIKE :x ")
 	Page<Department> searchByDepartmentName(@Param("x") String s, Pageable pageable);
 
-	@Query("SELECT u FROM Department u WHERE u.departmentName LIKE :x ")
+	@Query("SELECT u FROM Department u WHERE u.departmentName = :x ")
 	Optional<Department> findByDepartmentName(@Param("x") String name);
+
+	@Query("SELECT u FROM Department u WHERE u.departmentId = :x ")
+	Optional<Department> findByDepartmentId(@Param("x") String id);
 
 	Department searchByDepartmentId(String id);
 
 	@Query("SELECT d FROM Department d")
 	Optional<List<Department>> getAll();
+
+	@Query("SELECT d FROM Department d WHERE d.departmentId in :ids")
+	Optional<List<Department>> findByDepartmentIds(@Param("ids") List<String> departmentIds);
 
 }

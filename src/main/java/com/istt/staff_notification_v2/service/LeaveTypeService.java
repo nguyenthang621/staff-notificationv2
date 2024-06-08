@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public interface LeaveTypeService {
 
 	ResponseDTO<List<LeaveTypeDTO>> search(SearchDTO searchDTO);
 
+	LeaveTypeDTO update(LeaveTypeDTO leaveTypeDTO);
+
+	List<LeaveTypeDTO> getAll();
+
+	List<LeaveTypeDTO> deleteAllbyIds(List<String> ids);
+
 }
 
 @Service
@@ -47,6 +54,7 @@ class LeaveTypeServiceImpl implements LeaveTypeService {
 	private static final String ENTITY_NAME = "isttLeaveType";
 
 	@Override
+	@Transactional
 	public LeaveTypeDTO create(LeaveTypeDTO leaveTypeDTO) {
 		try {
 			if (leaveTypeRepo.findByLeavetypeName(leaveTypeDTO.getLeavetypeName()).isPresent()) {
@@ -67,6 +75,7 @@ class LeaveTypeServiceImpl implements LeaveTypeService {
 	}
 
 	@Override
+	@Transactional
 	public LeaveTypeDTO delete(String id) {
 		try {
 			LeaveType leaveType = leaveTypeRepo.findByLeavetypeId(id).orElseThrow(NoResultException::new);
@@ -105,6 +114,55 @@ class LeaveTypeServiceImpl implements LeaveTypeService {
 			ResponseDTO<List<LeaveTypeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
 			responseDTO.setData(leaveTypeDTOs);
 			return responseDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public LeaveTypeDTO update(LeaveTypeDTO leaveTypeDTO) {
+		try {
+			if (leaveTypeRepo.findById(leaveTypeDTO.getLeavetypeId()).isEmpty())
+				throw new BadRequestAlertException("LeaveType not found", ENTITY_NAME, "Not found");
+
+			leaveTypeRepo.save(new ModelMapper().map(leaveTypeDTO, LeaveType.class));
+			return leaveTypeDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public List<LeaveTypeDTO> getAll() {
+		try {
+			List<LeaveType> leaveTypes = leaveTypeRepo.findAll();
+			return leaveTypes.stream().map(leaveType -> new ModelMapper().map(leaveType, LeaveTypeDTO.class))
+					.collect(Collectors.toList());
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public List<LeaveTypeDTO> deleteAllbyIds(List<String> ids) {
+		try {
+			List<LeaveType> list = leaveTypeRepo.findByLeaveTypeIds(ids).orElseThrow(NoResultException::new);
+
+			if (!list.isEmpty()) {
+				leaveTypeRepo.deleteAllInBatch(list);
+				return list.stream().map(leaveType -> new ModelMapper().map(leaveType, LeaveTypeDTO.class))
+						.collect(Collectors.toList());
+			}
+			throw new BadRequestAlertException("LeaveType empty", ENTITY_NAME, "invalid");
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {

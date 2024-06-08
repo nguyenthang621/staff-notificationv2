@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,7 +52,7 @@ public class UserAPI {
 	}
 
 	@PutMapping("/update-password")
-	public ResponseDTO<Void> updatePassword(@ModelAttribute @Valid UpdatePassword updatePassword) throws IOException {
+	public ResponseDTO<Void> updatePassword(@RequestBody @Valid UpdatePassword updatePassword) throws IOException {
 		userService.updatePassword(updatePassword);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}

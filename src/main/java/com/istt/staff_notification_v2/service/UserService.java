@@ -2,8 +2,10 @@ package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,14 +29,14 @@ import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
-import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.UpdatePassword;
 import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.dto.UserResponse;
-import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.repository.RoleRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 
 public interface UserService {
@@ -65,6 +68,9 @@ class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 
 	@Autowired
+	private RoleRepo roleRepo;
+
+	@Autowired
 	ApplicationProperties props;
 
 	private static final String ENTITY_NAME = "isttUser";
@@ -82,23 +88,14 @@ class UserServiceImpl implements UserService {
 
 			if (userRepo.findByUsername(userDTO.getUsername()).isPresent()) {
 				throw new BadRequestAlertException("Bad request: USER already exists", ENTITY_NAME, "USER exists");
-
 			}
-			// map employee
-			Employee employee = new Employee();
-			if (user.getEmployee() == null) {
-				throw new BadRequestAlertException("Bad request: Missing employee", ENTITY_NAME, "Missing employee");
-			}
-			employee = user.getEmployee();
-			if (!props.getSTATUS_EMPLOYEE().contains(user.getEmployee().getStatus())) { // Validate if status not
-				// contain
-				// set default status
-				employee.setEmail(user.getUsername());
-				employee.setStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()));
-			}
-			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
-			System.out.println("employee: " + employee);
-			user.setEmployee(employee);
+			// map role
+			Set<Role> roles = new HashSet<>();
+			roles.addAll(roleRepo
+					.findByRoleIds(
+							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
+					.orElseThrow(NoResultException::new));
+			user.setRoles(roles);
 
 			// commit save
 			userRepo.save(user);
@@ -130,9 +127,25 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public UserDTO update(UserDTO userDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			User user = userRepo.findByUserId(userDTO.getId()).orElseThrow(NoResultException::new);
+			user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+			Set<Role> roles = new HashSet<Role>();
+			roles.addAll(roleRepo
+					.findByRoleIds(
+							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
+					.orElseThrow(NoResultException::new));
+			user.setRoles(roles);
+			userRepo.save(user);
+			return userDTO;
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 	@Override
@@ -168,7 +181,12 @@ class UserServiceImpl implements UserService {
 	public UserResponse updatePassword(UpdatePassword updatePassword) {
 		try {
 			User user = userRepo.findByUserId(updatePassword.getUserId()).orElseThrow(NoResultException::new);
-			if (updatePassword.getNewPassword().equals(updatePassword.getConfirmPassword())) {
+			Boolean compare_password = BCrypt.checkpw(updatePassword.getOldPassword(), user.getPassword());
+			if (!compare_password)
+				throw new BadRequestAlertException("Bad request: Old Password wrong !!!", ENTITY_NAME,
+						"Invalid password");
+
+			if (!updatePassword.getNewPassword().equals(updatePassword.getConfirmPassword())) {
 				throw new BadRequestAlertException("Bad request: Password do not match", ENTITY_NAME,
 						"Invalid password");
 			}

@@ -27,10 +27,10 @@ public class Level {
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(name = "levelname", nullable = false)
+	@Column(name = "levelname", nullable = false, unique = true)
 	private String levelName;
 
-	@Column(name = "levelcode", nullable = false)
+	@Column(name = "levelcode", nullable = false, unique = true)
 	private Long levelCode;
 
 	@JsonIgnore

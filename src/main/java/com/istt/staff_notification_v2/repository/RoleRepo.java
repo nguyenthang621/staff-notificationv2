@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,5 +19,14 @@ public interface RoleRepo extends JpaRepository<Role, String> {
 
 	@Query("SELECT u FROM Role u WHERE u.role LIKE :x ")
 	Page<Role> searchByName(@Param("x") String s, Pageable pageable);
+
+	@Query("SELECT r FROM Role r WHERE r.roleId in :ids")
+	Optional<List<Role>> findByRoleIds(@Param("ids") List<String> roleIds);
+
+	@Query("SELECT u FROM Role u WHERE u.role = :x ")
+	Optional<Role> findByRoleName(@Param("x") String role);
+
+	@Query("SELECT r FROM Role r")
+	Optional<List<Role>> getAll();
 
 }

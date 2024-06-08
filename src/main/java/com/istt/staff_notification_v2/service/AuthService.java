@@ -24,6 +24,8 @@ public interface AuthService {
 
 	ResponseDTO<String> handleRefreshToken(String refreshToken_in);
 
+	ResponseDTO<String> signup(LoginRequest loginRequest, User user);
+
 }
 
 @Service
@@ -43,6 +45,31 @@ class AuthServiceImpl implements AuthService {
 
 	@Override
 	public ResponseDTO<String> signin(LoginRequest loginRequest, User user) {
+		try {
+
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+			// Set thông tin authentication vào Security Context
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			String accessToken = tokenProvider.generateAccessToken(authentication);
+			String refreshToken = tokenProvider.generateRefreshToken(authentication);
+
+			user.setAccessToken(accessToken);
+			user.setRefreshToken(refreshToken);
+
+			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
+					.refreshToken(refreshToken).build();
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	public ResponseDTO<String> signup(LoginRequest loginRequest, User user) {
 		try {
 
 			Authentication authentication = authenticationManager.authenticate(

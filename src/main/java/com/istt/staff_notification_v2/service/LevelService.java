@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public interface LevelService {
 
 	ResponseDTO<List<LevelDTO>> search(SearchDTO searchDTO);
 
+	LevelDTO update(LevelDTO levelDTO);
+
+	List<LevelDTO> getAll();
+
+	List<LevelDTO> deleteAllbyIds(List<String> ids);
+
 }
 
 @Service
@@ -47,6 +54,7 @@ class LevelServiceImpl implements LevelService {
 	private static final String ENTITY_NAME = "isttLevel";
 
 	@Override
+	@Transactional
 	public LevelDTO create(LevelDTO levelDTO) {
 		try {
 			if (levelRepo.findByLevelNameorLevelCode(levelDTO.getLevelName(), levelDTO.getLevelCode()).isPresent()) {
@@ -65,6 +73,7 @@ class LevelServiceImpl implements LevelService {
 	}
 
 	@Override
+	@Transactional
 	public LevelDTO delete(String id) {
 		try {
 			Level level = levelRepo.findByLevelId(id).orElseThrow(NoResultException::new);
@@ -109,6 +118,55 @@ class LevelServiceImpl implements LevelService {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
 
+	}
+
+	@Override
+	@Transactional
+	public LevelDTO update(LevelDTO levelDTO) {
+		try {
+			if (levelRepo.findById(levelDTO.getLevelId()).isEmpty())
+				throw new BadRequestAlertException("Level not found", ENTITY_NAME, "Not found");
+
+			levelRepo.save(new ModelMapper().map(levelDTO, Level.class));
+			return levelDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public List<LevelDTO> getAll() {
+		try {
+			List<Level> levels = levelRepo.findAll();
+			return levels.stream().map(level -> new ModelMapper().map(level, LevelDTO.class))
+					.collect(Collectors.toList());
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public List<LevelDTO> deleteAllbyIds(List<String> ids) {
+		try {
+			List<Level> list = levelRepo.findByLevelIds(ids).orElseThrow(NoResultException::new);
+
+			if (!list.isEmpty()) {
+				levelRepo.deleteAllInBatch(list);
+				return list.stream().map(level -> new ModelMapper().map(level, LevelDTO.class))
+						.collect(Collectors.toList());
+			}
+			throw new BadRequestAlertException("Level empty", ENTITY_NAME, "invalid");
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 }

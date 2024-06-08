@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +16,13 @@ public interface LeaveTypeRepo extends JpaRepository<LeaveType, String> {
 
 	Optional<LeaveType> findByLeavetypeName(String leavetypeName);
 
-	@Query("SELECT u FROM LeaveType u WHERE u.leavetypeName LIKE :x ")
+	@Query("SELECT l FROM LeaveType l WHERE l.leavetypeName LIKE :x ")
 	Page<LeaveType> searchByLeavetypeName(@Param("x") String s, Pageable pageable);
+
+	@Query("SELECT l FROM LeaveType l WHERE l.leavetypeId in :ids")
+	Optional<List<LeaveType>> findByLeaveTypeIds(@Param("ids") List<String> leaveTypeIds);
+
+	@Query("SELECT l FROM LeaveType l")
+	Optional<List<LeaveType>> getAll();
 
 }

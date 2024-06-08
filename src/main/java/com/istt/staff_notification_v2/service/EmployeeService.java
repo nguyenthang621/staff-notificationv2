@@ -194,6 +194,8 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeDTO update(EmployeeDTO employeeDTO) {
 		try {
+			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
+					.orElseThrow(NoResultException::new);
 
 			if (employeeDTO.getEmployeeDependence().size() > 0) {
 				for (String employeeId : employeeDTO.getEmployeeDependence()) {
@@ -203,20 +205,21 @@ class EmployeeServiceImpl implements EmployeeService {
 								"Invalid");
 				}
 			}
+
+			Set<LevelDTO> levels = new HashSet<LevelDTO>();
+			for (LevelDTO level : employeeDTO.getLevels()) {
+				levels.add(new ModelMapper().map(
+						levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new),
+						LevelDTO.class));
+			}
+			employeeDTO.setLevels(levels);
 			ModelMapper mapper = new ModelMapper();
-			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
-					.orElseThrow(NoResultException::new);
 
 			mapper.createTypeMap(EmployeeDTO.class, Employee.class).setProvider(p -> employeeRepo
 					.findByEmployeeId(employeeDTO.getEmployeeId()).orElseThrow(NoResultException::new));
 
 			Employee employee = mapper.map(employeeDTO, Employee.class);
-
-			Set<Level> levels = new HashSet<Level>();
-			for (LevelDTO level : employeeDTO.getLevels()) {
-				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
-			}
-			employee.setLevels(levels);
+			employee.setEmployeeId(employeeInDB.getEmployeeId());
 
 			employeeRepo.save(employee);
 			return employeeDTO;

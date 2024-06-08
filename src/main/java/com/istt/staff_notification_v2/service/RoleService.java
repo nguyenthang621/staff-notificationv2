@@ -23,6 +23,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.RoleDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
@@ -35,6 +36,16 @@ public interface RoleService {
 	RoleDTO delete(String id);
 
 	ResponseDTO<List<RoleDTO>> search(SearchDTO searchDTO);
+
+	RoleDTO findById(String id);
+
+	RoleDTO findByName(String name);
+
+	RoleDTO update(RoleDTO roleDTO);
+
+	List<RoleDTO> getAll();
+
+	List<RoleDTO> deleteAllbyIds(List<String> ids);
 }
 
 @Service
@@ -43,10 +54,15 @@ class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RoleRepo roleRepo;
 
+	private static final String ENTITY_NAME = "isttRole";
+
 	@Transactional
 	@Override
 	public RoleDTO create(RoleDTO roleDTO) {
 		try {
+
+			if (roleRepo.findByRoleName(roleDTO.getRole()).isPresent())
+				throw new BadRequestAlertException("Bad request: Role already exists", ENTITY_NAME, "Exists");
 			ModelMapper mapper = new ModelMapper();
 			Role role = mapper.map(roleDTO, Role.class);
 			role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -99,6 +115,78 @@ class RoleServiceImpl implements RoleService {
 			ResponseDTO<List<RoleDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
 			responseDTO.setData(roleDTOs);
 			return responseDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	@Transactional
+	public RoleDTO update(RoleDTO roleDTO) {
+		try {
+			if (roleRepo.findById(roleDTO.getRoleId()).isEmpty())
+				throw new BadRequestAlertException("Role not found", ENTITY_NAME, "Not found");
+
+			roleRepo.save(new ModelMapper().map(roleDTO, Role.class));
+			return roleDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	public RoleDTO findById(String id) {
+		try {
+			Role role = roleRepo.findById(id).orElseThrow(NoResultException::new);
+			return new ModelMapper().map(role, RoleDTO.class);
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+
+	}
+
+	@Override
+	public RoleDTO findByName(String name) {
+		try {
+			Role role = roleRepo.findByRoleName(name).get();
+			return new ModelMapper().map(role, RoleDTO.class);
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+
+	}
+
+	@Override
+	public List<RoleDTO> getAll() {
+		try {
+			List<Role> roles = roleRepo.findAll();
+			return roles.stream().map(role -> new ModelMapper().map(role, RoleDTO.class)).collect(Collectors.toList());
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
+	}
+
+	@Override
+	public List<RoleDTO> deleteAllbyIds(List<String> ids) {
+		try {
+			List<Role> list = roleRepo.findByRoleIds(ids).orElseThrow(NoResultException::new);
+
+			if (!list.isEmpty()) {
+				roleRepo.deleteAllInBatch(list);
+				return list.stream().map(role -> new ModelMapper().map(role, RoleDTO.class))
+						.collect(Collectors.toList());
+			}
+			throw new BadRequestAlertException("Role empty", ENTITY_NAME, "invalid");
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {

@@ -24,6 +24,7 @@ public class Role {
 	@Column(name = "role_id", updatable = false, nullable = false)
 	private String roleId;
 
+	@Column(unique = true)
 	private String role;
 
 	@Column(columnDefinition = "TEXT")

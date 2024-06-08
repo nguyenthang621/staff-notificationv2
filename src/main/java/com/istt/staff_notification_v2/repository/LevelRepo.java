@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,4 +20,10 @@ public interface LevelRepo extends JpaRepository<Level, String> {
 
 	@Query("SELECT l FROM Level l WHERE l.levelName LIKE :x ")
 	Page<Level> searchByLevelName(@Param("x") String s, Pageable pageable);
+
+	@Query("SELECT l FROM Level l WHERE l.levelId in :ids")
+	Optional<List<Level>> findByLevelIds(@Param("ids") List<String> levelIds);
+
+	@Query("SELECT l FROM Level l")
+	Optional<List<Level>> getAll();
 }

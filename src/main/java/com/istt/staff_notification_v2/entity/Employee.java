@@ -39,6 +39,7 @@ public class Employee {
 
 	private String address;
 
+	@Column(unique = true)
 	private String phone;
 
 	@Column(name = "email", unique = true, nullable = false)
