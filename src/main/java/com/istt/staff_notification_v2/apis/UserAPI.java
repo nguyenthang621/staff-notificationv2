@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,5 +61,14 @@ public class UserAPI {
 	@PostMapping("/search")
 	public ResponseDTO<List<UserResponse>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return userService.search(searchDTO);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
+		if (id == null) {
+			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
+		}
+		userService.delete(id);
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 }

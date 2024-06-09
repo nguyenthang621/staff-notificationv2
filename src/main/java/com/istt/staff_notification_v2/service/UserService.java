@@ -149,8 +149,12 @@ class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean delete(String id) {
-		// TODO Auto-generated method stub
+		User user = userRepo.findById(id).orElseThrow(NoResultException::new);
+		if (user != null) {
+			userRepo.deleteById(id);
+		}
 		return null;
 	}
 

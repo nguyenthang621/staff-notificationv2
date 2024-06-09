@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,7 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusLeaveRequestRef;
+import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
@@ -28,7 +30,6 @@ import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
 import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
-import com.istt.staff_notification_v2.entity.LeaveType;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LeaveRequestRepo;
 import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
@@ -59,6 +60,9 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Autowired
 	EmployeeRepo employeeRepo;
+
+	@Autowired
+	AttendanceService attendanceService;
 
 	@Autowired
 	ApplicationProperties props;
@@ -117,22 +121,29 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			leaveRequest.setEmployee(employee);
 
 			if (leaveRequestDTO.getLeavetype().getLeavetypeId() == null)
-				throw new BadRequestAlertException("Bad request: Missing LeaveRequestId", ENTITY_NAME, "Missing");
-
-			LeaveType leaveType = leaveTypeRepo.findByLeavetypeId(leaveRequestDTO.getLeavetype().getLeavetypeId())
-					.orElseThrow(NoResultException::new);
+				throw new BadRequestAlertException("Bad request: Missing LeaveTypeId", ENTITY_NAME, "Missing");
 
 			// default set status is NOT_APPROVED if normal
-			if (leaveType.isSpecialType()) {
-				leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal()));
-			} else {
-				leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
-			}
+//			LeaveType leaveType = leaveTypeRepo.findByLeavetypeId(leaveRequestDTO.getLeavetype().getLeavetypeId())
+//					.orElseThrow(NoResultException::new);
+//			if (leaveType.isSpecialType()) {
+//				leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal()));
+//			} else {
+//				leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
+//			}
+
+			leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
+
+			// Valid only send to a employee
+			if (mailRequestDTO.getRecceiverList().size() != 1)
+				throw new BadRequestAlertException("Bad request: Can only be sent to 1 person", ENTITY_NAME, "Invalid");
+			leaveRequest.setReceiver(mailRequestDTO.getRecceiverList().get(0).getEmployeeId());
 
 			// Handle send mail:
 //			Optional<List<Employee>> employeeDependences = employeeRepo
 //					.findByEmployeeIds(employee.getEmployeeDependence());
 
+			// Get in receiver request
 			Optional<List<Employee>> employeeDependences = employeeRepo.findByEmployeeIds(mailRequestDTO
 					.getRecceiverList().stream().map(item -> item.getEmployeeId()).collect(Collectors.toList()));
 
@@ -147,8 +158,8 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			mailRequestEachEmployee.setSubject(mailRequestDTO.getSubject());
 
 			// Excute send mail
-//			if (!sendNotification(mailRequestEachEmployee))
-//				throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("ERROR PROCESS").build();
+			if (!sendNotification(mailRequestEachEmployee))
+				throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("ERROR SEND MAIL").build();
 
 			// Commit leaveRequest
 			leaveRequestRepo.save(leaveRequest);
@@ -194,11 +205,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			LeaveRequest leaveRequest = leaveRequestRepo.findByLeaveqequestId(responseLeaveRequest.getLeaveqequestId())
 					.orElseThrow(NoResultException::new);
 
-			System.out.println("status: " + leaveRequest.getStatus().equals(
-					String.valueOf(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal()))));
-
-			if (leaveRequest.getStatus().equals(
-					String.valueOf(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal()))))
+			if (leaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString()))
 				throw new BadRequestAlertException("Bad request: This request has been approved by others", ENTITY_NAME,
 						"APPROVED");
 
@@ -211,6 +218,24 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			leaveRequest.setResponseBy(responseLeaveRequest.getByEmployeeId());
 
 			leaveRequestRepo.save(leaveRequest);
+
+			if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString())) {
+				AttendanceDTO attendanceDTO = new AttendanceDTO();
+				attendanceDTO.setApprovedBy(responseLeaveRequest.getByEmployeeId());
+				attendanceDTO.setLeaveRequest(leaveRequest);
+				attendanceDTO.setEmployee(leaveRequest.getEmployee());
+				attendanceDTO.setApprovedBy(responseLeaveRequest.getByEmployeeId());
+
+				attendanceDTO.setType(responseLeaveRequest.getStatus());
+				attendanceDTO.setNote(responseLeaveRequest.getAnrreason());
+				attendanceDTO.setCreateAt(new Date());
+				//
+				attendanceDTO.setStartDate(leaveRequest.getStartDate());
+				attendanceDTO.setEndDate(leaveRequest.getStartDate());
+
+				attendanceService.create(attendanceDTO);
+			}
+			// handle date
 
 			return responseLeaveRequest;
 

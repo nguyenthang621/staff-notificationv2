@@ -29,12 +29,12 @@ public class LeaveRequest {
 	private Employee employee;
 
 	@ManyToOne
-	@JoinColumn(name = "leavetype_id")
+	@JoinColumn(name = "leavetype_id", nullable = false)
 	private LeaveType leavetype;
 
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(name = "request_date")
+	@Column(name = "request_date", nullable = false)
 	private Date requestDate;
 
 	private float duration;
@@ -48,10 +48,13 @@ public class LeaveRequest {
 	private String anrreason;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(name = "start_date")
+	@Column(name = "start_date", nullable = false)
 	private Date startDate;
 
-	@JoinColumn(name = "employee_response")
+	@Column(name = "employee_response")
 	private String responseBy;
+
+	@Column(name = "receiver", nullable = false)
+	private String receiver;
 
 }

@@ -26,6 +26,12 @@ public class ApplicationProperties {
 		WAITING, NOT_APPROVED, APPROVED, REJECT
 	}
 
+	private List<String> TYPE_ATTENDANCE = Arrays.asList("ABSENT", "OT", "APPROVED", "HAFT_ABSENT");
+
+	public enum TypeAttendanceRef {
+		ABSENT, OT, APPROVED, HAFT_ABSENT
+	}
+
 	@PostConstruct
 	protected void init() {
 		System.out.println(" == Application Reloaded: " + this);
