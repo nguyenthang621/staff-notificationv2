@@ -117,26 +117,21 @@ public class AttendanceAPI {
 	public long getDaysInPeriod(@RequestParam int startDay, @RequestParam int endDay, @RequestParam int month,
 			@RequestParam int year) {
 		try {
-			// Tạo đối tượng YearMonth
 			YearMonth yearMonth = YearMonth.of(year, month);
 
-			// Kiểm tra tính hợp lệ của startDay và endDay
 			if (startDay < 1 || startDay > yearMonth.lengthOfMonth() || endDay < 1
 					|| endDay > yearMonth.lengthOfMonth()) {
 				throw new IllegalArgumentException("Invalid startDay or endDay provided.");
 			}
 
-			// Tạo đối tượng LocalDate cho startDay và endDay
 			LocalDate startDate = LocalDate.of(year, month, startDay);
 			LocalDate endDate = LocalDate.of(year, month, endDay);
 
-			// Kiểm tra nếu startDate sau endDate
 			if (startDate.isAfter(endDate)) {
 				throw new IllegalArgumentException("startDay must be before or equal to endDay.");
 			}
 
-			// Tính số ngày giữa startDate và endDate
-			return ChronoUnit.DAYS.between(startDate, endDate) + 1; // +1 để bao gồm cả startDay và endDay
+			return ChronoUnit.DAYS.between(startDate, endDate) + 1;
 		} catch (DateTimeParseException | IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid input parameters.");
 		}
