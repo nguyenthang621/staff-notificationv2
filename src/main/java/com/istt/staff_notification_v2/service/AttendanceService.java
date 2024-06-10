@@ -28,6 +28,7 @@ import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Attendance;
 import com.istt.staff_notification_v2.entity.Employee;
@@ -52,7 +53,7 @@ public interface AttendanceService {
 
 	List<AttendanceDTO> getStatus(String type);
 
-	ResponseDTO<List<AttendanceDTO>> search(SearchDTO searchDTO);
+	ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence);
 }
 
 @Service
@@ -197,18 +198,26 @@ class AttendanceServiceImpl implements AttendanceService {
 	}
 
 	@Override
-	public ResponseDTO<List<AttendanceDTO>> search(SearchDTO searchDTO) {
+	public ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence) {
 		try {
-			List<Sort.Order> orders = Optional.ofNullable(searchDTO.getOrders()).orElseGet(Collections::emptyList)
-					.stream().map(order -> {
+			List<Sort.Order> orders = Optional.ofNullable(searchAttendence.getSearch().getOrders())
+					.orElseGet(Collections::emptyList).stream().map(order -> {
 						if (order.getOrder().equals(SearchDTO.ASC))
 							return Sort.Order.asc(order.getProperty());
 
 						return Sort.Order.desc(order.getProperty());
 					}).collect(Collectors.toList());
-			Pageable pageable = PageRequest.of(searchDTO.getPage(), searchDTO.getSize(), Sort.by(orders));
+			Pageable pageable = PageRequest.of(searchAttendence.getSearch().getPage(),
+					searchAttendence.getSearch().getSize(), Sort.by(orders));
 
-			Page<Attendance> page = attendanceRepo.findByType(searchDTO.getValue(), pageable);
+			Page<Attendance> page = attendanceRepo.searchByMultiAllType(searchAttendence.getSearch().getValue(),
+					searchAttendence.getStartDate(), searchAttendence.getEndDate(), pageable);
+			if (searchAttendence.getType().isEmpty()) {
+				page = attendanceRepo.searchByMulti(searchAttendence.getSearch().getValue(),
+						searchAttendence.getStartDate(), searchAttendence.getEndDate(), searchAttendence.getType(),
+						pageable);
+			}
+
 			ModelMapper mapper = new ModelMapper();
 			List<AttendanceDTO> levelDTOs = page.getContent().stream()
 					.map(attendance -> mapper.map(attendance, AttendanceDTO.class)).collect(Collectors.toList());

@@ -1,6 +1,10 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,11 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.service.AttendanceService;
 
@@ -80,9 +86,9 @@ public class AttendanceAPI {
 				.data(attendanceService.getStatus(type)).build();
 	}
 
-	@PostMapping("/searchByType")
-	public ResponseDTO<List<AttendanceDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
-		return attendanceService.search(searchDTO);
+	@PostMapping("/search")
+	public ResponseDTO<List<AttendanceDTO>> search(@RequestBody @Valid SearchAttendence SearchAttendence) {
+		return attendanceService.search(SearchAttendence);
 	}
 
 	@PostMapping("/searchByEmployeeStatus")
@@ -105,6 +111,45 @@ public class AttendanceAPI {
 	@GetMapping("/getAll")
 	public List<AttendanceDTO> getAll() {
 		return attendanceService.getAll();
+	}
+
+	@GetMapping("/api/days-in-period")
+	public long getDaysInPeriod(@RequestParam int startDay, @RequestParam int endDay, @RequestParam int month,
+			@RequestParam int year) {
+		try {
+			// Tạo đối tượng YearMonth
+			YearMonth yearMonth = YearMonth.of(year, month);
+
+			// Kiểm tra tính hợp lệ của startDay và endDay
+			if (startDay < 1 || startDay > yearMonth.lengthOfMonth() || endDay < 1
+					|| endDay > yearMonth.lengthOfMonth()) {
+				throw new IllegalArgumentException("Invalid startDay or endDay provided.");
+			}
+
+			// Tạo đối tượng LocalDate cho startDay và endDay
+			LocalDate startDate = LocalDate.of(year, month, startDay);
+			LocalDate endDate = LocalDate.of(year, month, endDay);
+
+			// Kiểm tra nếu startDate sau endDate
+			if (startDate.isAfter(endDate)) {
+				throw new IllegalArgumentException("startDay must be before or equal to endDay.");
+			}
+
+			// Tính số ngày giữa startDate và endDate
+			return ChronoUnit.DAYS.between(startDate, endDate) + 1; // +1 để bao gồm cả startDay và endDay
+		} catch (DateTimeParseException | IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid input parameters.");
+		}
+	}
+
+	@GetMapping("/api/days-in-month")
+	public int getDaysInMonth(@RequestParam int year, @RequestParam int month) {
+		try {
+			YearMonth yearMonth = YearMonth.of(year, month);
+			return yearMonth.lengthOfMonth();
+		} catch (DateTimeParseException | IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid year or month provided.");
+		}
 	}
 
 }
