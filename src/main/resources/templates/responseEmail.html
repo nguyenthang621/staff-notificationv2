@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h2>Phản hồi đơn xin nghỉ phép</h2>
+    <p>Kính gửi <span th:text="${receiverName}"></span>,</p>
+
+    <p>Sau khi xem xét đơn xin nghỉ phép của bạn gửi ngày <span th:text="${requestDate}"></span>, tôi xin thông báo rằng yêu cầu nghỉ phép của bạn từ <span th:text="${startDate}"></span> đến <span th:text="${endDate}"></span> đã được phê duyệt..</p>
+
+    <p>Vui lòng hoàn tất các công việc đang dang dở và bàn giao lại cho đồng nghiệp hoặc người chịu trách nhiệm trong thời gian bạn vắng mặt để đảm bảo không ảnh hưởng đến tiến độ công việc chung của phòng ban. Nếu có bất kỳ vấn đề hay thắc mắc nào, hãy thông báo để công ty có thể hỗ trợ kịp thời.
+
+        Chúc bạn có những ngày nghỉ thật thoải mái và vui vẻ.</p>
+
+    <p><span th:text="${senderName}"></span></p>
+    <p><span th:text="${senderLevel}"></span></p>
+    <p><span th:text="${senderDepartment}"></span></p>
+    <p><span th:text="${senderNumber}"></span></p>
+    <p><span th:text="${senderEmail}"></span></p>
+</body>
+</html>

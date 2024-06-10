@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h2>Phản hồi đơn xin nghỉ phép</h2>
+    <p>Kính gửi <span th:text="${receiverName}"></span>,</p>
+
+    <p>Sau khi xem xét đơn xin nghỉ phép của bạn gửi ngày <span th:text="${requestDate}"></span>, Sau khi xem xét tình hình công việc hiện tại và yêu cầu của bạn, tôi rất tiếc phải thông báo rằng tôi không thể phê duyệt yêu cầu nghỉ phép của bạn từ ngày <span th:text="${startDate}"></span> đến <span th:text="${endDate}"></span>.</p>
+
+    <p>Lý do chính cho quyết định này là <span th:text="${reason}"></span></p>
+    
+    <div th:if="${status == 'NOT_APPROVED'}">
+    <p>Tôi rất mong bạn sửa lại đơn xin nghỉ phép.</p>
+    </div>
+    
+    <div th:if="${status == 'REJECT'}">
+    <p>Tôi rất mong bạn thông cảm cho tình hình này và hy vọng bạn có thể xem xét lại thời gian nghỉ phép vào một dịp khác phù hợp hơn. 
+    Nếu có bất kỳ thắc mắc hoặc đề xuất nào khác, vui lòng trao đổi trực tiếp với tôi để tìm ra giải pháp hợp lý nhất.</p>
+    </div>
+    
+	<p>Chân thành cảm ơn sự hợp tác và hiểu biết của bạn.</p>
+    <p><span th:text="${senderName}"></span></p>
+    <p><span th:text="${senderLevel}"></span></p>
+    <p><span th:text="${senderDepartment}"></span></p>
+    <p><span th:text="${senderNumber}"></span></p>
+    <p><span th:text="${senderEmail}"></span></p>
+</body>
+</html>

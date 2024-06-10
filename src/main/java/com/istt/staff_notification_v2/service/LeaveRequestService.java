@@ -105,7 +105,6 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			ModelMapper mapper = new ModelMapper();
 			LeaveRequest leaveRequest = mapper.map(leaveRequestDTO, LeaveRequest.class);
 			// Validate duration:
-			System.out.println("leaveRequestDTO.getDuration(): " + leaveRequestDTO.getDuration());
 			if (leaveRequestDTO.getDuration() <= 0.0 || leaveRequestDTO.getDuration() % 0.5 != 0.0)
 				throw new BadRequestAlertException("Bad request: Invalid duration", ENTITY_NAME, "Invalid");
 
@@ -205,6 +204,9 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			LeaveRequest leaveRequest = leaveRequestRepo.findByLeaveqequestId(responseLeaveRequest.getLeaveqequestId())
 					.orElseThrow(NoResultException::new);
 
+			if (!props.getSTATUS_LEAVER_REQUEST().contains(leaveRequest.getStatus()))
+				throw new BadRequestAlertException("Bad request: Invalid type", ENTITY_NAME, "Invalid");
+
 			if (leaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString()))
 				throw new BadRequestAlertException("Bad request: This request has been approved by others", ENTITY_NAME,
 						"APPROVED");
@@ -213,13 +215,20 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				throw new BadRequestAlertException("Bad request: Must be the superior approval", ENTITY_NAME,
 						"Not role");
 
+			if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.NOT_APPROVED.toString())
+					|| responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.REJECT.toString())) {
+				if (responseLeaveRequest.getAnrreason().isEmpty())
+					throw new BadRequestAlertException("Bad request: If refused, there must be a reason", ENTITY_NAME,
+							"Missing");
+			}
+
 			leaveRequest.setAnrreason(responseLeaveRequest.getAnrreason());
 			leaveRequest.setStatus(responseLeaveRequest.getStatus());
 			leaveRequest.setResponseBy(responseLeaveRequest.getByEmployeeId());
 
 			leaveRequestRepo.save(leaveRequest);
 
-			if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString())) {
+			if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString())) { // Case approved
 				AttendanceDTO attendanceDTO = new AttendanceDTO();
 				attendanceDTO.setApprovedBy(responseLeaveRequest.getByEmployeeId());
 				attendanceDTO.setLeaveRequest(leaveRequest);
@@ -234,6 +243,25 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				attendanceDTO.setEndDate(leaveRequest.getStartDate());
 
 				attendanceService.create(attendanceDTO);
+
+				// Handle send mail
+				ModelMapper mapper = new ModelMapper();
+				String subject = "Phản hồi đơn xin nghỉ phép";
+				mailService.sendReponseApprovedEmail(mapper.map(leaveRequest, LeaveRequestDTO.class),
+						mapper.map(attendanceDTO.getEmployee(), EmployeeDTO.class), subject);
+			} else if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.NOT_APPROVED.toString())
+					|| responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.REJECT.toString())) { // Case
+																											// reject or
+																											// not_approved
+
+				// Handle send mail
+				ModelMapper mapper = new ModelMapper();
+				String subject = "Phản hồi đơn xin nghỉ phép";
+
+				String reason = responseLeaveRequest.getAnrreason();
+				mailService.sendReponseRejectEmail(mapper.map(leaveRequest, LeaveRequestDTO.class),
+						mapper.map(leaveRequest.getEmployee(), EmployeeDTO.class), subject, reason,
+						responseLeaveRequest.getStatus());
 			}
 			// handle date
 

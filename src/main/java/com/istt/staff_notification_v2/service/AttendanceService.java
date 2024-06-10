@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +27,6 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
-import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Attendance;
@@ -39,8 +39,6 @@ public interface AttendanceService {
 	AttendanceDTO create(AttendanceDTO attendanceDTO);
 
 	ResponseDTO<List<AttendanceDTO>> searchByEmployeeName(SearchDTO searchDTO);
-
-	AttendanceDTO createWhenApprover(LeaveRequestDTO leaveRequestDTO);
 
 	AttendanceDTO update(AttendanceDTO attendanceDTO);
 
@@ -81,7 +79,7 @@ class AttendanceServiceImpl implements AttendanceService {
 
 			Optional<Employee> employeeCreateOptional = employeeRepo.findByEmployeeId(attendanceDTO.getApprovedBy());
 			if (employeeCreateOptional.isEmpty())
-				throw new BadRequestAlertException("Employee create not found.", ENTITY_NAME, "Not found");
+				throw new BadRequestAlertException("Employee create attendance not found.", ENTITY_NAME, "Not found");
 
 			Optional<Employee> employeeOptional = employeeRepo
 					.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId());
@@ -93,6 +91,7 @@ class AttendanceServiceImpl implements AttendanceService {
 				throw new BadRequestAlertException("This employee has been suspended", ENTITY_NAME, "Suspend");
 
 			attendance.setEmployee(employee);
+			attendance.setCreateAt(new Date());
 
 			if (!props.getTYPE_ATTENDANCE().contains(attendanceDTO.getType()))
 				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
@@ -113,11 +112,12 @@ class AttendanceServiceImpl implements AttendanceService {
 		try {
 			Attendance attendance = new ModelMapper().map(attendanceDTO, Attendance.class);
 
-			Optional<Employee> employeeCreateOptional = employeeRepo.findById(attendanceDTO.getUpdateBy());
-			if (employeeCreateOptional.isEmpty())
+			Optional<Employee> employeeUpdateOptional = employeeRepo.findByEmployeeId(attendanceDTO.getUpdateBy());
+			if (employeeUpdateOptional.isEmpty())
 				throw new BadRequestAlertException("Employee update not found.", ENTITY_NAME, "Not found");
 
-			Optional<Employee> employeeOptional = employeeRepo.findById(attendanceDTO.getEmployee().getEmployeeId());
+			Optional<Employee> employeeOptional = employeeRepo
+					.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId());
 			if (employeeOptional.isEmpty())
 				throw new BadRequestAlertException("Employee not found.", ENTITY_NAME, "Not found");
 
@@ -126,6 +126,8 @@ class AttendanceServiceImpl implements AttendanceService {
 				throw new BadRequestAlertException("This employee has been suspended", ENTITY_NAME, "Suspend");
 
 			attendance.setEmployee(employee);
+			attendance.setUpdateAt(new Date());
+			attendance.setUpdateBy(employeeUpdateOptional.get().getEmployeeId());
 
 			if (!props.getTYPE_ATTENDANCE().contains(attendanceDTO.getType()))
 				throw new BadRequestAlertException("Invalid STATUS ATTENDANCE", ENTITY_NAME, "Invalid");
@@ -168,31 +170,6 @@ class AttendanceServiceImpl implements AttendanceService {
 		if (attendance == null)
 			throw new NoResultException();
 		return mapper.map(attendance, AttendanceDTO.class);
-	}
-
-	@Override
-	public AttendanceDTO createWhenApprover(LeaveRequestDTO leaveRequestDTO) {
-		try {
-
-//			ModelMapper mapper = new ModelMapper();
-//			Attendance attendance = new Attendance();
-//			attendance.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
-//			attendance.setStartDate(leaveRequestDTO.getStartDate());
-//			attendance.setEndDate(leaveRequestDTO.getEndDate());
-//			attendance.setStatus(props.getSTATUS_ATTENDANCE().get(StatusAttendanceRef.ABSENT.ordinal()));
-//			Employee employee = employeeRepo.findById(leaveRequestDTO.getEmployee().getEmployeeId())
-//					.orElseThrow(NoResultException::new);
-//			attendance.setEmployee(employee);
-//
-//			attendanceRepo.save(attendance);
-//
-//			return mapper.map(attendance, AttendanceDTO.class);
-			return null;
-		} catch (ResourceAccessException e) {
-			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
-		} catch (HttpServerErrorException | HttpClientErrorException e) {
-			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
-		}
 	}
 
 	@Override
