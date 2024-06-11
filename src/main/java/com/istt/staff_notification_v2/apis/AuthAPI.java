@@ -10,7 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LoginRequest;
@@ -74,15 +77,15 @@ public class AuthAPI {
 
 	}
 
-//	@PostMapping("/refreshToken")
-//	public ResponseDTO<String> handleRefreshToken(
-//			@RequestParam(value = "refreshtoken", required = true) String refreshtoken) {
-//		try {
-//			return authService.handleRefreshToken(refreshtoken);
-//
-//		} catch (Exception e) {
-//			throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("SERVER ERROR").build();
-//		}
-//	}
+	@PostMapping("/refreshToken")
+	public ResponseDTO<String> handleRefreshToken(
+			@RequestParam(value = "refreshtoken", required = true) String refreshtoken) {
+		try {
+			return authService.handleRefreshToken(refreshtoken);
+
+		} catch (Exception e) {
+			throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("SERVER ERROR").build();
+		}
+	}
 
 }

@@ -32,6 +32,12 @@ public class ApplicationProperties {
 		ABSENT, OT, APPROVED, HAFT_ABSENT
 	}
 
+	private List<String> TYPE_BUSINESSDAYS = Arrays.asList("HOLIDAYS", "BUSINESSDAY");
+
+	public enum TypeBusinessDaysRef {
+		HOLIDAYS, BUSINESSDAY
+	}
+
 	@PostConstruct
 	protected void init() {
 		System.out.println(" == Application Reloaded: " + this);

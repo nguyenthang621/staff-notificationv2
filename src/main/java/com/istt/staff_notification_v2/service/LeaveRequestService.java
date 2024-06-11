@@ -22,6 +22,7 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusLeaveRequestRef;
+import com.istt.staff_notification_v2.configuration.ApplicationProperties.TypeAttendanceRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
@@ -34,6 +35,7 @@ import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LeaveRequestRepo;
 import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
+import com.istt.staff_notification_v2.utils.utils;
 
 public interface LeaveRequestService {
 
@@ -239,8 +241,15 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				attendanceDTO.setNote(responseLeaveRequest.getAnrreason());
 				attendanceDTO.setCreateAt(new Date());
 				//
-				attendanceDTO.setStartDate(leaveRequest.getStartDate());
-				attendanceDTO.setEndDate(leaveRequest.getStartDate());
+				attendanceDTO.setStartDate(new utils().resetStartDate(leaveRequest.getStartDate()));
+
+				// Hnadle calculator endDate
+				attendanceDTO.setEndDate(
+						new utils().calculatorEndDate(leaveRequest.getStartDate(), leaveRequest.getDuration()));
+
+				if (leaveRequest.getDuration() - (int) leaveRequest.getDuration() == 0.5f) {
+					attendanceDTO.setType(TypeAttendanceRef.HAFT_ABSENT.toString());
+				}
 
 				attendanceService.create(attendanceDTO);
 

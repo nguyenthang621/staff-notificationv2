@@ -1,5 +1,7 @@
 package com.istt.staff_notification_v2.service;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,7 @@ import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.security.securityv2.JwtTokenProvider;
+import com.istt.staff_notification_v2.utils.exception.AccessDeniedException;
 
 public interface AuthService {
 	ResponseDTO<String> signin(LoginRequest loginRequest, User user);
@@ -43,6 +46,8 @@ class AuthServiceImpl implements AuthService {
 	@Autowired
 	JwtTokenProvider tokenProvider;
 
+	private static final String ENTITY_NAME = "isttAuth";
+
 	@Override
 	public ResponseDTO<String> signin(LoginRequest loginRequest, User user) {
 		try {
@@ -57,6 +62,7 @@ class AuthServiceImpl implements AuthService {
 
 			user.setAccessToken(accessToken);
 			user.setRefreshToken(refreshToken);
+			userRepo.save(user);
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 					.refreshToken(refreshToken).build();
@@ -100,12 +106,15 @@ class AuthServiceImpl implements AuthService {
 		try {
 
 			String user_id = tokenProvider.getUserIdFromJWT(refreshToken_in);
-			System.out.println("user_id: " + user_id);
+			System.out.println(1);
+			if (user_id.isEmpty())
+				throw new AccessDeniedException("Access Denied");
 
-			User user = userRepo.findByUserId(user_id).get();
-
+			System.out.println(2);
+			User user = userRepo.findByUserId(user_id).orElseThrow(NoResultException::new);
 			Authentication authentication = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+			System.out.println(4);
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(authentication);
