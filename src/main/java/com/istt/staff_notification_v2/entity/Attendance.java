@@ -12,10 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 
 @Data
@@ -29,13 +25,13 @@ public class Attendance {
 	@Column(name = "type", updatable = false, nullable = false)
 	private String type;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "start_date", updatable = false, nullable = false)
 	private Date startDate;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "end_date", updatable = false, nullable = false)
 	private Date endDate;
 
@@ -51,13 +47,13 @@ public class Attendance {
 	@Column(columnDefinition = "TEXT")
 	private String note;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "create_at")
 	private Date createAt;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "update_at")
 	private Date updateAt;
 

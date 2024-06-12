@@ -17,9 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.istt.staff_notification_v2.utils.StringListConverter;
 
@@ -54,16 +51,16 @@ public class Employee {
 
 	private String status;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateofbirth;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date hiredate;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date offdate;
 
 	@Convert(converter = StringListConverter.class)

@@ -9,10 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,8 +30,8 @@ public class LeaveRequest {
 	@JoinColumn(name = "leavetype_id", nullable = false)
 	private LeaveType leavetype;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "request_date", nullable = false)
 	private Date requestDate;
 
@@ -49,8 +45,8 @@ public class LeaveRequest {
 	@Column(columnDefinition = "TEXT")
 	private String anrreason;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
+//	@JsonFormat(pattern = "dd/MM/yyyy")
+//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "start_date", nullable = false)
 	private Date startDate;
 
