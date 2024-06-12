@@ -16,12 +16,12 @@ public class AttendanceDTO {
 
 	private String type;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	// @DateTimeFormat(pattern = "dd/MM/yyyy")
+	// @JsonFormat(pattern = "dd/MM/yyyy")
 	private Date startDate;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
+	// @DateTimeFormat(pattern = "dd/MM/yyyy")
+	// @JsonFormat(pattern = "dd/MM/yyyy")
 	private Date endDate;
 
 	private String updateBy;
