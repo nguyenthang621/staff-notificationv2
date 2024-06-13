@@ -3,6 +3,7 @@ package com.istt.staff_notification_v2.apis;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -86,8 +87,8 @@ public class EmployeeAPI {
 	}
 
 	@GetMapping("/employeeRelationship")
-	public ResponseDTO<List<List<EmployeeRelationshipResponse>>> getEmployeeRelationship() {
-		return ResponseDTO.<List<List<EmployeeRelationshipResponse>>>builder()
+	public ResponseDTO<Map<String, List<EmployeeRelationshipResponse>>> getEmployeeRelationship() {
+		return ResponseDTO.<Map<String, List<EmployeeRelationshipResponse>>>builder()
 				.code(String.valueOf(HttpStatus.OK.value())).data(employeeService.getEmployeeRelationship()).build();
 	}
 
@@ -95,5 +96,11 @@ public class EmployeeAPI {
 	public ResponseDTO<List<EmployeeDTO>> test() {
 		return ResponseDTO.<List<EmployeeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.test()).build();
+	}
+
+	@GetMapping("/allRelationship")
+	public ResponseDTO<List<EmployeeRelationshipResponse>> getAllRelationshipByRule() {
+		return ResponseDTO.<List<EmployeeRelationshipResponse>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(employeeService.getAllRelationshipByRule()).build();
 	}
 }
