@@ -28,7 +28,7 @@ public class utils {
 			long diffInMillies = endDate.getTime() - startDate.getTime();
 			float diffInHours = (float) diffInMillies / (1000 * 60 * 60);
 			float diffInDays = diffInHours / 24;
-
+			// Round to the nearest 0.5
 			return (float) (Math.round(diffInDays * 2) / 2.0);
 		}
 
@@ -127,11 +127,14 @@ public class utils {
 					attendanceSplit.setApprovedBy(attendance.getApprovedBy());
 					attendanceSplit.setCreateAt(attendance.getCreateAt());
 					attendanceSplit.setEmployee(attendance.getEmployee());
-					attendanceSplit.setApprovedBy(attendance.getApprovedBy());
-
+					attendanceSplit.setUpdateAt(attendance.getUpdateAt());
+					attendanceSplit.setUpdateBy(attendance.getUpdateBy());
+					attendanceSplit.setLeaveRequest(attendance.getLeaveRequest());
+					attendanceSplit.setLeavetype(attendance.getLeavetype());
 					attendanceSplit.setStartDate(splitDate.getStartDate());
 					attendanceSplit.setEndDate(splitDate.getEndDate());
 					attendanceSplit.setDuration(splitDate.getDuration());
+					attendanceSplit.setNote(attendance.getNote());
 					attendanceSplits.add(attendanceSplit);
 				}
 			} else {
