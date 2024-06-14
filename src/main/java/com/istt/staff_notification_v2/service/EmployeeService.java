@@ -82,6 +82,8 @@ public interface EmployeeService {
 
 //	NodeDepartment buildDepartmentTree(List<Employee> employees);
 
+	Map<String, List<EmployeeDTO>> findEmployeeToExportExcel();
+
 }
 
 @Service
@@ -586,6 +588,28 @@ class EmployeeServiceImpl implements EmployeeService {
 		}
 		return null;
 
+	}
+
+	@Override
+	public Map<String, List<EmployeeDTO>> findEmployeeToExportExcel() {
+		try {
+			Map<String, List<EmployeeDTO>> employeesByDepartment = new HashMap<>();
+			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
+			for (Department department : departments) {
+				employeesByDepartment.put(department.getDepartmentName(), new ArrayList<>());
+				List<Employee> employeeInDepartment = employeeRepo
+						.findAllByDepartmentId(department, StatusEmployeeRef.ACTIVE.toString())
+						.orElseThrow(NoResultException::new);
+				employeesByDepartment.get(department.getDepartmentName()).addAll(employeeInDepartment.stream()
+						.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList()));
+			}
+			return employeesByDepartment;
+
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 }

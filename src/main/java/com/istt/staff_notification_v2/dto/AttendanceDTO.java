@@ -2,11 +2,9 @@ package com.istt.staff_notification_v2.dto;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
+import com.istt.staff_notification_v2.entity.LeaveType;
 
 import lombok.Data;
 
@@ -14,7 +12,7 @@ import lombok.Data;
 public class AttendanceDTO {
 	private String attendanceId;
 
-	private String type;
+	private LeaveType leaveType;
 
 	// @DateTimeFormat(pattern = "dd/MM/yyyy")
 	// @JsonFormat(pattern = "dd/MM/yyyy")
@@ -25,6 +23,8 @@ public class AttendanceDTO {
 	private Date endDate;
 
 	private String updateBy;
+
+	private float duration;
 
 	private String approvedBy;
 

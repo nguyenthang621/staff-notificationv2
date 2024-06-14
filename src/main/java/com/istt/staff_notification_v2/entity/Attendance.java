@@ -22,8 +22,9 @@ public class Attendance {
 	@Column(name = "attendance_id", updatable = false, nullable = false)
 	private String attendanceId;
 
-	@Column(name = "type", updatable = false, nullable = false)
-	private String type;
+	@ManyToOne
+	@JoinColumn(name = "leavetype_id", nullable = false)
+	private LeaveType leavetype;
 
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 //	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -39,6 +40,9 @@ public class Attendance {
 
 	@Column(name = "approved_by", updatable = false, nullable = false)
 	private String approvedBy;
+
+	@Column(name = "duration", updatable = false, nullable = false)
+	private float duration;
 
 	@ManyToOne
 	@JoinColumn(name = "employee_id", updatable = false, nullable = false)

@@ -35,6 +35,7 @@ public class LeaveRequest {
 	@Column(name = "request_date", nullable = false)
 	private Date requestDate;
 
+	@Column(name = "duration", updatable = false, nullable = false)
 	private float duration;
 
 	@Column(columnDefinition = "TEXT")

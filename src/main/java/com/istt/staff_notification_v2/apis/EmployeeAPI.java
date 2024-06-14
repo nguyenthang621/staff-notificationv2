@@ -103,4 +103,10 @@ public class EmployeeAPI {
 		return ResponseDTO.<List<EmployeeRelationshipResponse>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.getAllRelationshipByRule()).build();
 	}
+
+	@GetMapping("/findEmployeeToExportExcel")
+	public ResponseDTO<Map<String, List<EmployeeDTO>>> findEmployeeToExportExcel() {
+		return ResponseDTO.<Map<String, List<EmployeeDTO>>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(employeeService.findEmployeeToExportExcel()).build();
+	}
 }

@@ -32,8 +32,11 @@ import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Attendance;
 import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.entity.LeaveType;
 import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
+import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
+import com.istt.staff_notification_v2.utils.utils;
 
 public interface AttendanceService {
 
@@ -68,6 +71,9 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Autowired
 	ApplicationProperties props;
 
+	@Autowired
+	private LeaveTypeRepo leaveTypeRepo;
+
 	private static final String ENTITY_NAME = "isttAttendance";
 
 	@Transactional
@@ -87,6 +93,16 @@ class AttendanceServiceImpl implements AttendanceService {
 			if (employeeOptional.isEmpty())
 				throw new BadRequestAlertException("Employee not found.", ENTITY_NAME, "Not found");
 
+			if (attendanceDTO.getDuration() <= 0.0 || attendanceDTO.getDuration() % 0.5 != 0.0)
+				throw new BadRequestAlertException("Bad request: Invalid duration", ENTITY_NAME, "Invalid");
+
+			Optional<LeaveType> leaveTypeOp = leaveTypeRepo
+					.findByLeavetypeId(attendanceDTO.getLeaveType().getLeavetypeId());
+			if (leaveTypeOp.isEmpty())
+				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
+
+			attendance.setLeavetype(leaveTypeOp.get());
+
 			Employee employee = employeeOptional.get();
 			if (employee.getStatus().equals(StatusEmployeeRef.SUSPEND.toString()))
 				throw new BadRequestAlertException("This employee has been suspended", ENTITY_NAME, "Suspend");
@@ -94,8 +110,10 @@ class AttendanceServiceImpl implements AttendanceService {
 			attendance.setEmployee(employee);
 			attendance.setCreateAt(new Date());
 
-			if (!props.getTYPE_ATTENDANCE().contains(attendanceDTO.getType()))
-				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
+			attendance.setStartDate(new utils().resetStartDate(attendanceDTO.getStartDate()));
+
+			attendance.setEndDate(
+					new utils().calculatorEndDate(attendanceDTO.getStartDate(), attendanceDTO.getDuration()));
 
 			attendanceRepo.save(attendance);
 
@@ -130,8 +148,12 @@ class AttendanceServiceImpl implements AttendanceService {
 			attendance.setUpdateAt(new Date());
 			attendance.setUpdateBy(employeeUpdateOptional.get().getEmployeeId());
 
-			if (!props.getTYPE_ATTENDANCE().contains(attendanceDTO.getType()))
-				throw new BadRequestAlertException("Invalid STATUS ATTENDANCE", ENTITY_NAME, "Invalid");
+			Optional<LeaveType> leaveTypeOp = leaveTypeRepo
+					.findByLeavetypeId(attendanceDTO.getLeaveType().getLeavetypeId());
+			if (leaveTypeOp.isEmpty())
+				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
+
+			attendance.setLeavetype(leaveTypeOp.get());
 
 			attendanceRepo.save(attendance);
 

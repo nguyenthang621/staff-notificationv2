@@ -10,6 +10,4 @@ public class SearchLeaveRequest {
 
 	private String startDate;
 
-	private String endDate;
-
 }

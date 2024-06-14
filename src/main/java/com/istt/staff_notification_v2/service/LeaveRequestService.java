@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,6 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusLeaveRequestRef;
-import com.istt.staff_notification_v2.configuration.ApplicationProperties.TypeAttendanceRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
@@ -237,19 +237,17 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				attendanceDTO.setEmployee(leaveRequest.getEmployee());
 				attendanceDTO.setApprovedBy(responseLeaveRequest.getByEmployeeId());
 
-				attendanceDTO.setType(responseLeaveRequest.getStatus());
+				attendanceDTO.setLeaveType(leaveRequest.getLeavetype());
 				attendanceDTO.setNote(responseLeaveRequest.getAnrreason());
 				attendanceDTO.setCreateAt(new Date());
-				//
+				// Handle reset time start date
 				attendanceDTO.setStartDate(new utils().resetStartDate(leaveRequest.getStartDate()));
 
-				// Hnadle calculator endDate
+				// Handle calculator endDate
 				attendanceDTO.setEndDate(
 						new utils().calculatorEndDate(leaveRequest.getStartDate(), leaveRequest.getDuration()));
 
-				if (leaveRequest.getDuration() - (int) leaveRequest.getDuration() == 0.5f) {
-					attendanceDTO.setType(TypeAttendanceRef.HAFT_ABSENT.toString());
-				}
+				attendanceDTO.setDuration(leaveRequest.getDuration());
 
 				attendanceService.create(attendanceDTO);
 
@@ -286,17 +284,32 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	@Override
 	public List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
 		try {
-//			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null && searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEndDate() == null) {
-			Employee employee = employeeRepo.findByEmail(searchLeaveRequest.getEmail());
-			if (employee == null)
-				throw new BadRequestAlertException("Bad request: Email nost found", ENTITY_NAME, "Not found");
-//			}
+			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null
+					&& searchLeaveRequest.getStartDate() == null) {
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findEmail(searchLeaveRequest.getEmail());
+				if (resultOp.isEmpty())
+					return new ArrayList<>();
+				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+						.collect(Collectors.toList());
+			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
+					&& searchLeaveRequest.getStartDate() == null) {
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo
+						.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus());
+				if (resultOp.isEmpty())
+					return new ArrayList<>();
+				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+						.collect(Collectors.toList());
+			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
+					&& searchLeaveRequest.getStartDate() != null) {
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo
+						.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus());
+				if (resultOp.isEmpty())
+					return new ArrayList<>();
+				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+						.collect(Collectors.toList());
+			}
+			return new ArrayList<>();
 
-			List<LeaveRequest> leaveRequestsOptional = leaveRequestRepo.findByEmployee(employee).get();
-
-			return leaveRequestsOptional.stream()
-					.map(leaveRequest -> new ModelMapper().map(leaveRequest, LeaveRequestDTO.class))
-					.collect(Collectors.toList());
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
