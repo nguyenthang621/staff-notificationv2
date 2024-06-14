@@ -313,12 +313,14 @@ class EmployeeServiceImpl implements EmployeeService {
 
 		String email = null;
 		String department = null;
+		String status = null;
 
 		if (StringUtils.hasText(searchDTO.getFilterBys().get("email"))) {
 			System.out.println("1 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
 			email = String.valueOf(searchDTO.getFilterBys().get("email"));
+			status = String.valueOf(searchDTO.getFilterBys().get("status"));
 
-			Page<Employee> page = employeeRepo.searchByFullnameAndEmail(searchDTO.getValue(), email, pageable);
+			Page<Employee> page = employeeRepo.searchByFullnameAndEmail(searchDTO.getValue(), email, status, pageable);
 
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
 			for (Employee employee : page.getContent()) {
@@ -330,9 +332,10 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			return responseDTO;
 		} else if (StringUtils.hasText(searchDTO.getFilterBys().get("department_name"))) {
+			status = String.valueOf(searchDTO.getFilterBys().get("status"));
 			System.out.println("3 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
 			department = String.valueOf(searchDTO.getFilterBys().get("department_name"));
-			Page<Employee> page = employeeRepo.searchByFullnameAndDepartment(searchDTO.getValue(), department,
+			Page<Employee> page = employeeRepo.searchByFullnameAndDepartment(searchDTO.getValue(), department, status,
 					pageable);
 
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
@@ -346,7 +349,8 @@ class EmployeeServiceImpl implements EmployeeService {
 
 		} else {
 
-			Page<Employee> page = employeeRepo.searchByFullname(searchDTO.getValue(), pageable);
+			status = String.valueOf(searchDTO.getFilterBys().get("status"));
+			Page<Employee> page = employeeRepo.searchByFullname(searchDTO.getValue(), status, pageable);
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
 			for (Employee employee : page.getContent()) {
 				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);

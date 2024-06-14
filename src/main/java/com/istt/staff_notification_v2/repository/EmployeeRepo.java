@@ -15,18 +15,19 @@ import com.istt.staff_notification_v2.entity.Employee;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, String> {
-	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x ")
-	Page<Employee> searchByFullname(@Param("x") String s, Pageable pageable);
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x  AND u.status = :s")
+	Page<Employee> searchByFullname(@Param("x") String s, @Param("s") String status, Pageable pageable);
 
-	@Query("SELECT u FROM Employee u WHERE u.email LIKE :x ")
-	Page<Employee> searchByEmail(@Param("x") String s, Pageable pageable);
+	@Query("SELECT u FROM Employee u WHERE u.email LIKE :x  AND u.status = :s")
+	Page<Employee> searchByEmail(@Param("x") String s, @Param("s") String status, Pageable pageable);
 
-	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.email LIKE :y ")
-	Page<Employee> searchByFullnameAndEmail(@Param("x") String name, @Param("y") String email, Pageable pageable);
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.email LIKE :y AND u.status = :s")
+	Page<Employee> searchByFullnameAndEmail(@Param("x") String name, @Param("y") String email,
+			@Param("s") String status, Pageable pageable);
 
-	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y ")
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y AND u.status = :s")
 	Page<Employee> searchByFullnameAndDepartment(@Param("x") String name, @Param("y") String department,
-			Pageable pageable);
+			@Param("s") String status, Pageable pageable);
 
 	@Query("SELECT e FROM Employee e WHERE e.email = :x ")
 	Employee findByEmail(@Param("x") String value);

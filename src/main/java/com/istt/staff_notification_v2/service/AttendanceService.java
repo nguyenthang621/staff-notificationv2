@@ -115,7 +115,14 @@ class AttendanceServiceImpl implements AttendanceService {
 			attendance.setEndDate(
 					new utils().calculatorEndDate(attendanceDTO.getStartDate(), attendanceDTO.getDuration()));
 
-			attendanceRepo.save(attendance);
+			List<Attendance> splitAttendences = new utils().handleSplitAttendence(attendance);
+			for (Attendance splitAttendence : splitAttendences) {
+				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
+				System.out.println("-> splitAttendence: " + splitAttendence.getDuration());
+//				attendanceRepo.save(splitAttendence);
+			}
+
+//			attendanceRepo.save(attendance);
 
 			return attendanceDTO;
 		} catch (ResourceAccessException e) {
