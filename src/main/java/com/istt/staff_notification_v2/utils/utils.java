@@ -25,10 +25,11 @@ public class utils {
 		}
 
 		private float calculateDuration(Date startDate, Date endDate) {
+			System.out.println(startDate + "--------" + endDate);
 			long diffInMillies = endDate.getTime() - startDate.getTime();
 			float diffInHours = (float) diffInMillies / (1000 * 60 * 60);
 			float diffInDays = diffInHours / 24;
-			// Round to the nearest 0.5
+			System.out.println("dureation: " + (float) (Math.round(diffInDays * 2) / 2.0));
 			return (float) (Math.round(diffInDays * 2) / 2.0);
 		}
 
@@ -64,8 +65,6 @@ public class utils {
 
 			calendar.setTimeInMillis(calendar.getTimeInMillis() + durationInMillis);
 
-			System.out.println("calendar: " + calendar);
-			System.out.println("calendar.getTime(): " + calendar.getTime());
 			return calendar.getTime();
 
 		} catch (Exception e) {
@@ -93,22 +92,29 @@ public class utils {
 	public static List<DateRange> splitDates(Date start, Date end) {
 		List<DateRange> dateRanges = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
-
-		// Set the start date
 		calendar.setTime(start);
-		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-		Date currentEnd = calendar.getTime();
 
-		while (currentEnd.before(end)) {
-			dateRanges.add(new DateRange(start, currentEnd));
-			calendar.add(Calendar.DAY_OF_MONTH, 1);
-			start = calendar.getTime();
+		while (calendar.getTime().before(end)) {
+			Date startDate = calendar.getTime();
 
 			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-			currentEnd = calendar.getTime();
-		}
+			Date endDate = calendar.getTime();
 
-		dateRanges.add(new DateRange(start, end));
+			if (endDate.after(end)) {
+				endDate = end;
+			} else {
+				Calendar tempCal = (Calendar) calendar.clone();
+				tempCal.add(Calendar.DAY_OF_MONTH, 1);
+				endDate = tempCal.getTime();
+			}
+
+			dateRanges.add(new DateRange(startDate, endDate));
+
+			calendar.setTime(endDate);
+			if (calendar.getTime().before(end)) {
+				calendar.add(Calendar.DAY_OF_MONTH, 0);
+			}
+		}
 
 		return dateRanges;
 	}
