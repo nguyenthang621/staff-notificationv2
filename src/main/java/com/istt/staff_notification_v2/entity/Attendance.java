@@ -65,4 +65,10 @@ public class Attendance {
 	@JoinColumn(name = "leaveqequestId", referencedColumnName = "leaveqequest_id")
 	private LeaveRequest leaveRequest;
 
+	private Long year;
+
+	private Long month;
+
+	private Long day;
+
 }

@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.service;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,7 @@ public interface AttendanceService {
 	List<AttendanceDTO> getStatus(String type);
 
 	ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence);
+
 }
 
 @Service
@@ -228,6 +230,13 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence) {
 		try {
+			// Sử dụng Calendar để cộng thêm 1 ngày
+//			Calendar calendar = Calendar.getInstance();
+//			calendar.setTime(searchAttendence.getEndDate());
+//			calendar.add(Calendar.DAY_OF_MONTH, 1);
+//
+//			searchAttendence.setEndDate(calendar.getTime());
+
 			List<Sort.Order> orders = Optional.ofNullable(searchAttendence.getSearch().getOrders())
 					.orElseGet(Collections::emptyList).stream().map(order -> {
 						if (order.getOrder().equals(SearchDTO.ASC))
@@ -238,8 +247,29 @@ class AttendanceServiceImpl implements AttendanceService {
 			Pageable pageable = PageRequest.of(searchAttendence.getSearch().getPage(),
 					searchAttendence.getSearch().getSize(), Sort.by(orders));
 
-			Page<Attendance> page = attendanceRepo.searchByMultiAllType(searchAttendence.getSearch().getValue(),
-					searchAttendence.getStartDate(), searchAttendence.getEndDate(), pageable);
+//			Page<Attendance> page = attendanceRepo.searchByMultiAllType(searchAttendence.getSearch().getValue(),
+//					searchAttendence.getStartDate(), searchAttendence.getEndDate(), pageable);
+
+			Calendar calendarStartDate = Calendar.getInstance();
+			calendarStartDate.setTime(searchAttendence.getStartDate());
+
+			Calendar calendarEndDate = Calendar.getInstance();
+			calendarEndDate.setTime(searchAttendence.getEndDate());
+
+			System.out.println(
+					"----" + calendarStartDate.get(Calendar.YEAR) + "---> " + calendarEndDate.get(Calendar.YEAR));
+			System.out.println(
+					"----" + calendarStartDate.get(Calendar.MONTH) + "---> " + calendarEndDate.get(Calendar.MONTH));
+
+			System.out.println("----" + calendarStartDate.get(Calendar.DAY_OF_MONTH) + "---> "
+					+ calendarEndDate.get(Calendar.DAY_OF_MONTH));
+			Page<Attendance> page = attendanceRepo.searchByIndex(searchAttendence.getSearch().getValue(),
+					Long.valueOf(calendarStartDate.get(Calendar.YEAR)),
+					Long.valueOf(calendarStartDate.get(Calendar.MONTH) + 1),
+					Long.valueOf(calendarStartDate.get(Calendar.DAY_OF_MONTH)),
+					Long.valueOf(calendarEndDate.get(Calendar.YEAR)),
+					Long.valueOf(calendarEndDate.get(Calendar.MONTH) + 1),
+					Long.valueOf(calendarEndDate.get(Calendar.DAY_OF_MONTH)), pageable);
 			if (searchAttendence.getType().isEmpty()) {
 				page = attendanceRepo.searchByMulti(searchAttendence.getSearch().getValue(),
 						searchAttendence.getStartDate(), searchAttendence.getEndDate(), searchAttendence.getType(),

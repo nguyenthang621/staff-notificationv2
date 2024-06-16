@@ -27,9 +27,16 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	Page<Attendance> searchByMulti(@Param("x") String value, @Param("a") Date start, @Param("b") Date end,
 			@Param("t") String leaveType, Pageable pageable);
 
-	@Query("SELECT a FROM Attendance a WHERE (a.employee.fullname LIKE :x OR a.employee.email LIKE :x) AND a.createAt BETWEEN :a AND :b")
+	@Query("SELECT a FROM Attendance a WHERE (a.employee.fullname LIKE :x OR a.employee.email LIKE :x) AND a.startDate <= :b AND a.endDate >= :a")
 	Page<Attendance> searchByMultiAllType(@Param("x") String value, @Param("a") Date start, @Param("b") Date end,
 			Pageable pageable);
+
+	@Query("SELECT a FROM Attendance a WHERE "
+			+ "(a.year > :startYear OR (a.year = :startYear AND (a.month > :startMonth OR (a.month = :startMonth AND a.day >= :startDay)))) AND "
+			+ "(a.year < :endYear OR (a.year = :endYear AND (a.month < :endMonth OR (a.month = :endMonth AND a.day <= :endDay)))) AND a.employee.fullname LIKE :x")
+	Page<Attendance> searchByIndex(@Param("x") String value, @Param("startYear") Long startYear,
+			@Param("startMonth") Long startMonth, @Param("startDay") Long startDay, @Param("endYear") Long endYear,
+			@Param("endMonth") Long endMonth, @Param("endDay") Long endDay, Pageable pageable);
 
 	@Query("Select a from Attendance a where a.leavetype.leavetypeName = :x ")
 	List<Attendance> getType(@Param("x") String value);

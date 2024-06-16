@@ -13,24 +13,54 @@ import com.istt.staff_notification_v2.entity.Attendance;
 @Service
 public class utils {
 
+//	public static class DateRange {
+//		private Date startDate;
+//		private Date endDate;
+//		private float duration; // duration in days
+//
+//		public DateRange(Date startDate, Date endDate) {
+//			this.startDate = startDate;
+//			this.endDate = endDate;
+//			this.duration = calculateDuration(startDate, endDate);
+//		}
+//
+//		private float calculateDuration(Date startDate, Date endDate) {
+//			System.out.println(startDate + "--------" + endDate);
+//			long diffInMillies = endDate.getTime() - startDate.getTime();
+//			float diffInHours = (float) diffInMillies / (1000 * 60 * 60);
+//			float diffInDays = diffInHours / 24;
+//			System.out.println("dureation: " + (float) (Math.round(diffInDays * 2) / 2.0));
+//			return (float) (Math.round(diffInDays * 2) / 2.0);
+//		}
+//
+//		public Date getStartDate() {
+//			return startDate;
+//		}
+//
+//		public Date getEndDate() {
+//			return endDate;
+//		}
+//
+//		public float getDuration() {
+//			return duration;
+//		}
+//
+//		@Override
+//		public String toString() {
+//			return "DateRange{" + "startDate=" + startDate + ", endDate=" + endDate + ", duration=" + duration + " days"
+//					+ '}';
+//		}
+//	}
+
 	public static class DateRange {
 		private Date startDate;
 		private Date endDate;
-		private float duration; // duration in days
+		private float duration;
 
-		public DateRange(Date startDate, Date endDate) {
+		public DateRange(Date startDate, Date endDate, float duration) {
 			this.startDate = startDate;
 			this.endDate = endDate;
-			this.duration = calculateDuration(startDate, endDate);
-		}
-
-		private float calculateDuration(Date startDate, Date endDate) {
-			System.out.println(startDate + "--------" + endDate);
-			long diffInMillies = endDate.getTime() - startDate.getTime();
-			float diffInHours = (float) diffInMillies / (1000 * 60 * 60);
-			float diffInDays = diffInHours / 24;
-			System.out.println("dureation: " + (float) (Math.round(diffInDays * 2) / 2.0));
-			return (float) (Math.round(diffInDays * 2) / 2.0);
+			this.duration = duration;
 		}
 
 		public Date getStartDate() {
@@ -89,31 +119,93 @@ public class utils {
 		}
 	}
 
-	public static List<DateRange> splitDates(Date start, Date end) {
+//	public static List<DateRange> splitDates(Date start, Date end) {
+//		List<DateRange> dateRanges = new ArrayList<>();
+//		Calendar calendar = Calendar.getInstance();
+//
+//		// Set the start date
+//		calendar.setTime(start);
+//		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+//		Date currentEnd = calendar.getTime();
+//
+//		while (currentEnd.before(end)) {
+//			dateRanges.add(new DateRange(start, currentEnd));
+//			calendar.add(Calendar.DAY_OF_MONTH, 1);
+//			start = calendar.getTime();
+//
+//			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+//			currentEnd = calendar.getTime();
+//		}
+//
+//		dateRanges.add(new DateRange(start, end));
+//
+//		return dateRanges;
+//	}
+
+//	public static List<DateRange> splitDates(Date start, Date end) {
+//		List<DateRange> dateRanges = new ArrayList<>();
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.setTime(start);
+//
+//		while (calendar.getTime().before(end)) {
+//			Date startDate = calendar.getTime();
+//
+//			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+//			Date endDate = calendar.getTime();
+//
+//			if (endDate.after(end)) {
+//				endDate = end;
+//			} else {
+//				Calendar tempCal = (Calendar) calendar.clone();
+//				tempCal.add(Calendar.DAY_OF_MONTH, 1);
+//				endDate = tempCal.getTime();
+//			}
+//
+//			dateRanges.add(new DateRange(startDate, endDate));
+//
+//			calendar.setTime(endDate);
+//			if (calendar.getTime().before(end)) {
+//				calendar.add(Calendar.DAY_OF_MONTH, 0);
+//			}
+//		}
+//
+//		return dateRanges;
+//	}
+
+	public static List<DateRange> splitDateRange(Date startDate, float totalDuration) {
 		List<DateRange> dateRanges = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(start);
+		calendar.setTime(startDate);
 
-		while (calendar.getTime().before(end)) {
-			Date startDate = calendar.getTime();
+		while (totalDuration > 0) {
+			Date rangeStartDate = calendar.getTime();
 
-			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-			Date endDate = calendar.getTime();
+			float currentDuration = Math.min(totalDuration, 1.0f);
+			if (totalDuration < 1 && totalDuration > 0) {
+				currentDuration = totalDuration;
+			}
 
-			if (endDate.after(end)) {
-				endDate = end;
+			Calendar tempCal = (Calendar) calendar.clone();
+			if (currentDuration == 0.5f) {
+				tempCal.add(Calendar.HOUR_OF_DAY, 12);
 			} else {
-				Calendar tempCal = (Calendar) calendar.clone();
-				tempCal.add(Calendar.DAY_OF_MONTH, 1);
-				endDate = tempCal.getTime();
+				tempCal.add(Calendar.DAY_OF_MONTH, (int) currentDuration - 1);
+				if (currentDuration % 1 != 0) {
+					tempCal.add(Calendar.HOUR_OF_DAY, 12);
+				}
+			}
+			Date rangeEndDate = tempCal.getTime();
+
+			dateRanges.add(new DateRange(rangeStartDate, rangeEndDate, currentDuration));
+
+			calendar.setTime(rangeEndDate);
+			if (currentDuration == 0.5f) {
+				calendar.add(Calendar.HOUR_OF_DAY, 12);
+			} else {
+				calendar.add(Calendar.DAY_OF_MONTH, 1);
 			}
 
-			dateRanges.add(new DateRange(startDate, endDate));
-
-			calendar.setTime(endDate);
-			if (calendar.getTime().before(end)) {
-				calendar.add(Calendar.DAY_OF_MONTH, 0);
-			}
+			totalDuration -= currentDuration;
 		}
 
 		return dateRanges;
@@ -121,7 +213,7 @@ public class utils {
 
 	public static List<Attendance> handleSplitAttendence(Attendance attendance) {
 		try {
-			List<DateRange> splitDates = splitDates(attendance.getStartDate(), attendance.getEndDate());
+			List<DateRange> splitDates = splitDateRange(attendance.getStartDate(), attendance.getDuration());
 			System.out.println("split date: " + splitDates.toString());
 			List<Attendance> attendanceSplits = new ArrayList<>();
 
@@ -141,7 +233,15 @@ public class utils {
 					attendanceSplit.setEndDate(splitDate.getEndDate());
 					attendanceSplit.setDuration(splitDate.getDuration());
 					attendanceSplit.setNote(attendance.getNote());
+//					handle fill index
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(splitDate.getStartDate());
+					attendanceSplit.setYear(Long.valueOf(calendar.get(Calendar.YEAR)));
+					attendanceSplit.setMonth(Long.valueOf(calendar.get(Calendar.MONTH) + 1));
+					attendanceSplit.setDay(Long.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+
 					attendanceSplits.add(attendanceSplit);
+
 				}
 			} else {
 				attendanceSplits.add(attendance);
