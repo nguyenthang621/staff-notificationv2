@@ -228,7 +228,7 @@ public class utils {
 					attendanceSplit.setUpdateAt(attendance.getUpdateAt());
 					attendanceSplit.setUpdateBy(attendance.getUpdateBy());
 					attendanceSplit.setLeaveRequest(attendance.getLeaveRequest());
-					attendanceSplit.setLeavetype(attendance.getLeavetype());
+					attendanceSplit.setLeaveType(attendance.getLeaveType());
 					attendanceSplit.setStartDate(splitDate.getStartDate());
 					attendanceSplit.setEndDate(splitDate.getEndDate());
 					attendanceSplit.setDuration(splitDate.getDuration());

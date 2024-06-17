@@ -103,7 +103,7 @@ class AttendanceServiceImpl implements AttendanceService {
 			if (leaveTypeOp.isEmpty())
 				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
 
-			attendance.setLeavetype(leaveTypeOp.get());
+			attendance.setLeaveType(leaveTypeOp.get());
 
 			Employee employee = employeeOptional.get();
 			if (employee.getStatus().equals(StatusEmployeeRef.SUSPEND.toString()))
@@ -161,7 +161,7 @@ class AttendanceServiceImpl implements AttendanceService {
 			if (leaveTypeOp.isEmpty())
 				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
 
-			attendance.setLeavetype(leaveTypeOp.get());
+			attendance.setLeaveType(leaveTypeOp.get());
 
 			attendanceRepo.save(attendance);
 
@@ -277,11 +277,11 @@ class AttendanceServiceImpl implements AttendanceService {
 			}
 
 			ModelMapper mapper = new ModelMapper();
-			List<AttendanceDTO> levelDTOs = page.getContent().stream()
+			List<AttendanceDTO> attendanceDTOs = page.getContent().stream()
 					.map(attendance -> mapper.map(attendance, AttendanceDTO.class)).collect(Collectors.toList());
 
 			ResponseDTO<List<AttendanceDTO>> responseDTO = mapper.map(page, ResponseDTO.class);
-			responseDTO.setData(levelDTOs);
+			responseDTO.setData(attendanceDTOs);
 			return responseDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();

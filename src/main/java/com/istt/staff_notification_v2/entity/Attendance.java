@@ -24,7 +24,7 @@ public class Attendance {
 
 	@ManyToOne
 	@JoinColumn(name = "leavetype_id", nullable = false)
-	private LeaveType leavetype;
+	private LeaveType leaveType;
 
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 //	@DateTimeFormat(pattern = "dd/MM/yyyy")

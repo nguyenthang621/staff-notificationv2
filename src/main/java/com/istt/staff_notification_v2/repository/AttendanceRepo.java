@@ -17,13 +17,13 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a")
 	List<Attendance> getAll();
 
-	@Query("Select a from Attendance a where a.leavetype.leavetypeName = :x ")
+	@Query("Select a from Attendance a where a.leaveType.leavetypeName = :x ")
 	Page<Attendance> findByType(@Param("x") String value, Pageable pageable);
 
 	@Query("Select a from Attendance a where a.employee.fullname like :x OR a.employee.email like :x")
 	Page<Attendance> searchByEmployeeName(@Param("x") String value, Pageable pageable);
 
-	@Query("SELECT a FROM Attendance a WHERE (a.employee.fullname LIKE :x OR a.employee.email LIKE :x) AND a.createAt BETWEEN :a AND :b AND a.leavetype.leavetypeName = :t")
+	@Query("SELECT a FROM Attendance a WHERE (a.employee.fullname LIKE :x OR a.employee.email LIKE :x) AND a.createAt BETWEEN :a AND :b AND a.leaveType.leavetypeName = :t")
 	Page<Attendance> searchByMulti(@Param("x") String value, @Param("a") Date start, @Param("b") Date end,
 			@Param("t") String leaveType, Pageable pageable);
 
@@ -38,7 +38,7 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 			@Param("startMonth") Long startMonth, @Param("startDay") Long startDay, @Param("endYear") Long endYear,
 			@Param("endMonth") Long endMonth, @Param("endDay") Long endDay, Pageable pageable);
 
-	@Query("Select a from Attendance a where a.leavetype.leavetypeName = :x ")
+	@Query("Select a from Attendance a where a.leaveType.leavetypeName = :x ")
 	List<Attendance> getType(@Param("x") String value);
 
 }
