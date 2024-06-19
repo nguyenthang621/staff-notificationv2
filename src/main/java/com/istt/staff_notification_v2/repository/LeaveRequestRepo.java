@@ -25,6 +25,9 @@ public interface LeaveRequestRepo extends JpaRepository<LeaveRequest, String> {
 	@Query("SELECT l FROM LeaveRequest l WHERE l.employee.email = :x AND l.status = :t AND l.startDate > :d")
 	Optional<List<LeaveRequest>> find(@Param("x") String email, @Param("t") String status, @Param("t") Date d);
 
+	@Query("SELECT l FROM LeaveRequest l WHERE AND l.status = :t")
+	Optional<List<LeaveRequest>> findstatus(@Param("t") String status);
+
 	@Query("SELECT COUNT(l) FROM LeaveRequest l")
 	Optional<Long> returnCheckCount();
 
