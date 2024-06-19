@@ -394,3 +394,50 @@ Caused by: org.hibernate.hql.internal.ast.QuerySyntaxException: unexpected token
 2024-06-19 09:47:33.237  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
 2024-06-19 09:47:33.265  INFO DESKTOP-2B56038 --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
 2024-06-19 09:47:33.274  INFO DESKTOP-2B56038 --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 5.003 seconds (JVM running for 5.899)
+2024-06-19 10:38:40.250  INFO DESKTOP-2B56038 --- [on(3)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-06-19 10:38:40.250  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-06-19 10:38:40.250  INFO DESKTOP-2B56038 --- [on(5)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-06-19 10:38:40.301  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-8080"]
+2024-06-19 10:38:40.302  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-06-19 10:38:40.310  WARN DESKTOP-2B56038 --- [on(4)-127.0.0.1] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@15.0.2/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@15.0.2/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@15.0.2/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1661)
+ java.base@15.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@15.0.2/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@15.0.2/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1056)
+ java.base@15.0.2/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1116)
+ java.base@15.0.2/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+ java.base@15.0.2/java.lang.Thread.run(Thread.java:832)
+2024-06-19 10:38:40.313  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-8080"]
+2024-06-19 10:38:40.316  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-8080"]
+2024-06-19 10:38:40.329  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-06-19 10:38:40.337  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-06-19 10:38:40.345  INFO DESKTOP-2B56038 --- [on(4)-127.0.0.1] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-06-19 10:52:50.368  INFO DESKTOP-2B56038 --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-06-19 10:52:50.411  INFO DESKTOP-2B56038 --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 15.0.2 on DESKTOP-2B56038 with PID 15908 (F:\Workspace_java\staff-notification-v2\target\classes started by nthan in F:\Workspace_java\staff-notification-v2)
+2024-06-19 10:52:50.415  INFO DESKTOP-2B56038 --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-06-19 10:52:50.455  INFO DESKTOP-2B56038 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-06-19 10:52:50.455  INFO DESKTOP-2B56038 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-06-19 10:52:51.225  INFO DESKTOP-2B56038 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-19 10:52:51.296  INFO DESKTOP-2B56038 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 63 ms. Found 10 JPA repository interfaces.
+2024-06-19 10:52:51.839  INFO DESKTOP-2B56038 --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-06-19 10:52:51.855  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-06-19 10:52:51.856  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-06-19 10:52:51.857  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-06-19 10:52:51.948  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-06-19 10:52:51.948  INFO DESKTOP-2B56038 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1492 ms
+2024-06-19 10:52:52.110  WARN DESKTOP-2B56038 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-19 10:52:52.167  INFO DESKTOP-2B56038 --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-06-19 10:52:52.319  INFO DESKTOP-2B56038 --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-06-19 10:52:52.362  INFO DESKTOP-2B56038 --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-19 10:52:52.418  INFO DESKTOP-2B56038 --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-06-19 10:52:52.582  INFO DESKTOP-2B56038 --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-06-19 10:52:52.680  INFO DESKTOP-2B56038 --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-06-19 10:52:53.414  INFO DESKTOP-2B56038 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-06-19 10:52:53.423  INFO DESKTOP-2B56038 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-19 10:52:54.519  INFO DESKTOP-2B56038 --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56c1dd9e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@9da191f, org.springframework.security.web.context.SecurityContextPersistenceFilter@11c84bbe, org.springframework.security.web.header.HeaderWriterFilter@26e96810, org.springframework.web.filter.CorsFilter@79b4a5b6, org.springframework.security.web.authentication.logout.LogoutFilter@6aa299cc, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@2f1f204, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5eab255d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@9001f9a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@69de3201, org.springframework.security.web.session.SessionManagementFilter@17133ca5, org.springframework.security.web.access.ExceptionTranslationFilter@332a2c7e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@43eb4416]
+2024-06-19 10:52:55.395  INFO DESKTOP-2B56038 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-06-19 10:52:55.415  INFO DESKTOP-2B56038 --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-06-19 10:52:55.440  INFO DESKTOP-2B56038 --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-06-19 10:52:55.448  INFO DESKTOP-2B56038 --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 5.333 seconds (JVM running for 6.298)
