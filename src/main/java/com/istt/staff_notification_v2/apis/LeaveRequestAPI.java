@@ -31,8 +31,7 @@ public class LeaveRequestAPI {
 		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
 				|| mailRequestDTO.getLeaveRequestDTO().getReason() == null
 				|| mailRequestDTO.getLeaveRequestDTO().getLeavetype() == null
-				|| mailRequestDTO.getLeaveRequestDTO().getEmployee() == null
-				|| mailRequestDTO.getLeaveRequestDTO().getEmployee().getEmail() == null) {
+				|| mailRequestDTO.getLeaveRequestDTO().getEmployee() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
 		}
 		leaveRequestService.create(mailRequestDTO);
