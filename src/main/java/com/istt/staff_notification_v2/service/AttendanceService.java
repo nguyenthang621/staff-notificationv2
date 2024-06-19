@@ -256,13 +256,6 @@ class AttendanceServiceImpl implements AttendanceService {
 			Calendar calendarEndDate = Calendar.getInstance();
 			calendarEndDate.setTime(searchAttendence.getEndDate());
 
-			System.out.println(
-					"----" + calendarStartDate.get(Calendar.YEAR) + "---> " + calendarEndDate.get(Calendar.YEAR));
-			System.out.println(
-					"----" + calendarStartDate.get(Calendar.MONTH) + "---> " + calendarEndDate.get(Calendar.MONTH));
-
-			System.out.println("----" + calendarStartDate.get(Calendar.DAY_OF_MONTH) + "---> "
-					+ calendarEndDate.get(Calendar.DAY_OF_MONTH));
 			Page<Attendance> page = attendanceRepo.searchByIndex(searchAttendence.getSearch().getValue(),
 					Long.valueOf(calendarStartDate.get(Calendar.YEAR)),
 					Long.valueOf(calendarStartDate.get(Calendar.MONTH) + 1),

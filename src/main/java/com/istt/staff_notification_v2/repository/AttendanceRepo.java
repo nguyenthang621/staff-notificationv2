@@ -38,6 +38,13 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 			@Param("startMonth") Long startMonth, @Param("startDay") Long startDay, @Param("endYear") Long endYear,
 			@Param("endMonth") Long endMonth, @Param("endDay") Long endDay, Pageable pageable);
 
+	@Query("SELECT a FROM Attendance a WHERE "
+			+ "(a.year > :startYear OR (a.year = :startYear AND (a.month > :startMonth OR (a.month = :startMonth AND a.day >= :startDay)))) AND "
+			+ "(a.year < :endYear OR (a.year = :endYear AND (a.month < :endMonth OR (a.month = :endMonth AND a.day <= :endDay))))")
+	List<Attendance> findByIndex(@Param("startYear") Long startYear, @Param("startMonth") Long startMonth,
+			@Param("startDay") Long startDay, @Param("endYear") Long endYear, @Param("endMonth") Long endMonth,
+			@Param("endDay") Long endDay);
+
 	@Query("Select a from Attendance a where a.leaveType.leavetypeName = :x ")
 	List<Attendance> getType(@Param("x") String value);
 

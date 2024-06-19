@@ -38,6 +38,8 @@ public class ApplicationProperties {
 		HOLIDAYS, BUSINESSDAY
 	}
 
+	private String ApiServerHandleExcel = "http://localhost:5000/download";
+
 	@PostConstruct
 	protected void init() {
 		System.out.println(" == Application Reloaded: " + this);

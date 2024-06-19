@@ -35,6 +35,8 @@ public class Employee {
 
 	private String fullname;
 
+	private float countOfDayOff;
+
 	private String address;
 
 	@Column(unique = true)
