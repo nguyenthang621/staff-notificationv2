@@ -40,6 +40,8 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	Boolean existsByEmail(String email);
 
+	Boolean existsByStaffId(Long staffId);
+
 	Boolean existsByEmployeeId(String employeeId);
 
 	@Query("SELECT e FROM Employee e WHERE e.department = :x AND e.status = :y")
@@ -50,4 +52,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	@Query("SELECT e FROM Employee e WHERE e.status = :x")
 	Optional<List<Employee>> getByEmployeeStatus(@Param("x") String x);
+
+	@Query("SELECT a from Employee a")
+	List<Employee> getAll();
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.istt.staff_notification_v2.entity.Attendance;
+import com.istt.staff_notification_v2.entity.BusinessDays;
 
 @Service
 public class utils {
@@ -119,6 +120,41 @@ public class utils {
 		return dateRanges;
 	}
 
+	public static List<DateRange> splitDateByRange(Date startDate, Date endDate) {
+		List<DateRange> dateRanges = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startDate);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		while (!calendar.getTime().after(endDate)) {
+			Date rangeStartDate = calendar.getTime();
+
+			// Move to the end of the current day
+			Calendar tempCal = (Calendar) calendar.clone();
+			tempCal.add(Calendar.DAY_OF_MONTH, 1);
+			tempCal.add(Calendar.MILLISECOND, -1);
+
+			Date rangeEndDate = tempCal.getTime();
+			if (rangeEndDate.after(endDate)) {
+				rangeEndDate = endDate;
+			}
+
+			dateRanges.add(new DateRange(rangeStartDate, rangeEndDate, 1.0f));
+
+			// Move to the next day
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+		}
+
+		return dateRanges;
+	}
+
 	public static List<Attendance> handleSplitAttendence(Attendance attendance) {
 		try {
 			List<DateRange> splitDates = splitDateRange(attendance.getStartDate(), attendance.getDuration());
@@ -155,6 +191,35 @@ public class utils {
 				attendanceSplits.add(attendance);
 			}
 			return attendanceSplits;
+
+		} catch (Exception e) {
+			System.out.println("Exception :" + e);
+			return null;
+		}
+	}
+
+	public static List<BusinessDays> handleSplitBusinessDays(BusinessDays businessDays) {
+		try {
+			List<DateRange> splitDates = splitDateByRange(businessDays.getStartdate(), businessDays.getEnddate());
+			System.out.println("split date 2: " + splitDates.size() + splitDates.toString());
+			List<BusinessDays> businessDaysSplits = new ArrayList<>();
+
+			if (splitDates.size() > 1) {
+				for (DateRange splitDate : splitDates) {
+					BusinessDays businessDaysSplit = new BusinessDays();
+					businessDaysSplit.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
+					businessDaysSplit.setStartdate(splitDate.getStartDate());
+					businessDaysSplit.setEnddate(splitDate.getEndDate());
+					businessDaysSplit.setType(businessDays.getType());
+					businessDaysSplit.setDescription(businessDays.getDescription());
+
+					businessDaysSplits.add(businessDaysSplit);
+
+				}
+			} else {
+				businessDaysSplits.add(businessDays);
+			}
+			return businessDaysSplits;
 
 		} catch (Exception e) {
 			System.out.println("Exception :" + e);

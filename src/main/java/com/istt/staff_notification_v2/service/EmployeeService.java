@@ -122,6 +122,16 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	private static final String ENTITY_NAME = "isttEmployee";
 
+	private Long createStaffIdAutoIncrement() {
+		Long countstaff = (long) employeeRepo.getAll().size();
+		Long value = 1000000 + countstaff;
+		while (employeeRepo.existsByStaffId(value)) {
+			countstaff++;
+			value = 1000000 + countstaff;
+		}
+		return value;
+	}
+
 	private static Long getMaxLevelCode(Employee e) {
 		Long max = Long.MIN_VALUE;
 		for (Level level : e.getLevels()) {
@@ -170,6 +180,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			}
 			filterEmployeeDependence(employee);
 
+			employee.setStaffId(createStaffIdAutoIncrement());
 			employee.setEmployeeDependence(filterEmployeeDependence(employee));
 			employeeRepo.save(employee);
 

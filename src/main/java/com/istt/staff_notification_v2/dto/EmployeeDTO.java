@@ -15,6 +15,8 @@ import lombok.Data;
 public class EmployeeDTO {
 	private String employeeId;
 
+	private Long staffId;
+
 	private float countOfDayOff;
 
 	private String fullname;

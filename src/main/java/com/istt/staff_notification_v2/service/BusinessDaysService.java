@@ -31,6 +31,7 @@ import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.BusinessDays;
 import com.istt.staff_notification_v2.repository.BusinessDaysRepo;
+import com.istt.staff_notification_v2.utils.utils;
 
 public interface BusinessDaysService {
 	List<BusinessDaysDTO> getAll();
@@ -87,7 +88,18 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 				logger.error("Invalid TYPE BUSINESSDAYS");
 				throw new BadRequestAlertException("Invalid TYPE BUSINESSDAYS", ENTITY_NAME, "Invalid");
 			}
-			businessDaysRepo.save(businessDays);
+			businessDaysDTO.setStartdate(new utils().resetStartDate(businessDaysDTO.getStartdate()));
+			businessDaysDTO.setEnddate(new utils().resetStartDate(businessDaysDTO.getEnddate()));
+
+			List<BusinessDays> splitBusinessDays = new utils()
+					.handleSplitBusinessDays(new ModelMapper().map(businessDaysDTO, BusinessDays.class));
+
+			System.out.println("---------" + splitBusinessDays.size());
+			for (BusinessDays splitBusinessDay : splitBusinessDays) {
+				splitBusinessDay.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
+				businessDaysRepo.save(splitBusinessDay);
+			}
+//			businessDaysRepo.save(businessDays);
 			return businessDaysDTO;
 		} catch (ResourceAccessException e) {
 			logger.trace(Status.EXPECTATION_FAILED.toString());
