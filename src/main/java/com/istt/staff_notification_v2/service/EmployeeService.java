@@ -69,7 +69,7 @@ public interface EmployeeService {
 
 	Boolean delete(String id);
 
-	Boolean deleteAll(List<Integer> ids);
+	Boolean deleteAll(List<String> ids);
 
 	EmployeeDTO get(String id);
 
@@ -94,6 +94,8 @@ public interface EmployeeService {
 	EmployeeDTO saveCountOfDayOff(String employeeId);
 
 	ResponseDTO<List<EmployeeDTO>> saveCountOfDayOffs(List<String> ids);
+
+	List<EmployeeDTO> resetDependence(List<String> ids);
 
 }
 
@@ -296,7 +298,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Boolean deleteAll(List<Integer> ids) {
+	public Boolean deleteAll(List<String> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -710,6 +712,27 @@ class EmployeeServiceImpl implements EmployeeService {
 		ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(employeeDTOs, ResponseDTO.class);
 		responseDTO.setData(employeeDTOs);
 		return responseDTO;
+	}
+
+	@Override
+	public List<EmployeeDTO> resetDependence(List<String> ids) {
+		try {
+			List<Employee> employees = employeeRepo.findByEmployeeIds(ids).orElseThrow(NoResultException::new);
+			if (employees.size() > 0) {
+				for (Employee employee : employees) {
+					List<String> dependences = filterEmployeeDependence(employee);
+					employee.setEmployeeDependence(dependences);
+					update(new ModelMapper().map(employee, EmployeeDTO.class));
+				}
+				return employees.stream().map(e -> new ModelMapper().map(e, EmployeeDTO.class))
+						.collect(Collectors.toList());
+			}
+			return null;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 }

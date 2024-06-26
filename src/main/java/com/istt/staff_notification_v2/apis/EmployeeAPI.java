@@ -127,4 +127,17 @@ public class EmployeeAPI {
 			throws URISyntaxException {
 		return employeeService.saveCountOfDayOffs(ids);
 	}
+
+	@PostMapping("/resetDependence/ids")
+	public ResponseDTO<List<EmployeeDTO>> resetDependence(@RequestBody @Valid List<String> ids)
+			throws URISyntaxException {
+
+		if (ids.isEmpty()) {
+			throw new BadRequestAlertException("Bad request: missing ", ENTITY_NAME, "missing");
+		}
+
+		return ResponseDTO.<List<EmployeeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(employeeService.resetDependence(ids)).build();
+	}
+
 }
