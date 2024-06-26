@@ -24,8 +24,6 @@ import com.istt.staff_notification_v2.dto.BusinessDaysDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
-import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
-import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.BusinessDaysService;
 
 @RestController
@@ -52,9 +50,8 @@ public class BusinessDaysAPI {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentuser, @PathVariable(value = "id") String id)
-			throws URISyntaxException {
-		logger.info("create by :" + currentuser.getUsername());
+	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
+
 		if (id == null) {
 			logger.error("missing data");
 			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
@@ -70,11 +67,10 @@ public class BusinessDaysAPI {
 //	}
 
 	@DeleteMapping("/ids")
-	public ResponseDTO<List<String>> deletebyListId(@CurrentUser UserPrincipal currentuser,
-			@RequestBody @Valid List<String> ids) throws URISyntaxException {
-		logger.info("create by :" + currentuser.getUsername());
+	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
+//		logger.info("create by :" + currentuser.getUsername());
 		if (ids.isEmpty()) {
-			logger.error("missing data");
+//			logger.error("missing data");
 			throw new BadRequestAlertException("Bad request: missing departments", ENTITY_NAME, "missing_departments");
 		}
 		businessDaysService.deleteByListId(ids);
@@ -82,9 +78,8 @@ public class BusinessDaysAPI {
 	}
 
 	@PutMapping("/")
-	public ResponseDTO<BusinessDaysDTO> update(@CurrentUser UserPrincipal currentuser,
-			@RequestBody @Valid BusinessDaysDTO businessDaysDTO) throws IOException {
-		logger.info("create by :" + currentuser.getUsername());
+	public ResponseDTO<BusinessDaysDTO> update(@RequestBody @Valid BusinessDaysDTO businessDaysDTO) throws IOException {
+//		logger.info("create by :" + currentuser.getUsername());
 		businessDaysService.update(businessDaysDTO);
 		return ResponseDTO.<BusinessDaysDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(businessDaysDTO)
 				.build();
@@ -98,9 +93,8 @@ public class BusinessDaysAPI {
 	}
 
 	@PostMapping("/searchByType")
-	public ResponseDTO<List<BusinessDaysDTO>> searchbyType(@CurrentUser UserPrincipal currentuser,
-			@RequestBody @Valid SearchDTO searchDTO) {
-		logger.info("Create by" + currentuser.getUsername());
+	public ResponseDTO<List<BusinessDaysDTO>> searchbyType(@RequestBody @Valid SearchDTO searchDTO) {
+//		logger.info("Create by" + currentuser.getUsername());
 		return businessDaysService.searchByType(searchDTO);
 	}
 

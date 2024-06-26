@@ -26,6 +26,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "employee")
+//@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent", "subordinatesOdoo" })
 @EqualsAndHashCode(callSuper = false, exclude = { "levels", "department" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Employee {
@@ -35,6 +36,14 @@ public class Employee {
 
 	@Column(name = "staff_id", updatable = false, nullable = false, unique = true)
 	private Long staffId;
+
+//	@ManyToOne
+//	@JoinColumn(name = "parent_id")
+//	private Employee parent;
+//
+//	@JsonIgnore
+//	@OneToMany(mappedBy = "parent")
+//	private List<Employee> subordinatesOdoo;
 
 	private String fullname;
 

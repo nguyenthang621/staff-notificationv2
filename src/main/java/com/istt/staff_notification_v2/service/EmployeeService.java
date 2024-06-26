@@ -168,7 +168,6 @@ class EmployeeServiceImpl implements EmployeeService {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
-
 			Set<Level> levels = new HashSet<Level>();
 			for (LevelDTO level : employeeDTO.getLevels()) {
 				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
@@ -182,7 +181,15 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			employee.setStaffId(createStaffIdAutoIncrement());
 			employee.setEmployeeDependence(filterEmployeeDependence(employee));
-			employeeRepo.save(employee);
+			System.out.println("--------------------------------");
+			Employee parnet = null;
+//			if (!employeeDTO.getParent().isEmpty()) {
+//				System.out.println(employeeDTO.getParent());
+//				parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent()).orElseThrow(NoResultException::new);
+//			}
+//			System.out.println(4);
+//			employee.setParent(parnet);
+//			employeeRepo.save(employee);
 
 //			create new user 
 			if (userRepo.findByUsername(employee.getEmail()).isPresent()) {
@@ -256,6 +263,15 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(employeeInDB.getEmployeeId());
+
+//			System.out.println("--------------------------------");
+//			Employee parnet = null;
+//			if (!employeeDTO.getParent().isEmpty()) {
+//				System.out.println(employeeDTO.getParent());
+//				parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent()).orElseThrow(NoResultException::new);
+//			}
+//			System.out.println(4);
+//			employee.setParent(parnet);
 
 			employeeRepo.save(employee);
 			return employeeDTO;

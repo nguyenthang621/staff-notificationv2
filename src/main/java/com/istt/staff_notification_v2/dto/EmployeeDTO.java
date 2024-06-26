@@ -17,6 +17,8 @@ public class EmployeeDTO {
 
 	private Long staffId;
 
+//	private Employee parent;
+
 	private float countOfDayOff;
 
 	private String fullname;
@@ -44,6 +46,8 @@ public class EmployeeDTO {
 	private List<String> employeeDependence;
 
 	private List<EmployeeDTO> subordinates = new ArrayList<>();
+
+//	private List<Employee> subordinatesOdoo = new ArrayList<>();
 
 //	@JsonBackReference
 	private User user;
