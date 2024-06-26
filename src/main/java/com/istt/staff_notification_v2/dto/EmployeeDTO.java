@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.istt.staff_notification_v2.entity.Department;
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.User;
 
 import lombok.Data;
@@ -17,7 +18,11 @@ public class EmployeeDTO {
 
 	private Long staffId;
 
-//	private Employee parent;
+	private String parent;
+
+	private String uOdooId;
+
+	private List<Employee> subordinatesOdoo;
 
 	private float countOfDayOff;
 

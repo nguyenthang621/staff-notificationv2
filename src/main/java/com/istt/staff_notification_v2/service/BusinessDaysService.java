@@ -114,28 +114,16 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 	@Override
 	public BusinessDaysDTO update(BusinessDaysDTO businessDaysDTO) {
 		try {
-			if (businessDaysRepo.findById(businessDaysDTO.getBussinessdaysId()).isEmpty()) {
-				logger.error("not found businessdays");
-				throw new NoResultException();
-			}
-			BusinessDays businessDays = new ModelMapper().map(businessDaysDTO, BusinessDays.class);
+			BusinessDays businessDays = businessDaysRepo.findByBussinessdaysId(businessDaysDTO.getBussinessdaysId())
+					.orElseThrow(NoResultException::new);
+
 			if (!props.getTYPE_BUSINESSDAYS().contains(businessDaysDTO.getType())) {
 				logger.error("Invalid TYPE BUSINESSDAYS");
 				throw new BadRequestAlertException("Invalid TYPE BUSINESSDAYS", ENTITY_NAME, "Invalid");
 			}
-			businessDaysDTO.setStartdate(new utils().resetStartDate(businessDaysDTO.getStartdate()));
-			businessDaysDTO.setEnddate(new utils().resetStartDate(businessDaysDTO.getEnddate()));
+			businessDays.setDescription(businessDaysDTO.getDescription());
 
-			List<BusinessDays> splitBusinessDays = new utils()
-					.handleSplitBusinessDays(new ModelMapper().map(businessDaysDTO, BusinessDays.class));
-
-			for (BusinessDays splitBusinessDay : splitBusinessDays) {
-				splitBusinessDay.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
-				if (!businessDaysRepo.existsByStartdate(splitBusinessDay.getStartdate())) {
-					System.out.println(splitBusinessDay.getStartdate());
-					businessDaysRepo.save(splitBusinessDay);
-				}
-			}
+			businessDaysRepo.save(businessDays);
 			return businessDaysDTO;
 		} catch (ResourceAccessException e) {
 			logger.trace(Status.EXPECTATION_FAILED.toString());

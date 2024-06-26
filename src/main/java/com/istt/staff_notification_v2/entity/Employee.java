@@ -15,9 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.istt.staff_notification_v2.utils.StringListConverter;
 
 import lombok.Data;
@@ -26,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "employee")
-//@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent", "subordinatesOdoo" })
-@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department" })
+@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent", "subordinatesOdoo" })
+//@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Employee {
 	@Id
@@ -37,13 +40,20 @@ public class Employee {
 	@Column(name = "staff_id", updatable = false, nullable = false, unique = true)
 	private Long staffId;
 
-//	@ManyToOne
-//	@JoinColumn(name = "parent_id")
-//	private Employee parent;
-//
-//	@JsonIgnore
-//	@OneToMany(mappedBy = "parent")
-//	private List<Employee> subordinatesOdoo;
+//	@Column(name = "parent_id")
+//	private String parent;
+
+	@ManyToOne
+	@JoinColumn(name = "parent_id")
+	@JsonBackReference
+	private Employee parent;
+
+	@OneToMany(mappedBy = "parent")
+	@JsonManagedReference
+	private List<Employee> subordinatesOdoo;
+
+	@Column(name = "uodoo_id")
+	private String uOdooId;
 
 	private String fullname;
 

@@ -23,6 +23,7 @@ import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.service.EmployeeService;
 
 @RestController
@@ -138,6 +139,11 @@ public class EmployeeAPI {
 
 		return ResponseDTO.<List<EmployeeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.resetDependence(ids)).build();
+	}
+
+	@GetMapping("/hierarchy/{id}")
+	public Employee getEmployeeHierarchy(@PathVariable String id) {
+		return employeeService.getEmployeeHierarchyFrom(id);
 	}
 
 }

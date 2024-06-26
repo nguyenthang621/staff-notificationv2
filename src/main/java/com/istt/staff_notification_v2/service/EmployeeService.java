@@ -97,6 +97,8 @@ public interface EmployeeService {
 
 	List<EmployeeDTO> resetDependence(List<String> ids);
 
+	Employee getEmployeeHierarchyFrom(String employeeId);
+
 }
 
 @Service
@@ -145,6 +147,26 @@ class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public Employee getEmployeeHierarchyFrom(String id) {
+		Optional<Employee> optionalEmployee = employeeRepo.findByEmployeeId(id);
+		if (optionalEmployee.isPresent()) {
+			Employee rootEmployee = optionalEmployee.get();
+			buildHierarchy(rootEmployee);
+			return rootEmployee;
+		} else {
+			throw new RuntimeException("Employee not found");
+		}
+	}
+
+	private void buildHierarchy(Employee employee) {
+		List<Employee> subordinates = employeeRepo.findByParent(employee.getEmployeeId());
+		employee.setSubordinatesOdoo(subordinates);
+		for (Employee subordinate : subordinates) {
+			buildHierarchy(subordinate);
+		}
+	}
+
+	@Override
 	public List<String> filterEmployeeDependence(Employee employeeCurrent) { // return list dependence employeeId
 		Optional<List<Employee>> employeesRaw = employeeRepo.findAllByDepartmentId(employeeCurrent.getDepartment(),
 				StatusEmployeeRef.ACTIVE.toString());
@@ -169,6 +191,14 @@ class EmployeeServiceImpl implements EmployeeService {
 		try {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
+
+//			String parentId = null;
+//			if (employeeDTO.getParent() != null && !employeeDTO.getParent().isEmpty()) {
+//				Employee parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent())
+//						.orElseThrow(NoResultException::new);
+//				parentId = parnet.getEmployeeId();
+//			}
+
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
 			Set<Level> levels = new HashSet<Level>();
 			for (LevelDTO level : employeeDTO.getLevels()) {
@@ -183,15 +213,9 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			employee.setStaffId(createStaffIdAutoIncrement());
 			employee.setEmployeeDependence(filterEmployeeDependence(employee));
-			System.out.println("--------------------------------");
-			Employee parnet = null;
-//			if (!employeeDTO.getParent().isEmpty()) {
-//				System.out.println(employeeDTO.getParent());
-//				parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent()).orElseThrow(NoResultException::new);
-//			}
-//			System.out.println(4);
-//			employee.setParent(parnet);
-//			employeeRepo.save(employee);
+//			employee.setParent(parentId);
+
+			employeeRepo.save(employee);
 
 //			create new user 
 			if (userRepo.findByUsername(employee.getEmail()).isPresent()) {
@@ -239,6 +263,12 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeDTO update(EmployeeDTO employeeDTO) {
 		try {
+			String parentId = null;
+			if (employeeDTO.getParent() != null && !employeeDTO.getParent().isEmpty()) {
+				Employee parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent())
+						.orElseThrow(NoResultException::new);
+				parentId = parnet.getEmployeeId();
+			}
 			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
 					.orElseThrow(NoResultException::new);
 
@@ -257,6 +287,7 @@ class EmployeeServiceImpl implements EmployeeService {
 						levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new),
 						LevelDTO.class));
 			}
+
 			employeeDTO.setLevels(levels);
 			ModelMapper mapper = new ModelMapper();
 
@@ -265,15 +296,7 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(employeeInDB.getEmployeeId());
-
-//			System.out.println("--------------------------------");
-//			Employee parnet = null;
-//			if (!employeeDTO.getParent().isEmpty()) {
-//				System.out.println(employeeDTO.getParent());
-//				parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent()).orElseThrow(NoResultException::new);
-//			}
-//			System.out.println(4);
-//			employee.setParent(parnet);
+//			employee.setParent(parentId);
 
 			employeeRepo.save(employee);
 			return employeeDTO;

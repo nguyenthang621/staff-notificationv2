@@ -2,6 +2,7 @@ package com.istt.staff_notification_v2.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,9 @@ import com.istt.staff_notification_v2.entity.BusinessDays;
 public interface BusinessDaysRepo extends JpaRepository<BusinessDays, String> {
 	@Query("Select u from BusinessDays u")
 	List<BusinessDays> getAll();
+
+	@Query("Select u from BusinessDays u where u.bussinessdaysId = :x")
+	Optional<BusinessDays> findByBussinessdaysId(@Param("x") String id);
 
 	@Query("Select a from BusinessDays a where a.type = :x ")
 	Page<BusinessDays> findByType(@Param("x") String value, Pageable pageable);
