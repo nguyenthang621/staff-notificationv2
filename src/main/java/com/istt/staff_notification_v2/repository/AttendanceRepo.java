@@ -2,6 +2,7 @@ package com.istt.staff_notification_v2.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +49,7 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a where a.leaveType.leavetypeName = :x ")
 	List<Attendance> getType(@Param("x") String value);
 
-	Boolean existsByStartDate(Date startDate);
+	@Query("Select a from Attendance a where a.startDate = :d and a.employee.employeeId = :y ")
+	Optional<Attendance> findByStartDate(@Param("d") Date startDate, @Param("y") String employee_id);
 
 }

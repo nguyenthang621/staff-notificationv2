@@ -121,7 +121,9 @@ class AttendanceServiceImpl implements AttendanceService {
 			for (Attendance splitAttendence : splitAttendences) {
 				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
 
-				if (!attendanceRepo.existsByStartDate(splitAttendence.getStartDate())) {
+				if (attendanceRepo
+						.findByStartDate(splitAttendence.getStartDate(), splitAttendence.getEmployee().getEmployeeId())
+						.isEmpty()) {
 					attendanceRepo.save(splitAttendence);
 				}
 			}
@@ -165,7 +167,9 @@ class AttendanceServiceImpl implements AttendanceService {
 			for (Attendance splitAttendence : splitAttendences) {
 				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
 
-				if (!attendanceRepo.existsByStartDate(splitAttendence.getStartDate())) {
+				if (attendanceRepo
+						.findByStartDate(splitAttendence.getStartDate(), splitAttendence.getEmployee().getEmployeeId())
+						.isEmpty()) {
 					attendanceRepo.save(splitAttendence);
 				}
 			}

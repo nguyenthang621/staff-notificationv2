@@ -285,31 +285,44 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	public List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
 		try {
 			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null
-					&& searchLeaveRequest.getStartDate() == null) {
+					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
 				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findEmail(searchLeaveRequest.getEmail());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
+
 			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() == null) {
+					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
 				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo
 						.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
+
 			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() != null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo
-						.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus());
+					&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getMailReciver() == null) {
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.find(searchLeaveRequest.getEmail(),
+						searchLeaveRequest.getStatus(), searchLeaveRequest.getStartDate());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
+
 			} else if (searchLeaveRequest.getEmail() == null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() == null) {
+					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
 				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findstatus(searchLeaveRequest.getStatus());
+				if (resultOp.isEmpty())
+					return new ArrayList<>();
+				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+						.collect(Collectors.toList());
+
+			} else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() != null
+					&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getEmail() != null) {
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiver(
+						searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus(),
+						searchLeaveRequest.getStartDate());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))

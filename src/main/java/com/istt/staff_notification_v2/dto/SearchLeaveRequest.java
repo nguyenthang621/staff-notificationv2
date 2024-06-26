@@ -1,5 +1,7 @@
 package com.istt.staff_notification_v2.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -8,6 +10,8 @@ public class SearchLeaveRequest {
 
 	private String status;
 
-	private String startDate;
+	private Date startDate;
+
+	private String mailReciver;
 
 }
