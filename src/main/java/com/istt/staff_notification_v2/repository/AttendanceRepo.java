@@ -48,4 +48,6 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a where a.leaveType.leavetypeName = :x ")
 	List<Attendance> getType(@Param("x") String value);
 
+	Boolean existsByStartDate(Date startDate);
+
 }

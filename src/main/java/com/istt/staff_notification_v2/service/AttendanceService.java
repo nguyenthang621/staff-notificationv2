@@ -120,10 +120,11 @@ class AttendanceServiceImpl implements AttendanceService {
 			List<Attendance> splitAttendences = new utils().handleSplitAttendence(attendance);
 			for (Attendance splitAttendence : splitAttendences) {
 				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
-				attendanceRepo.save(splitAttendence);
-			}
 
-//			attendanceRepo.save(attendance);
+				if (!attendanceRepo.existsByStartDate(splitAttendence.getStartDate())) {
+					attendanceRepo.save(splitAttendence);
+				}
+			}
 
 			return attendanceDTO;
 		} catch (ResourceAccessException e) {
@@ -153,17 +154,21 @@ class AttendanceServiceImpl implements AttendanceService {
 				throw new BadRequestAlertException("This employee has been suspended", ENTITY_NAME, "Suspend");
 
 			attendance.setEmployee(employee);
-			attendance.setUpdateAt(new Date());
-			attendance.setUpdateBy(employeeUpdateOptional.get().getEmployeeId());
+			attendance.setCreateAt(new Date());
 
-			Optional<LeaveType> leaveTypeOp = leaveTypeRepo
-					.findByLeavetypeId(attendanceDTO.getLeaveType().getLeavetypeId());
-			if (leaveTypeOp.isEmpty())
-				throw new BadRequestAlertException("Invalid TYPE ATTENDANCE", ENTITY_NAME, "Invalid");
+			attendance.setStartDate(new utils().resetStartDate(attendanceDTO.getStartDate()));
 
-			attendance.setLeaveType(leaveTypeOp.get());
+			attendance.setEndDate(
+					new utils().calculatorEndDate(attendanceDTO.getStartDate(), attendanceDTO.getDuration()));
 
-			attendanceRepo.save(attendance);
+			List<Attendance> splitAttendences = new utils().handleSplitAttendence(attendance);
+			for (Attendance splitAttendence : splitAttendences) {
+				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
+
+				if (!attendanceRepo.existsByStartDate(splitAttendence.getStartDate())) {
+					attendanceRepo.save(splitAttendence);
+				}
+			}
 
 			return attendanceDTO;
 		} catch (ResourceAccessException e) {

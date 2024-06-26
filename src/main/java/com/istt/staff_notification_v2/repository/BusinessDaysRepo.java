@@ -24,4 +24,8 @@ public interface BusinessDaysRepo extends JpaRepository<BusinessDays, String> {
 			+ " OR a.enddate  BETWEEN :x AND :y) and a.type like %:z%")
 	Page<BusinessDays> search(@Param("x") Date x, @Param("y") Date y, @Param("z") String z, Pageable pageable);
 
+	@Query("select startdate from BusinessDays b where b.startdate between :x and :y")
+	List<BusinessDays> getListStartDateCheck(@Param("x") Date startDate, @Param("y") Date endDate);
+
+	Boolean existsByStartdate(Date startDate);
 }
