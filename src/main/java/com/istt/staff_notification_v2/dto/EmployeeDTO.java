@@ -18,7 +18,7 @@ public class EmployeeDTO {
 
 	private Long staffId;
 
-	private String parent;
+	private String parentId;
 
 	private String uOdooId;
 

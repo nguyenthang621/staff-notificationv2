@@ -192,12 +192,12 @@ class EmployeeServiceImpl implements EmployeeService {
 			ModelMapper mapper = new ModelMapper();
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 
-//			String parentId = null;
-//			if (employeeDTO.getParent() != null && !employeeDTO.getParent().isEmpty()) {
-//				Employee parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent())
-//						.orElseThrow(NoResultException::new);
-//				parentId = parnet.getEmployeeId();
-//			}
+			String parentId = null;
+			if (employeeDTO.getParentId() != null && !employeeDTO.getParentId().isEmpty()) {
+				Employee parnet = employeeRepo.findByEmployeeId(employeeDTO.getParentId())
+						.orElseThrow(NoResultException::new);
+				parentId = parnet.getEmployeeId();
+			}
 
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
 			Set<Level> levels = new HashSet<Level>();
@@ -263,11 +263,10 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeDTO update(EmployeeDTO employeeDTO) {
 		try {
-			String parentId = null;
-			if (employeeDTO.getParent() != null && !employeeDTO.getParent().isEmpty()) {
-				Employee parnet = employeeRepo.findByEmployeeId(employeeDTO.getParent())
-						.orElseThrow(NoResultException::new);
-				parentId = parnet.getEmployeeId();
+			Employee parnet = null;
+			if (employeeDTO.getParentId() != null && !employeeDTO.getParentId().isEmpty()) {
+				parnet = employeeRepo.findByEmployeeId(employeeDTO.getParentId()).orElseThrow(NoResultException::new);
+//				parentId = parnet.getEmployeeId();
 			}
 			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
 					.orElseThrow(NoResultException::new);
@@ -296,7 +295,7 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(employeeInDB.getEmployeeId());
-//			employee.setParent(parentId);
+			employee.setParent(parnet);
 
 			employeeRepo.save(employee);
 			return employeeDTO;
