@@ -239,13 +239,6 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence) {
 		try {
-			// Sử dụng Calendar để cộng thêm 1 ngày
-//			Calendar calendar = Calendar.getInstance();
-//			calendar.setTime(searchAttendence.getEndDate());
-//			calendar.add(Calendar.DAY_OF_MONTH, 1);
-//
-//			searchAttendence.setEndDate(calendar.getTime());
-
 			List<Sort.Order> orders = Optional.ofNullable(searchAttendence.getSearch().getOrders())
 					.orElseGet(Collections::emptyList).stream().map(order -> {
 						if (order.getOrder().equals(SearchDTO.ASC))

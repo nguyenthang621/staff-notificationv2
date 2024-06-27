@@ -32,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;
 
+	@Autowired
+	private CustomAuthenticationProvider customAuthenticationProvider;
+
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() {
 		return new JwtAuthenticationFilter();
@@ -42,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+//		authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.authenticationProvider(customAuthenticationProvider);
 	}
 
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -55,10 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-//	  @Override
-//	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//	        auth.authenticationProvider(noPasswordAuthenticationProvider);
-//	    }
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
 						"/**/*.css", "/**/*.js")
 				.permitAll().antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/auth/**", "**") // dev
-																													// **
+				// **
 				.permitAll().anyRequest().authenticated();
 //
 //		// Add our custom JWT security filter

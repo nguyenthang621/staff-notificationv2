@@ -188,6 +188,11 @@ public class utils {
 
 				}
 			} else {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(attendance.getStartDate());
+				attendance.setYear(Long.valueOf(calendar.get(Calendar.YEAR)));
+				attendance.setMonth(Long.valueOf(calendar.get(Calendar.MONTH) + 1));
+				attendance.setDay(Long.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
 				attendanceSplits.add(attendance);
 			}
 			return attendanceSplits;

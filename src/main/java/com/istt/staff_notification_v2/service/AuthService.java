@@ -52,17 +52,17 @@ class AuthServiceImpl implements AuthService {
 	public ResponseDTO<String> signin(LoginRequest loginRequest, User user) {
 		try {
 
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-			// Set thông tin authentication vào Security Context
+			Authentication authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), null));
+
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
-			String refreshToken = tokenProvider.generateRefreshToken(authentication);
+			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
-			user.setAccessToken(accessToken);
-			user.setRefreshToken(refreshToken);
-			userRepo.save(user);
+//			user.setAccessToken(accessToken);
+//			user.setRefreshToken(refreshToken);
+//			userRepo.save(user);
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 					.refreshToken(refreshToken).build();
@@ -79,12 +79,12 @@ class AuthServiceImpl implements AuthService {
 		try {
 
 			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), user.getUserId()));
 			// Set thông tin authentication vào Security Context
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
-			String refreshToken = tokenProvider.generateRefreshToken(authentication);
+			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
 			user.setAccessToken(accessToken);
 			user.setRefreshToken(refreshToken);
@@ -105,22 +105,21 @@ class AuthServiceImpl implements AuthService {
 	public ResponseDTO<String> handleRefreshToken(String refreshToken_in) {
 		try {
 
-			String user_id = tokenProvider.getUserIdFromJWT(refreshToken_in);
-			System.out.println(1);
-			if (user_id.isEmpty())
+			String username = tokenProvider.getUserIdFromJWT(refreshToken_in);
+			if (username.isEmpty())
 				throw new AccessDeniedException("Access Denied");
 
-			System.out.println(2);
-			User user = userRepo.findByUserId(user_id).orElseThrow(NoResultException::new);
+			User user = userRepo.findByUsername(username).orElseThrow(NoResultException::new);
+
 			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-			System.out.println(4);
+					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), null));
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
-			String refreshToken = tokenProvider.generateRefreshToken(authentication);
+			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
-			user.setAccessToken(accessToken);
-			user.setRefreshToken(refreshToken);
+//			user.setAccessToken(accessToken);
+//			user.setRefreshToken(refreshToken);
+//			userRepo.save(user);
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 					.refreshToken(refreshToken).build();

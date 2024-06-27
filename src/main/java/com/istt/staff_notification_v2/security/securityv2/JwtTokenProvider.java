@@ -37,15 +37,24 @@ public class JwtTokenProvider {
 				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
-	public String generateRefreshToken(Authentication authentication) {
+//	public String generateRefreshToken(Authentication authentication) {
+//
+//		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+//
+//		Date now = new Date();
+//		Date expiryDate = new Date(now.getTime() + jwtExpirationRT);
+//
+//		return Jwts.builder().setSubject(String.valueOf(userPrincipal.getUser_id())).setIssuedAt(new Date())
+//				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+//	}
 
-		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+	public String generateRefreshToken(String uid) {
 
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + jwtExpirationRT);
 
-		return Jwts.builder().setSubject(String.valueOf(userPrincipal.getUser_id())).setIssuedAt(new Date())
-				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+		return Jwts.builder().setSubject(String.valueOf(uid)).setIssuedAt(new Date()).setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
 	public String getUserIdFromJWT(String token) {

@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private CustomUserDetailsService customUserDetailsService;
 
 //	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-	private static final List<String> ALLOWED_URLS = Arrays.asList("/auth/signin", "/role", "/auth/signup",
+	private static final List<String> ALLOWED_URLS = Arrays.asList("/auth/signin", "/auth/signup",
 			"/auth/refreshToken");
 
 	@Override
@@ -37,12 +37,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String jwt = getJwtFromRequest(request);
 			if (ALLOWED_URLS.contains(requestURI)) {
 				filterChain.doFilter(request, response);
-				System.out.println("----pass-----");
+
 				return;
 			}
 
 			if (jwt != null && tokenProvider.validateToken(jwt)) {
-				System.out.println("----validateToken---: " + jwt);
+
 				String userId = tokenProvider.getUserIdFromJWT(jwt);
 
 				UserDetails userDetails = customUserDetailsService.loadUserById(userId);
@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			logger.error("Could not set user authentication in security context", ex);
 		}
 
-		System.out.println("-----------doFilter---------------------");
 		filterChain.doFilter(request, response);
 	}
 

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,6 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
-import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.service.AuthService;
@@ -57,25 +55,25 @@ public class AuthAPI {
 
 	}
 
-	@PostMapping("/signup")
-	public ResponseDTO<String> signup(@Valid @RequestBody UserDTO userSignUp) {
-		Optional<User> userOptional = userRepo.findByUsername(userSignUp.getUsername());
-		User user = userOptional.get();
-
-		if (user != null)
-			throw new BadRequestAlertException("user " + user.getUsername() + " already exists", ENTITY_NAME,
-					"Password wrong");
-
-		UserDTO userDTO = new ModelMapper().map(user, UserDTO.class);
-		userService.create(userDTO);
-
-		LoginRequest loginRequest = new LoginRequest();
-		loginRequest.setUsername(userSignUp.getUsername());
-		loginRequest.setUsername(userSignUp.getPassword());
-
-		return authService.signup(loginRequest, user);
-
-	}
+//	@PostMapping("/signup")
+//	public ResponseDTO<String> signup(@Valid @RequestBody UserDTO userSignUp) {
+//		Optional<User> userOptional = userRepo.findByUsername(userSignUp.getUsername());
+//		User user = userOptional.get();
+//
+//		if (user != null)
+//			throw new BadRequestAlertException("user " + user.getUsername() + " already exists", ENTITY_NAME,
+//					"Password wrong");
+//
+//		UserDTO userDTO = new ModelMapper().map(user, UserDTO.class);
+//		userService.create(userDTO);
+//
+//		LoginRequest loginRequest = new LoginRequest();
+//		loginRequest.setUsername(userSignUp.getUsername());
+//		loginRequest.setUsername(userSignUp.getPassword());
+//
+//		return authService.signup(loginRequest, user);
+//
+//	}
 
 	@PostMapping("/refreshToken")
 	public ResponseDTO<String> handleRefreshToken(
