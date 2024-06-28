@@ -15,7 +15,7 @@ public class UserDTO {
 	private String password;
 	private Employee employee;
 	private Set<RoleDTO> roles = new HashSet<>();
-	private String accessToken;
 	private String refreshToken;
+	private Long expired;
 
 }

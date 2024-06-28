@@ -15,7 +15,7 @@ import com.istt.staff_notification_v2.entity.Employee;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, String> {
-	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x  AND u.status = :s")
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x AND u.status = :s")
 	Page<Employee> searchByFullname(@Param("x") String s, @Param("s") String status, Pageable pageable);
 
 	@Query("SELECT u FROM Employee u WHERE u.email LIKE :x  AND u.status = :s")
@@ -25,7 +25,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	Page<Employee> searchByFullnameAndEmail(@Param("x") String name, @Param("y") String email,
 			@Param("s") String status, Pageable pageable);
 
-	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y AND u.status = :s")
+	@Query("SELECT u.employeeId, u.fullname, u.phone, u.email, u.department, u.avatar, u.status, u.dateofbirth, u.levels FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y AND u.status = :s")
 	Page<Employee> searchByFullnameAndDepartment(@Param("x") String name, @Param("y") String department,
 			@Param("s") String status, Pageable pageable);
 

@@ -34,9 +34,15 @@ public class ResponseDTO<T> {
 	private T data;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String refreshToken; // Thêm trường token
+	private String refreshToken;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String accessToken; // Thêm trường token
+	private String accessToken;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String sessionId;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Long expired;
 
 }

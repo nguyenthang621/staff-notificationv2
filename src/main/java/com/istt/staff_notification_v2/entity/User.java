@@ -36,9 +36,14 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	private String accessToken;
+	@Column(name = "session_id")
+	private String sessionId;
+
+	private Long expired;
 
 	private String refreshToken;
+
+	private String accessToken;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

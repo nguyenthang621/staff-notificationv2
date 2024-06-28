@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,10 +45,9 @@ public class AuthAPI {
 
 		User user = userOptional.get();
 
-		Boolean compare_password = BCrypt.checkpw(loginRequest.getPassword(), user.getPassword());
-
-		if (!compare_password)
-			throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
+//		Boolean compare_password = BCrypt.checkpw(loginRequest.getPassword(), user.getPassword());
+//		if (!compare_password)
+//			throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
 
 		return authService.signin(loginRequest, user);
 

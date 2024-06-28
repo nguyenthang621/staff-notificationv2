@@ -40,9 +40,6 @@ public class Employee {
 	@Column(name = "staff_id", updatable = false, nullable = false, unique = true)
 	private Long staffId;
 
-//	@Column(name = "parent_id")
-//	private String parent;
-
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
 	@JsonBackReference
@@ -75,16 +72,10 @@ public class Employee {
 
 	private String status;
 
-//	@JsonFormat(pattern = "dd/MM/yyyy")
-//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateofbirth;
 
-//	@JsonFormat(pattern = "dd/MM/yyyy")
-//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date hiredate;
 
-//	@JsonFormat(pattern = "dd/MM/yyyy")
-//	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date offdate;
 
 	@Convert(converter = StringListConverter.class)
