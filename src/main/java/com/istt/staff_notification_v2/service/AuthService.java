@@ -1,6 +1,8 @@
 package com.istt.staff_notification_v2.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +105,7 @@ class AuthServiceImpl implements AuthService {
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
+
 			List<String> response = getOdooSession(loginRequest);
 			if (response == null)
 				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
@@ -113,7 +116,8 @@ class AuthServiceImpl implements AuthService {
 				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
 			}
 
-//			user.set(accessToken);
+			user.setExpired(expired);
+			user.setSessionId(session_id);
 			user.setRefreshToken(refreshToken);
 			userRepo.save(user);
 
@@ -169,12 +173,21 @@ class AuthServiceImpl implements AuthService {
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
-//			user.setAccessToken(accessToken);
-//			user.setRefreshToken(refreshToken);
-//			userRepo.save(user);
+			if (user.getExpired() == null)
+				throw new AccessDeniedException("Access Denied");
+			if (refreshToken_in != user.getRefreshToken())
+				throw new AccessDeniedException("Access Denied");
+			Timestamp now = new Timestamp(new Date().getTime());
+			Timestamp expired = new Timestamp(Long.valueOf(user.getExpired() * 1000));
 
+			if (expired.before(now)) {
+				throw new AccessDeniedException("Token expired!!!");
+			}
+
+			user.setRefreshToken(refreshToken);
+			userRepo.save(user);
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
-					.refreshToken(refreshToken).build();
+					.sessionId(user.getSessionId()).refreshToken(refreshToken).build();
 
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();

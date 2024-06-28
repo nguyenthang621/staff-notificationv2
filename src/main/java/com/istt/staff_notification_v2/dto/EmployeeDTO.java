@@ -24,6 +24,10 @@ public class EmployeeDTO {
 
 	private List<Employee> subordinatesOdoo;
 
+	private String jobTitle;
+
+	private String workCity;
+
 	private float countOfDayOff;
 
 	private String fullname;

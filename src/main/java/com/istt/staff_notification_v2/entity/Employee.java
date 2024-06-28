@@ -78,6 +78,12 @@ public class Employee {
 
 	private Date offdate;
 
+	@Column(name = "job_title")
+	private String jobTitle;
+
+	@Column(name = "work_city")
+	private String workCity;
+
 	@Convert(converter = StringListConverter.class)
 	@Column(name = "employeeDependence")
 	private List<String> employeeDependence;
