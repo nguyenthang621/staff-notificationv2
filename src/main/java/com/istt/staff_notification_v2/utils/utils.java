@@ -1,11 +1,13 @@
 package com.istt.staff_notification_v2.utils;
 
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,6 @@ import com.istt.staff_notification_v2.entity.BusinessDays;
 
 @Service
 public class utils {
-
 	public static class DateRange {
 		private Date startDate;
 		private Date endDate;
@@ -271,4 +272,21 @@ public class utils {
 
 		return new DateRange(startDate, endDate, durationInDays);
 	}
+	
+	public static String changeName(String input) {
+        // Normalize the input string to decompose accents
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // Remove the accents using a regular expression
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String result = pattern.matcher(normalized).replaceAll("");
+        // Replace special Vietnamese characters
+        result = result.replaceAll("Đ", "D").replaceAll("đ", "d");
+        int lastSpaceIndex = input.lastIndexOf(' ');
+        if (lastSpaceIndex == -1) {
+            return result; // No space found, return the whole string
+        }
+        String lastWord = result.substring(lastSpaceIndex + 1);
+        String remainingString = result.substring(0, lastSpaceIndex);
+        return lastWord + " " + remainingString;
+    }
 }
