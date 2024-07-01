@@ -32,10 +32,10 @@ public class ApplicationProperties {
 		ABSENT, OT, APPROVED, HAFT_ABSENT
 	}
 
-	private List<String> TYPE_BUSINESSDAYS = Arrays.asList("HOLIDAYS", "BUSINESSDAY");
+	private List<String> TYPE_BUSINESSDAYS = Arrays.asList("P", "K");
 
 	public enum TypeBusinessDaysRef {
-		HOLIDAYS, BUSINESSDAY
+		P,K
 	}
 
 	private String ApiServerHandleExcel = "http://localhost:5000/download";

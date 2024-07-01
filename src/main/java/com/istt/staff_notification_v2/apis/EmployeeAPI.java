@@ -145,5 +145,9 @@ public class EmployeeAPI {
 	public Employee getEmployeeHierarchy(@PathVariable String id) {
 		return employeeService.getEmployeeHierarchyFrom(id);
 	}
+	@GetMapping("/getAll")
+    public List<EmployeeDTO> getAll() {
+        return employeeService.getAll();
+    }
 
 }

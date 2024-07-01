@@ -30,7 +30,9 @@ import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.BusinessDays;
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.repository.BusinessDaysRepo;
+import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.utils.utils;
 
 public interface BusinessDaysService {
@@ -58,6 +60,12 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 
 	@Autowired
 	private BusinessDaysRepo businessDaysRepo;
+	
+	@Autowired 
+	private EmployeeRepo employeeRepo;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	@Autowired
 	ApplicationProperties props;
@@ -81,7 +89,7 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 	@Override
 	public BusinessDaysDTO create(BusinessDaysDTO businessDaysDTO) {
 		try {
-
+			int count=0;
 			BusinessDays businessDays = new ModelMapper().map(businessDaysDTO, BusinessDays.class);
 			businessDays.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
 			if (!props.getTYPE_BUSINESSDAYS().contains(businessDaysDTO.getType())) {
@@ -98,8 +106,13 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 				splitBusinessDay.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
 				if (!businessDaysRepo.existsByStartdate(splitBusinessDay.getStartdate())) {
 					System.out.println(splitBusinessDay.getStartdate());
+					count++;
 					businessDaysRepo.save(splitBusinessDay);
 				}
+			}
+			//check type neu nghi khong luong thi tru ngay phep con lai khong lam gi ca
+			if(businessDaysDTO.getType().equals("K")) {
+				employeeService.calListDayOff(count, false);
 			}
 			return businessDaysDTO;
 		} catch (ResourceAccessException e) {
@@ -116,13 +129,20 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 		try {
 			BusinessDays businessDays = businessDaysRepo.findByBussinessdaysId(businessDaysDTO.getBussinessdaysId())
 					.orElseThrow(NoResultException::new);
-
 			if (!props.getTYPE_BUSINESSDAYS().contains(businessDaysDTO.getType())) {
 				logger.error("Invalid TYPE BUSINESSDAYS");
 				throw new BadRequestAlertException("Invalid TYPE BUSINESSDAYS", ENTITY_NAME, "Invalid");
 			}
+			//neu update lai type
+			if(!businessDaysDTO.getType().equals(businessDays.getType())) {
+				//neu update tu co luong sang khong luong thi tru ngay phep di
+				if(businessDaysDTO.getType().equals("K"))
+					employeeService.calListDayOff(1, false);
+				//neu update tu khong luong sang co luong thi cong ngay phep vao
+				else employeeService.calListDayOff(1, true);
+			}
+			businessDays.setType(businessDaysDTO.getType());
 			businessDays.setDescription(businessDaysDTO.getDescription());
-
 			businessDaysRepo.save(businessDays);
 			return businessDaysDTO;
 		} catch (ResourceAccessException e) {
@@ -140,6 +160,11 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 			logger.error("not found businessdays");
 			return false;
 		}
+		BusinessDays businessDays = businessDaysRepo.findById(id).get();
+		//check xem ngay nghi do luong hay khong
+		//neu khong luong(co bi tru ngay phep thi cong lai ngay phep cho moi nguoi)
+		if(businessDays.getType().equals("K")) 
+			employeeService.calListDayOff(1, true);
 		businessDaysRepo.deleteById(id);
 		return true;
 	}
@@ -151,6 +176,12 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 			logger.error("not found businessDays");
 			return false;
 		}
+		
+		for (BusinessDays businessDays2 : businessDays) {
+			if(businessDays2.getType().equals("K")) 
+				employeeService.calListDayOff(1, true);
+		}
+		
 		businessDaysRepo.deleteAll(businessDays);
 		return true;
 	}

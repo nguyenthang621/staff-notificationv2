@@ -41,7 +41,7 @@ public class Attendance {
 	@Column(name = "approved_by", updatable = false, nullable = false)
 	private String approvedBy;
 
-	@Column(name = "duration", updatable = false, nullable = false)
+	@Column(name = "duration", nullable = false)
 	private float duration;
 
 	@ManyToOne
@@ -71,4 +71,8 @@ public class Attendance {
 
 	private Long day;
 
+	@Override
+	public String toString() {
+		return "id:"+attendanceId + "-leavetype:"+ leaveType.getLeavetypeId()+"/"+ leaveType.getLeavetypeName()+"- duration:"+ duration;
+	}
 }

@@ -24,6 +24,8 @@ public class LeaveRequestDTO {
 	private String status;
 
 	private String anrreason;
+	
+	private String leavePlace;
 
 	private Date startDate;
 

@@ -36,6 +36,7 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
+import com.istt.staff_notification_v2.configuration.EmployeeComparator;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.LevelDTO;
@@ -48,6 +49,7 @@ import com.istt.staff_notification_v2.entity.Level;
 import com.istt.staff_notification_v2.entity.Rule;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.AttendanceRepo;
+import com.istt.staff_notification_v2.repository.BusinessDaysRepo;
 import com.istt.staff_notification_v2.repository.DepartmentRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LevelRepo;
@@ -58,6 +60,8 @@ import com.istt.staff_notification_v2.utils.utils.DateRange;
 
 public interface EmployeeService {
 	EmployeeDTO create(EmployeeDTO employeeDTO);
+	
+	List<EmployeeDTO> getAll();
 
 	EmployeeDTO findByName(String name);
 
@@ -98,6 +102,10 @@ public interface EmployeeService {
 	List<EmployeeDTO> resetDependence(List<String> ids);
 
 	Employee getEmployeeHierarchyFrom(String employeeId);
+	
+	Employee calDayOff(String Employeeid, float duration, boolean type);
+	
+	List<Employee> calListDayOff(float duration, boolean type);
 
 }
 
@@ -120,6 +128,9 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private AttendanceRepo attendanceRepo;
+	
+	@Autowired
+	private BusinessDaysRepo businessDaysRepo;
 
 	@Autowired
 	ApplicationProperties props;
@@ -214,6 +225,9 @@ class EmployeeServiceImpl implements EmployeeService {
 			employee.setStaffId(createStaffIdAutoIncrement());
 			employee.setEmployeeDependence(filterEmployeeDependence(employee));
 //			employee.setParent(parentId);
+			
+			//set work_city
+			
 
 			employeeRepo.save(employee);
 
@@ -408,6 +422,7 @@ class EmployeeServiceImpl implements EmployeeService {
 				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
 				employeeDTOs.add(employeeDTO);
 			}
+			
 			ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
 			responseDTO.setData(employeeDTOs);
 			return responseDTO;
@@ -707,9 +722,11 @@ class EmployeeServiceImpl implements EmployeeService {
 					count += attendance.getDuration();
 				System.err.println(count);
 			}
-			count = employee.getCountOfDayOff() - count;
-			employee.setCountOfDayOff(count);
 		}
+		
+		
+		count = employee.getCountOfDayOff() - count;
+		employee.setCountOfDayOff(count);
 		return employee;
 	}
 
@@ -756,5 +773,48 @@ class EmployeeServiceImpl implements EmployeeService {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
 	}
+
+	@Override
+	public Employee calDayOff(String employeeId, float duration, boolean type) {
+		ModelMapper modelMapper = new ModelMapper();
+		Employee employee = employeeRepo.findById(employeeId).orElseThrow(NoResultException::new);
+		if (getMaxLevelCode(employee) == 0) {
+			return employee;
+		}
+		float count =0;
+		//neu nghi khong luong thi tru ngay phep
+		if(!type) count = employee.getCountOfDayOff() - duration;
+		else count = employee.getCountOfDayOff() + duration;
+		employee.setCountOfDayOff(count);
+		employeeRepo.save(employee);
+		return employee;
+	}
+
+	@Override
+	public List<Employee> calListDayOff(float duration, boolean type) {
+		System.err.println("calListDayOff");
+		List<Employee> employees = employeeRepo.getByEmployeeStatus("ACTIVE").get();
+		if(employees.size()>0) {
+			for (Employee employee : employees) {
+				calDayOff(employee.getEmployeeId(), duration, type);
+			}
+		}
+		return employees;
+	}
+
+	@Override
+	public List<EmployeeDTO> getAll() {
+		ModelMapper mapper = new ModelMapper();
+		List<Employee> employees = employeeRepo.findByOrderByDepartmentAsc();
+		if(employees.size()<0) return null;
+		Collections.sort(employees, new EmployeeComparator());
+		List<EmployeeDTO> employeeDTOs = employees
+				  .stream()
+				  .map(employee -> mapper.map(employee, EmployeeDTO.class))
+				  .collect(Collectors.toList());
+		return employeeDTOs;
+	}
+	
+	
 
 }

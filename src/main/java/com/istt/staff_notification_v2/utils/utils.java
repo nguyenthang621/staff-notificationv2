@@ -95,6 +95,17 @@ public class utils {
 			}
 
 			Calendar tempCal = (Calendar) calendar.clone();
+			
+			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == Calendar.SATURDAY||dayOfWeek == Calendar.SUNDAY) {
+                //System.err.println(calendar.getTime()+ "is SATURDAY, SUNDAY");
+                calendar.add(Calendar.HOUR_OF_DAY, 12);
+                continue;
+            }
+			
+//            System.err.println(calendar.getTime());
+			
+			
 			if (currentDuration == 0.5f) {
 				tempCal.add(Calendar.HOUR_OF_DAY, 12);
 			} else {
@@ -136,13 +147,18 @@ public class utils {
 			Calendar tempCal = (Calendar) calendar.clone();
 			tempCal.add(Calendar.DAY_OF_MONTH, 1);
 			tempCal.add(Calendar.MILLISECOND, -1);
+			
+			
 
 			Date rangeEndDate = tempCal.getTime();
 			if (rangeEndDate.after(endDate)) {
 				rangeEndDate = endDate;
 			}
-
-			dateRanges.add(new DateRange(rangeStartDate, rangeEndDate, 1.0f));
+			
+			int dayOfWeek = tempCal.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
+            	dateRanges.add(new DateRange(rangeStartDate, rangeEndDate, 1.0f));
+            }
 
 			// Move to the next day
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -158,7 +174,7 @@ public class utils {
 	public static List<Attendance> handleSplitAttendence(Attendance attendance) {
 		try {
 			List<DateRange> splitDates = splitDateRange(attendance.getStartDate(), attendance.getDuration());
-			System.out.println("split date: " + splitDates.toString());
+//			System.out.println("split date: " + splitDates.toString());
 			List<Attendance> attendanceSplits = new ArrayList<>();
 
 			if (splitDates.size() > 1) {
@@ -206,9 +222,8 @@ public class utils {
 	public static List<BusinessDays> handleSplitBusinessDays(BusinessDays businessDays) {
 		try {
 			List<DateRange> splitDates = splitDateByRange(businessDays.getStartdate(), businessDays.getEnddate());
-			System.out.println("split date 2: " + splitDates.size() + splitDates.toString());
+//			System.out.println("split date 2: " + splitDates.size() + splitDates.toString());
 			List<BusinessDays> businessDaysSplits = new ArrayList<>();
-
 			if (splitDates.size() > 1) {
 				for (DateRange splitDate : splitDates) {
 					BusinessDays businessDaysSplit = new BusinessDays();

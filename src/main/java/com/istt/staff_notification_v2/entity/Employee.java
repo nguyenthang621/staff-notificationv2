@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.web.jsf.FacesContextUtils;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -77,6 +79,9 @@ public class Employee {
 	private Date hiredate;
 
 	private Date offdate;
+	
+	@Column(name ="work_city", nullable = false)
+	private String workCity;
 
 	@Convert(converter = StringListConverter.class)
 	@Column(name = "employeeDependence")

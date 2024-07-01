@@ -43,6 +43,8 @@ public class EmployeeDTO {
 	private Date dateofbirth;
 
 	private Date offdate;
+	
+	private String workCity;
 
 	private Date hiredate;
 
@@ -53,5 +55,4 @@ public class EmployeeDTO {
 	private List<EmployeeDTO> subordinates = new ArrayList<>();
 
 	private User user;
-
 }

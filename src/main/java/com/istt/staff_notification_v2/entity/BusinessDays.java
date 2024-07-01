@@ -25,7 +25,7 @@ public class BusinessDays {
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 	private Date enddate;
 
-	private String type;
+	private String type; 
 
 	@Column(columnDefinition = "TEXT")
 	private String description;

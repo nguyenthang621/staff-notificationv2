@@ -79,7 +79,6 @@ public class BusinessDaysAPI {
 
 	@PutMapping("/")
 	public ResponseDTO<BusinessDaysDTO> update(@RequestBody @Valid BusinessDaysDTO businessDaysDTO) throws IOException {
-//		logger.info("create by :" + currentuser.getUsername());
 		businessDaysService.update(businessDaysDTO);
 		return ResponseDTO.<BusinessDaysDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(businessDaysDTO)
 				.build();

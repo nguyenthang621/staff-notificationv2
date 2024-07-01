@@ -16,7 +16,7 @@ public class BusinessDaysDTO {
 //	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date enddate;
 
-	private String type;
+	private String type; 
 
 	private String description;
 }

@@ -55,6 +55,8 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	@Query("SELECT a from Employee a")
 	List<Employee> getAll();
+	
+	List<Employee> findByOrderByDepartmentAsc();
 
 //	List<Employee> findByParentIsNull();
 

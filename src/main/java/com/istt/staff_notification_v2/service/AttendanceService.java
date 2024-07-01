@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -75,6 +76,9 @@ class AttendanceServiceImpl implements AttendanceService {
 
 	@Autowired
 	private LeaveTypeRepo leaveTypeRepo;
+	
+	@Autowired 
+	private EmployeeService employeeService;
 
 	private static final String ENTITY_NAME = "isttAttendance";
 
@@ -82,7 +86,7 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public AttendanceDTO create(AttendanceDTO attendanceDTO) {
 		try {
-
+			float count=0;
 			Attendance attendance = new ModelMapper().map(attendanceDTO, Attendance.class);
 			attendance.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
 
@@ -120,14 +124,18 @@ class AttendanceServiceImpl implements AttendanceService {
 			List<Attendance> splitAttendences = new utils().handleSplitAttendence(attendance);
 			for (Attendance splitAttendence : splitAttendences) {
 				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
-
 				if (attendanceRepo
 						.findByStartDate(splitAttendence.getStartDate(), splitAttendence.getEmployee().getEmployeeId())
 						.isEmpty()) {
+					count += splitAttendence.getDuration();
 					attendanceRepo.save(splitAttendence);
 				}
 			}
-
+			
+			//ngay nghi bi tru luong
+			if(!leaveTypeOp.get().isSpecialType())
+				employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), count, false);
+			
 			return attendanceDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
@@ -140,40 +148,38 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public AttendanceDTO update(AttendanceDTO attendanceDTO) {
 		try {
-			Attendance attendance = new ModelMapper().map(attendanceDTO, Attendance.class);
-
-			Optional<Employee> employeeUpdateOptional = employeeRepo.findByEmployeeId(attendanceDTO.getUpdateBy());
-			if (employeeUpdateOptional.isEmpty())
-				throw new BadRequestAlertException("Employee update not found.", ENTITY_NAME, "Not found");
-
-			Optional<Employee> employeeOptional = employeeRepo
-					.findByEmployeeId(attendanceDTO.getEmployee().getEmployeeId());
-			if (employeeOptional.isEmpty())
-				throw new BadRequestAlertException("Employee not found.", ENTITY_NAME, "Not found");
-
-			Employee employee = employeeOptional.get();
-			if (employee.getStatus().equals(StatusEmployeeRef.SUSPEND.toString()))
-				throw new BadRequestAlertException("This employee has been suspended", ENTITY_NAME, "Suspend");
-
-			attendance.setEmployee(employee);
-			attendance.setCreateAt(new Date());
-
-			attendance.setStartDate(new utils().resetStartDate(attendanceDTO.getStartDate()));
-
-			attendance.setEndDate(
-					new utils().calculatorEndDate(attendanceDTO.getStartDate(), attendanceDTO.getDuration()));
-
-			List<Attendance> splitAttendences = new utils().handleSplitAttendence(attendance);
-			for (Attendance splitAttendence : splitAttendences) {
-				splitAttendence.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
-
-				if (attendanceRepo
-						.findByStartDate(splitAttendence.getStartDate(), splitAttendence.getEmployee().getEmployeeId())
-						.isEmpty()) {
-					attendanceRepo.save(splitAttendence);
+			ModelMapper mapper = new ModelMapper();
+			Optional<Attendance> attendanceOp = attendanceRepo.findById(attendanceDTO.getAttendanceId());
+			
+			if(attendanceOp==null) throw new BadRequestAlertException("not found attendance", ENTITY_NAME, "missing data");
+			Attendance attendance = attendanceOp.get();
+			
+			//check leavetype
+			Optional<LeaveType> leaveTypeOp = leaveTypeRepo.findById(attendanceDTO.getLeaveType().getLeavetypeId());
+			if(leaveTypeOp.isEmpty()) {
+				throw new BadRequestAlertException("not found leavetype", ENTITY_NAME, "missing data");
+			}
+			attendanceDTO.setLeaveType(leaveTypeOp.get());
+			//neu doi type
+			if(attendanceDTO.getLeaveType().isSpecialType()!= attendance.getLeaveType().isSpecialType()) {
+				//truong hop doi tu co luong sang khong luong
+				if(attendanceDTO.getLeaveType().isSpecialType()) {
+					employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), attendance.getDuration(), true);
+				}
+				else {
+					//truong hop doi tu khong luong sang co luong
+					employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), attendanceDTO.getDuration(), false);
+				}
+			}else { //khong doi type
+				//neu khong luong
+				if(!attendance.getLeaveType().isSpecialType()) {
+					employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), attendanceDTO.getDuration()- attendance.getDuration(), false);
 				}
 			}
-
+			
+			attendance.setLeaveType(leaveTypeOp.get());
+			attendance.setDuration(attendanceDTO.getDuration());
+			attendanceRepo.save(attendance);
 			return attendanceDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
@@ -186,6 +192,11 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public Boolean deleteById(String id) {
 		Attendance attendance = attendanceRepo.findById(id).orElseThrow(NoResultException::new);
+		
+		//check xem attendance nay nghi co bi tru phép khong neu co cong lai cho nguoi ta
+		if(!attendance.getLeaveType().isSpecialType())
+			employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), attendance.getDuration(),true);
+		
 		if (attendance != null) {
 			attendanceRepo.deleteById(id);
 		}
@@ -196,6 +207,14 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public Boolean deletebylistId(List<String> ids) {
 		List<Attendance> attendances = attendanceRepo.findAllById(ids);
+		
+		for (Attendance attendance : attendances) {
+			//check xem attendance nay nghi co bi tru phép khong neu co cong lai cho nguoi ta
+			if(!attendance.getLeaveType().isSpecialType())
+				employeeService.calDayOff(attendance.getEmployee().getEmployeeId(), attendance.getDuration(),true);
+		}
+		
+		
 		if (attendances.size() > 0) {
 			attendanceRepo.deleteAllById(ids);
 			return true;
