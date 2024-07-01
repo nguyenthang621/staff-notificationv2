@@ -2,10 +2,9 @@ package com.istt.staff_notification_v2.configuration;
 
 import java.util.Comparator;
 
-import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.dto.EmployeeDTO;
 
-
-public class EmployeeComparator implements Comparator<Employee> {
+public class EmployeeDTOComparator implements Comparator<EmployeeDTO> {
     public static String changeName(String input) { //moveLastWordToFront
         int lastSpaceIndex = input.lastIndexOf(' ');
         if (lastSpaceIndex == -1) {
@@ -16,7 +15,7 @@ public class EmployeeComparator implements Comparator<Employee> {
         return lastWord + " " + remainingString;
     }
     @Override
-    public int compare(Employee p1, Employee p2) {
+    public int compare(EmployeeDTO p1, EmployeeDTO p2) {
     	String name1 = changeName(p1.getFullname());
     	String name2 = changeName(p2.getFullname());
         if (p1.getDepartment()== p2.getDepartment()) {
@@ -24,7 +23,5 @@ public class EmployeeComparator implements Comparator<Employee> {
         } else {
             return p1.getDepartment().getDepartmentId().compareTo(p2.getDepartment().getDepartmentId());
         }
-//    	return p1.getStaffId().compareTo(p2.getStaffId());
-//    	return p1.getDepartment().getDepartmentId().compareTo(p2.getDepartment().getDepartmentId());
     }
 }

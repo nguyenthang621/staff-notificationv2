@@ -23,6 +23,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,7 +124,6 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private RuleRepo ruleRepo;
-
 	@Autowired
 	private DepartmentRepo departmentRepo;
 
@@ -388,8 +389,8 @@ class EmployeeServiceImpl implements EmployeeService {
 
 					return Sort.Order.desc(order.getProperty());
 				}).collect(Collectors.toList());
+		orders.add(new Sort.Order(Direction.ASC, "department"));
 		Pageable pageable = PageRequest.of(searchDTO.getPage(), searchDTO.getSize(), Sort.by(orders));
-
 		String email = null;
 		String department = null;
 		String status = null;
@@ -400,7 +401,6 @@ class EmployeeServiceImpl implements EmployeeService {
 			status = String.valueOf(searchDTO.getFilterBys().get("status"));
 
 			Page<Employee> page = employeeRepo.searchByFullnameAndEmail(searchDTO.getValue(), email, status, pageable);
-
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
 			for (Employee employee : page.getContent()) {
 				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
@@ -805,7 +805,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<EmployeeDTO> getAll() {
 		ModelMapper mapper = new ModelMapper();
-		List<Employee> employees = employeeRepo.findByOrderByDepartmentAsc();
+		List<Employee> employees = employeeRepo.findAll();
 		if(employees.size()<0) return null;
 		Collections.sort(employees, new EmployeeComparator());
 		List<EmployeeDTO> employeeDTOs = employees

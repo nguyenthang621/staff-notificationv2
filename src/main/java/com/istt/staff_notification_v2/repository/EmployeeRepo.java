@@ -35,7 +35,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x ")
 	Optional<Employee> findByEmployeeId(@Param("x") String employeeId);
 
-	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x or e.email = :y")
+	@Query("SELECT e FROM Employee e WHERE e.employeeId = :x or e.email = :y order by e.department.departmentId")
 	Optional<Employee> findByEmployeeIdOrEmail(@Param("x") String employeeId, @Param("y") String email);
 
 	Boolean existsByEmail(String email);
@@ -56,7 +56,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	@Query("SELECT a from Employee a")
 	List<Employee> getAll();
 	
-	List<Employee> findByOrderByDepartmentAsc();
+//	List<Employee> findByOrderByDepartmentAsc();
 
 //	List<Employee> findByParentIsNull();
 
