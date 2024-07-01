@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +44,17 @@ public class utils {
 					+ '}';
 		}
 	}
+	
+	public static String toStringDate(Date date){
+
+        // Create a SimpleDateFormat object and define the desired date format
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        // Format the date
+        String formattedDate = formatter.format(date);
+
+        return formattedDate;
+    }
 
 	public static Date calculatorEndDate(Date startDate, float duration) {
 		try {

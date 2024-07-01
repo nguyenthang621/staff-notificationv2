@@ -149,5 +149,10 @@ public class EmployeeAPI {
     public List<EmployeeDTO> getAll() {
         return employeeService.getAll();
     }
+	
+	@GetMapping("/filterbystaffid")
+    public List<EmployeeDTO> getByStaffId() {
+        return employeeService.filterStaffId();
+    }
 
 }

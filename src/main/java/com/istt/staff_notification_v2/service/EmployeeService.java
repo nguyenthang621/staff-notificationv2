@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -108,6 +109,8 @@ public interface EmployeeService {
 	Employee calDayOff(String Employeeid, float duration, boolean type);
 	
 	List<Employee> calListDayOff(float duration, boolean type);
+	
+	List<EmployeeDTO> filterStaffId();
 
 }
 
@@ -147,6 +150,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		}
 		return value;
 	}
+	
 
 	private static Long getMaxLevelCode(Employee e) {
 		Long max = Long.MIN_VALUE;
@@ -814,6 +818,26 @@ class EmployeeServiceImpl implements EmployeeService {
 				  .collect(Collectors.toList());
 		return employeeDTOs;
 	}
+
+	@Override
+	public List<EmployeeDTO> filterStaffId() {
+		ModelMapper mapper = new ModelMapper();
+		List<Employee> employees = employeeRepo.findByOrderByHiredateAsc();
+//		List<Employee> employees = employeeRepo.findAll();
+		if(employees.size()==0) return null;
+		long count = 1000000;
+		for (Employee employee : employees) {
+			employee.setStaffId(count);
+			employeeRepo.save(employee);
+			count++;
+		}
+		return employees
+				  .stream()
+				  .map(employee -> mapper.map(employee, EmployeeDTO.class))
+				  .collect(Collectors.toList());
+	}
+	
+	
 	
 	
 

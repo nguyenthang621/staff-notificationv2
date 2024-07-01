@@ -39,7 +39,7 @@ public class Employee {
 	@Column(name = "employee_id", updatable = false, nullable = false)
 	private String employeeId;
 
-	@Column(name = "staff_id", updatable = false, nullable = false, unique = true)
+	@Column(name = "staff_id")
 	private Long staffId;
 
 	@ManyToOne
