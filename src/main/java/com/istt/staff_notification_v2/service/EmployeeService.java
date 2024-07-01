@@ -40,6 +40,7 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.configuration.EmployeeComparator;
+import com.istt.staff_notification_v2.configuration.EmployeeHireDateComparator;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.LevelDTO;
@@ -822,8 +823,9 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<EmployeeDTO> filterStaffId() {
 		ModelMapper mapper = new ModelMapper();
-		List<Employee> employees = employeeRepo.findByOrderByHiredateAsc();
-//		List<Employee> employees = employeeRepo.findAll();
+//		List<Employee> employees = employeeRepo.findByOrderByHiredateAsc();
+		List<Employee> employees = employeeRepo.findAll();
+		Collections.sort(employees, new EmployeeHireDateComparator());
 		if(employees.size()==0) return null;
 		long count = 1000000;
 		for (Employee employee : employees) {
