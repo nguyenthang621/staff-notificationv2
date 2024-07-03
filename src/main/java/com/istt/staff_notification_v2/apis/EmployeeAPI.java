@@ -111,24 +111,6 @@ public class EmployeeAPI {
 				.data(employeeService.findEmployeeToExportExcel()).build();
 	}
 
-	@PostMapping("/calCountOfDayOff")
-	public ResponseDTO<EmployeeDTO> calCountOfDayOff(@RequestBody @Valid EmployeeDTO employeeDTO)
-			throws URISyntaxException {
-		if (employeeDTO.getEmail() == null || employeeDTO.getFullname() == null
-				|| employeeDTO.getDepartment() == null) {
-			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing");
-		}
-
-		employeeService.saveCountOfDayOff(employeeDTO.getEmployeeId());
-		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeDTO).build();
-	}
-
-	@PostMapping("/calCountOfDayOffList")
-	public ResponseDTO<List<EmployeeDTO>> saveCountOfDayOffs(@RequestBody @Valid List<String> ids)
-			throws URISyntaxException {
-		return employeeService.saveCountOfDayOffs(ids);
-	}
-
 	@PostMapping("/resetDependence/ids")
 	public ResponseDTO<List<EmployeeDTO>> resetDependence(@RequestBody @Valid List<String> ids)
 			throws URISyntaxException {

@@ -98,12 +98,6 @@ public interface EmployeeService {
 
 	Map<String, List<EmployeeDTO>> findEmployeeToExportExcel();
 
-	Employee calCountOfDayOff(String employeeId);
-
-	EmployeeDTO saveCountOfDayOff(String employeeId);
-
-	ResponseDTO<List<EmployeeDTO>> saveCountOfDayOffs(List<String> ids);
-
 	List<EmployeeDTO> resetDependence(List<String> ids);
 
 	Employee getEmployeeHierarchyFrom(String employeeId);
@@ -700,63 +694,6 @@ class EmployeeServiceImpl implements EmployeeService {
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
-	}
-
-	@Override
-	public Employee calCountOfDayOff(String employeeId) {
-		float count = 0;
-		Employee employee = employeeRepo.findById(employeeId).orElseThrow(NoResultException::new);
-		if (getMaxLevelCode(employee) == 0) {
-			return employee;
-		}
-		DateRange dateRange = utils.getCurrentMonth();
-		Calendar calendarStartDate = Calendar.getInstance();
-		calendarStartDate.setTime(dateRange.getStartDate());
-
-		Calendar calendarEndDate = Calendar.getInstance();
-		calendarEndDate.setTime(dateRange.getEndDate());
-
-		List<Attendance> attendances = attendanceRepo.findByIndex(Long.valueOf(calendarStartDate.get(Calendar.YEAR)),
-				Long.valueOf(calendarStartDate.get(Calendar.MONTH) + 1),
-				Long.valueOf(calendarStartDate.get(Calendar.DAY_OF_MONTH)),
-				Long.valueOf(calendarEndDate.get(Calendar.YEAR)), Long.valueOf(calendarEndDate.get(Calendar.MONTH) + 1),
-				Long.valueOf(calendarEndDate.get(Calendar.DAY_OF_MONTH)));
-		if (attendances.size() > 0) {
-			for (Attendance attendance : attendances) {
-				// chi tru nhung lan nghi phep k dac biet trong thang
-				if (!attendance.getLeaveType().isSpecialType())
-					count += attendance.getDuration();
-				System.err.println(count);
-			}
-		}
-		
-		
-		count = employee.getCountOfDayOff() - count;
-		employee.setCountOfDayOff(count);
-		return employee;
-	}
-
-	@Override
-	public EmployeeDTO saveCountOfDayOff(String employeeId) {
-		Employee employee = calCountOfDayOff(employeeId);
-		EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
-		employeeRepo.save(employee);
-		return employeeDTO;
-	}
-
-	@Override
-	public ResponseDTO<List<EmployeeDTO>> saveCountOfDayOffs(List<String> ids) {
-		List<Employee> employees = employeeRepo.findAllById(ids);
-		List<EmployeeDTO> employeeDTOs = new ArrayList<EmployeeDTO>();
-		if (employees.size() == 0)
-			return null;
-		for (Employee employee : employees) {
-			EmployeeDTO employeeDTO = saveCountOfDayOff(employee.getEmployeeId());
-			employeeDTOs.add(employeeDTO);
-		}
-		ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(employeeDTOs, ResponseDTO.class);
-		responseDTO.setData(employeeDTOs);
-		return responseDTO;
 	}
 
 	@Override
