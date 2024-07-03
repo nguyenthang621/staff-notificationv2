@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -34,12 +35,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent", "subordinatesOdoo" })
 //@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Employee {
+public class Employee implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "employee_id", updatable = false, nullable = false)
 	private String employeeId;
 
-	@Column(name = "staff_id")
+	@Column(name = "staff_id", nullable = false)
 	private Long staffId;
 
 	@ManyToOne

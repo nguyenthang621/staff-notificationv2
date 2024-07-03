@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "user")
 @EqualsAndHashCode(callSuper = false, exclude = { "roles", "employee" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class User {
-
+public class User implements Serializable{
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "user_id", updatable = false, nullable = false)
 	private String userId;

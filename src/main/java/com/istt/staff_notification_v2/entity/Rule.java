@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,8 +20,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "rule")
-public class Rule {
-
+public class Rule implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "rule_id", updatable = false, nullable = false)
 	private String ruleId;

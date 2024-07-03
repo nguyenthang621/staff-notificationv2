@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "leaveqequest")
 @EqualsAndHashCode(callSuper = false)
 public class LeaveRequest {
-
+//	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "leaveqequest_id", updatable = false, nullable = false)
 	private String leaveqequestId;

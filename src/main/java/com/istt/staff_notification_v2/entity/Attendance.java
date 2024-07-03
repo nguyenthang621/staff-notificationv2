@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;

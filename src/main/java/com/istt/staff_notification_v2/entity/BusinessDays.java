@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,7 +13,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "businessdays")
-public class BusinessDays {
+public class BusinessDays implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "bussinessdays_id", updatable = false, nullable = false)
 	private String bussinessdaysId;

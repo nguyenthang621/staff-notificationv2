@@ -1,5 +1,6 @@
 package com.istt.staff_notification_v2.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +19,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "level")
 @EqualsAndHashCode(callSuper = false)
-public class Level {
-
+public class Level implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "level_id", updatable = false, nullable = false)
 	private String levelId;
