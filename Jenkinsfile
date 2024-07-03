@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     echo 'Starting the build process...'
-                    sh 'cd /var/lib/jenkins/workspace/staff-notification-v2_be/ && /opt/apache-maven-3.9.6/bin/mvn clean install'
+                    sh 'cd /var/lib/jenkins/workspace/_notification-v2-be_calCountOffs/ && /opt/apache-maven-3.9.6/bin/mvn clean install'
                 }
             }
         }
