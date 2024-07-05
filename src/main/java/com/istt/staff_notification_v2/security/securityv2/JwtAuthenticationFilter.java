@@ -35,6 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String requestURI = request.getRequestURI();
 
 			String jwt = getJwtFromRequest(request);
+			
+			System.out.println(jwt);
 			if (ALLOWED_URLS.contains(requestURI)) {
 				filterChain.doFilter(request, response);
 
