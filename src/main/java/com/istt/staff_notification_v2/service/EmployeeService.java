@@ -787,11 +787,6 @@ class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = user.getEmployee();
 		return new ModelMapper().map(employee, EmployeeDTO.class);
 	}
-
-
-	
-	
-	
 	
 
 }

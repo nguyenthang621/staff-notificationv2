@@ -139,13 +139,14 @@ public class EmployeeAPI {
     public List<EmployeeDTO> getByStaffId() {
         return employeeService.filterStaffId();
     }
-
+	
 	@GetMapping("/employeeInfo")
-	public ResponseDTO<EmployeeDTO> get(@CurrentUser UserPrincipal currentUser) {
+	public ResponseDTO<EmployeeDTO> getEmployee(@CurrentUser UserPrincipal currentUser) {
 		if (currentUser == null) {
 			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
 		}
 		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.getEmployeeFromUser(currentUser.getUser_id())).build();
 	}
+
 }
