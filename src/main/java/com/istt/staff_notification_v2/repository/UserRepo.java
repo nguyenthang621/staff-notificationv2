@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.User;
 
 @Repository
@@ -27,5 +28,5 @@ public interface UserRepo extends JpaRepository<User, String> {
 
 	@Query("SELECT u FROM User u ")
 	Page<User> getAll(@Param("x") String value, Pageable pageable);
-
+	
 }

@@ -107,6 +107,8 @@ public interface EmployeeService {
 	List<Employee> calListDayOff(float duration, boolean type);
 	
 	List<EmployeeDTO> filterStaffId();
+	
+	EmployeeDTO getEmployeeFromUser(String userId);
 
 }
 
@@ -125,6 +127,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	private RuleRepo ruleRepo;
 	@Autowired
 	private DepartmentRepo departmentRepo;
+	
 
 	@Autowired
 	private AttendanceRepo attendanceRepo;
@@ -776,6 +779,16 @@ class EmployeeServiceImpl implements EmployeeService {
 				  .map(employee -> mapper.map(employee, EmployeeDTO.class))
 				  .collect(Collectors.toList());
 	}
+
+
+	@Override
+	public EmployeeDTO getEmployeeFromUser(String userId) {
+		User user = userRepo.findByUserId(userId).orElseThrow(NoResultException::new);
+		Employee employee = user.getEmployee();
+		return new ModelMapper().map(employee, EmployeeDTO.class);
+	}
+
+
 	
 	
 	

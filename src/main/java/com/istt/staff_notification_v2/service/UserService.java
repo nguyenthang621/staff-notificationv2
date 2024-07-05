@@ -29,6 +29,7 @@ import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
+import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.UpdatePassword;
@@ -59,6 +60,7 @@ public interface UserService {
 	UserResponse updatePassword(UpdatePassword updatePassword);
 
 	ResponseDTO<List<UserResponse>> search(SearchDTO searchDTO);
+
 }
 
 @Service
@@ -239,5 +241,8 @@ class UserServiceImpl implements UserService {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
 	}
+
+	
+	
 
 }

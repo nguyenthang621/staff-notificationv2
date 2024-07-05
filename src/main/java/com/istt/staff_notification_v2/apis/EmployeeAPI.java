@@ -24,6 +24,8 @@ import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.EmployeeService;
 
 @RestController
@@ -63,6 +65,7 @@ public class EmployeeAPI {
 		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.get(id)).build();
 	}
+	
 
 	@GetMapping("/dependence/{id}")
 	public ResponseDTO<List<EmployeeDTO>> getEmployeeDependence(@PathVariable(value = "id") String id) {
@@ -137,4 +140,12 @@ public class EmployeeAPI {
         return employeeService.filterStaffId();
     }
 
+	@GetMapping("/employeeInfo")
+	public ResponseDTO<EmployeeDTO> get(@CurrentUser UserPrincipal currentUser) {
+		if (currentUser == null) {
+			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
+		}
+		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(employeeService.getEmployeeFromUser(currentUser.getUser_id())).build();
+	}
 }
