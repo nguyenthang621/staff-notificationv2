@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,7 +24,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "user")
-@EqualsAndHashCode(callSuper = false, exclude = { "roles", "employee" })
+@EqualsAndHashCode(callSuper = false, exclude = { "groupRole", "employee" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -45,10 +46,10 @@ public class User implements Serializable{
 	private String refreshToken;
 
 	private String accessToken;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "group_id")
+	private GroupRole groupRole;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "employeeId", referencedColumnName = "employee_id")

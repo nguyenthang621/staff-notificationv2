@@ -1,6 +1,8 @@
 package com.istt.staff_notification_v2.apis;
 
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -16,6 +18,7 @@ import org.zalando.problem.Status;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.service.AuthService;
@@ -45,6 +48,13 @@ public class AuthAPI {
 
 		User user = userOptional.get();
 
+//		Set<Role> roles = user.getGroupRole().getRoles();
+//		for (Role role : roles) {
+//			System.err.println(role.getRole());
+//		}
+		
+//		System.err.println(user.getGroupRole().getRoles().toString());
+		
 //		Boolean compare_password = BCrypt.checkpw(loginRequest.getPassword(), user.getPassword());
 //		if (!compare_password)
 //			throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");

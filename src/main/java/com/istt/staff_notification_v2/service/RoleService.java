@@ -28,7 +28,9 @@ import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.RoleDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Role;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.RoleRepo;
+import com.istt.staff_notification_v2.repository.UserRepo;
 
 public interface RoleService {
 	RoleDTO create(RoleDTO roleDTO);
@@ -46,6 +48,8 @@ public interface RoleService {
 	List<RoleDTO> getAll();
 
 	List<RoleDTO> deleteAllbyIds(List<String> ids);
+	
+	List<RoleDTO> getRoleFromUser(String userId);
 }
 
 @Service
@@ -53,6 +57,9 @@ class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleRepo roleRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
 
 	private static final String ENTITY_NAME = "isttRole";
 
@@ -192,6 +199,14 @@ class RoleServiceImpl implements RoleService {
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
+	}
+
+	@Override
+	public List<RoleDTO> getRoleFromUser(String userId) {
+		Optional<User> user = userRepo.findById(userId);
+		List<Role> roles = roleRepo.findByGroupRole(user.get().getGroupRole());
+		ModelMapper mapper = new ModelMapper();
+		return null;
 	}
 
 }

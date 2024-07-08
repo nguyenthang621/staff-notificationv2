@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class BusinessDaysAPI {
 	private static final String ENTITY_NAME = "isttBusinessDays";
 	private static final Logger logger = LogManager.getLogger(BusinessDaysAPI.class);
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<BusinessDaysDTO> create(@RequestBody @Valid BusinessDaysDTO businessDaysDTO)
 			throws URISyntaxException {
@@ -49,6 +51,7 @@ public class BusinessDaysAPI {
 				.build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 
@@ -66,6 +69,7 @@ public class BusinessDaysAPI {
 //		return null;
 //	}
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_DELETE')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 //		logger.info("create by :" + currentuser.getUsername());
@@ -77,6 +81,7 @@ public class BusinessDaysAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<BusinessDaysDTO> update(@RequestBody @Valid BusinessDaysDTO businessDaysDTO) throws IOException {
 		businessDaysService.update(businessDaysDTO);
@@ -85,18 +90,20 @@ public class BusinessDaysAPI {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<BusinessDaysDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<BusinessDaysDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(businessDaysService.getAll()).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_SEARCHTYPE')")
 	@PostMapping("/searchByType")
 	public ResponseDTO<List<BusinessDaysDTO>> searchbyType(@RequestBody @Valid SearchDTO searchDTO) {
 //		logger.info("Create by" + currentuser.getUsername());
 		return businessDaysService.searchByType(searchDTO);
 	}
-
+	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<BusinessDaysDTO>> search(@RequestBody @Valid SearchAttendence searchDTO) {
 //		logger.info("Create by"+ currentuser.getUsername());
