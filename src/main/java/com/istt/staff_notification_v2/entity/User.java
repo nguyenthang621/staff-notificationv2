@@ -48,7 +48,7 @@ public class User implements Serializable{
 	private String accessToken;
 	
 	@ManyToOne
-	@JoinColumn(name = "group_id")
+	@JoinColumn(name ="group_id")
 	private GroupRole groupRole;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
