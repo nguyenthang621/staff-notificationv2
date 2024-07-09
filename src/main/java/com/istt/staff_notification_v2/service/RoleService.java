@@ -2,6 +2,7 @@ package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,6 +51,9 @@ public interface RoleService {
 	List<RoleDTO> deleteAllbyIds(List<String> ids);
 	
 	List<RoleDTO> getRoleFromUser(String userId);
+	
+	List<RoleDTO> createAll(List<RoleDTO> roleDTO);
+	
 }
 
 @Service
@@ -207,6 +211,14 @@ class RoleServiceImpl implements RoleService {
 		List<Role> roles = roleRepo.findByGroupRole(user.get().getGroupRole());
 		ModelMapper mapper = new ModelMapper();
 		return null;
+	}
+
+	@Override
+	public List<RoleDTO> createAll(List<RoleDTO> roles) {
+		for (RoleDTO roleDTO2 : roles) {
+			create(roleDTO2);
+		}
+		return roles;
 	}
 
 }

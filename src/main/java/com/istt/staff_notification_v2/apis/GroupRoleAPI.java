@@ -35,13 +35,13 @@ public class GroupRoleAPI {
 
 	private static final String ENTITY_NAME = "isttGroupRole";
 	
-	@PreAuthorize("hasRole('ROLE_GROUPROLE_GETALL')")
+//	@PreAuthorize("hasRole('ROLE_GROUPROLE_GETALL')")
 	@GetMapping("/getAll")
     public List<GroupRoleDTO> getAll() {
         return groupRoleService.getAll();
     }
 	
-	@PreAuthorize("hasRole('ROLE_GROUPROLE_CREATE')")
+//	@PreAuthorize("hasRole('ROLE_GROUPROLE_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<GroupRoleDTO> create(@RequestBody GroupRoleDTO groupRoleDTO) throws URISyntaxException {
 		if (groupRoleDTO.getGroupName()==null) {
@@ -51,7 +51,7 @@ public class GroupRoleAPI {
 		return ResponseDTO.<GroupRoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupRoleDTO).build();
 	}
 	
-	@PreAuthorize("hasRole('ROLE_GROUPROLE_DELETE')")
+//	@PreAuthorize("hasRole('ROLE_GROUPROLE_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		if (id == null) {
@@ -61,7 +61,7 @@ public class GroupRoleAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 	
-	@PreAuthorize("hasRole('ROLE_GROUPROLE_GET')")
+//	@PreAuthorize("hasRole('ROLE_GROUPROLE_GET')")
 	@GetMapping("/{id}")
 	public ResponseDTO<GroupRoleDTO> get(@PathVariable(value = "id") String id) {
 		if (id == null) {
@@ -73,7 +73,7 @@ public class GroupRoleAPI {
 
 	
 	@PutMapping("/")
-	@PreAuthorize("hasRole('ROLE_GROUPROLE_UPDATE')")
+//	@PreAuthorize("hasRole('ROLE_GROUPROLE_UPDATE')")
 	public ResponseDTO<GroupRoleDTO> update(@RequestBody @Valid GroupRoleDTO groupRoleDTO ) throws IOException {
 		groupRoleService.update(groupRoleDTO);
 		return ResponseDTO.<GroupRoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupRoleDTO).build();

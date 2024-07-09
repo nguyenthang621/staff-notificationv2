@@ -34,54 +34,63 @@ public class RoleAPI {
 
 	private static final String ENTITY_NAME = "isttRole";
 
-//	@PostMapping("")
-////	@PreAuthorize("hasAuthority('ADMIN') and hasAuthority('USER')")
-//	public ResponseDTO<RoleDTO> create(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
-//
+	@PostMapping("")
+//	@PreAuthorize("hasAuthority('ADMIN') and hasAuthority('USER')")
+	public ResponseDTO<RoleDTO> create(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
+
+		if (roleDTO.getRole() == null) {
+			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_role");
+		}
+		roleService.create(roleDTO);
+		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
+			throws URISyntaxException {
+		if (id == null) {
+			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_id");
+		}
+		roleService.delete(id);
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+	}
+
+	@PostMapping("/search")
+	public ResponseDTO<List<RoleDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
+		return roleService.search(searchDTO);
+	}
+
+	@DeleteMapping("/ids")
+	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
+
+		if (ids.isEmpty()) {
+			throw new BadRequestAlertException("Bad request: missing roles", ENTITY_NAME, "missing_roles");
+		}
+		roleService.deleteAllbyIds(ids);
+		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
+	}
+
+	@PutMapping("/")
+	public ResponseDTO<RoleDTO> update(@RequestBody @Valid RoleDTO roleDTO) throws IOException {
+		roleService.update(roleDTO);
+		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
+
+	}
+
+	@GetMapping("/all")
+	public ResponseDTO<List<RoleDTO>> getAll() throws IOException {
+		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(roleService.getAll()).build();
+	}
+	
+	@PostMapping("/createAll")
+	public ResponseDTO<List<RoleDTO>> createALL(@RequestBody List<RoleDTO> roleDTO) throws URISyntaxException {
+
 //		if (roleDTO.getRole() == null) {
 //			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_role");
 //		}
-//		roleService.create(roleDTO);
-//		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
-//	}
-
-//	@DeleteMapping("/{id}")
-//	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
-//			throws URISyntaxException {
-//		if (id == null) {
-//			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_id");
-//		}
-//		roleService.delete(id);
-//		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
-//	}
-
-//	@PostMapping("/search")
-//	public ResponseDTO<List<RoleDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
-//		return roleService.search(searchDTO);
-//	}
-
-//	@DeleteMapping("/ids")
-//	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
-//
-//		if (ids.isEmpty()) {
-//			throw new BadRequestAlertException("Bad request: missing roles", ENTITY_NAME, "missing_roles");
-//		}
-//		roleService.deleteAllbyIds(ids);
-//		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
-//	}
-//
-//	@PutMapping("/")
-//	public ResponseDTO<RoleDTO> update(@RequestBody @Valid RoleDTO roleDTO) throws IOException {
-//		roleService.update(roleDTO);
-//		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
-//
-//	}
-
-//	@PreAuthorize("hasRole('ROLE_USER_UPDATE_PASSWORD')")
-//	@GetMapping("/all")
-//	public ResponseDTO<List<RoleDTO>> getAll() throws IOException {
-//		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-//				.data(roleService.getAll()).build();
-//	}
+		roleService.createAll(roleDTO);
+		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
+	}
 
 }

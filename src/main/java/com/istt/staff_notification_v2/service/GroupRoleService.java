@@ -30,8 +30,10 @@ import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.GroupRole;
 import com.istt.staff_notification_v2.entity.Level;
 import com.istt.staff_notification_v2.entity.Role;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.GroupRoleRepo;
 import com.istt.staff_notification_v2.repository.RoleRepo;
+import com.istt.staff_notification_v2.repository.UserRepo;
 
 public interface GroupRoleService {
 	GroupRoleDTO create(GroupRoleDTO groupRoleDTO);
@@ -41,12 +43,20 @@ public interface GroupRoleService {
 	List<GroupRoleDTO> deleteByList(List<String> ids);
 	List<GroupRoleDTO> getAll();
 	List<GroupRoleDTO> updateByList(List<GroupRoleDTO> groupRoleDTOs);
-	List<GroupRoleDTO> searchByRole(String role);
+	
+	GroupRoleDTO addAllRole(String username);
+	GroupRoleDTO addRoleUser();
 }
 
 @Service
 class GroupRoleServiceImpl implements GroupRoleService{
 
+	@Autowired
+	private UserRepo userRepo;
+	
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private GroupRoleRepo groupRoleRepo;
 	
@@ -122,7 +132,15 @@ class GroupRoleServiceImpl implements GroupRoleService{
 	@Override
 	public Boolean delete(String id) {
 		try {
+			GroupRole groupRole = new GroupRole();
 			if(groupRoleRepo.existsById(id)) {
+				groupRole = groupRoleRepo.findById(id).get();
+				List<Role> roles = roleRepo.findByGroupRole(groupRole);
+				if(roles.size()>0) {
+					for (Role role : roles) {
+						role.getGroupRoles().remove(groupRole);
+					}
+				}
 				groupRoleRepo.deleteById(id);
 				return true;
 			}
@@ -167,9 +185,43 @@ class GroupRoleServiceImpl implements GroupRoleService{
 		}
 	}
 	@Override
-	public List<GroupRoleDTO> searchByRole(String role) {
-		// TODO Auto-generated method stub
-		return null;
+	public GroupRoleDTO addAllRole(String username) {
+		GroupRole groupRole = new GroupRole();
+		User user = userRepo.findByUsername(username).orElseThrow(NoResultException::new);
+		Optional<GroupRole> groupRoleOp = groupRoleRepo.findByGroupName("ADMIN");
+		if(groupRoleOp.isEmpty()) {
+			groupRole.setGroupId(UUID.randomUUID().toString().replaceAll("-", ""));
+			groupRole.setGroupName("ADMIN");
+		}else {
+			groupRole = groupRoleOp.get();
+		}
+		List<Role> rolesAll = roleRepo.findAll();
+		Set<Role> roles = new HashSet<Role>();
+		roles.addAll(rolesAll);
+		groupRole.setRoles(roles);
+		groupRoleRepo.save(groupRole);
+		user.setGroupRole(groupRole);
+		userRepo.save(user);
+		
+		return new ModelMapper().map(groupRole, GroupRoleDTO.class);
+	}
+	@Override
+	public GroupRoleDTO addRoleUser() {
+		GroupRole groupRole = new GroupRole();
+		Optional<GroupRole> grOp = groupRoleRepo.findByGroupName("USER");
+		if(grOp.isEmpty()) {
+			groupRole.setGroupId(UUID.randomUUID().toString().replaceAll("-", ""));
+			groupRole.setGroupName("USER");
+			groupRoleRepo.save(groupRole);
+		}else {
+			groupRole = grOp.get();
+		}
+		List<User> users = userRepo.findAll();
+		for (User user : users) {
+			user.setGroupRole(groupRole);
+		}
+		userRepo.saveAll(users);
+		return new ModelMapper().map(groupRole, GroupRoleDTO.class);
 	}
 	
 }
