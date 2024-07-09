@@ -3743,3 +3743,283 @@ Caused by: org.hibernate.hql.internal.ast.QuerySyntaxException: unexpected token
 2024-07-09 09:51:27.508  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
 2024-07-09 09:51:27.534  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
 2024-07-09 09:51:27.543  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 8.93 seconds (JVM running for 9.743)
+2024-07-09 10:14:38.301  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-09 10:14:38.344  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 16436 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 10:14:38.349  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 10:14:38.387  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-09 10:14:38.387  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-09 10:14:39.137  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 10:14:39.227  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 83 ms. Found 11 JPA repository interfaces.
+2024-07-09 10:14:40.083  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 10:14:40.099  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 10:14:40.100  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 10:14:40.101  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 10:14:40.219  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 10:14:40.219  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1831 ms
+2024-07-09 10:14:40.413  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 10:14:40.489  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-09 10:14:40.688  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-09 10:14:40.732  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 10:14:40.782  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-09 10:14:40.935  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-09 10:14:41.028  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 10:14:43.330  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 10:14:43.339  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 10:14:44.540  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3b97de7e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3b9fd776, org.springframework.security.web.context.SecurityContextPersistenceFilter@720adb30, org.springframework.security.web.header.HeaderWriterFilter@77d5149d, org.springframework.web.filter.CorsFilter@70b73c48, org.springframework.security.web.authentication.logout.LogoutFilter@1cd928a8, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@2676af46, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@62fa142, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@685e2bae, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7267d620, org.springframework.security.web.session.SessionManagementFilter@3cc82d22, org.springframework.security.web.access.ExceptionTranslationFilter@704e7644, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@50585ddc]
+2024-07-09 10:14:45.675  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 10:14:45.704  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 10:14:45.727  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 10:14:45.737  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 7.698 seconds (JVM running for 8.559)
+2024-07-09 11:29:36.007  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-09 11:29:36.053  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 27716 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:29:36.057  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:29:36.095  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-09 11:29:36.095  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-09 11:29:36.833  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:29:36.922  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 82 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:29:37.737  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:29:37.753  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:29:37.754  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:29:37.755  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:29:37.867  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:29:37.867  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1770 ms
+2024-07-09 11:29:38.053  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:29:38.112  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-09 11:29:38.297  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-09 11:29:38.339  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:29:38.388  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-09 11:29:38.539  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-09 11:29:38.645  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:29:39.518  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:29:39.526  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:29:40.757  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@225e66b1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2d51bf8b, org.springframework.security.web.context.SecurityContextPersistenceFilter@63712e43, org.springframework.security.web.header.HeaderWriterFilter@26fc2a63, org.springframework.web.filter.CorsFilter@10d0c40f, org.springframework.security.web.authentication.logout.LogoutFilter@46728087, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@1bc5669a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3e55e214, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@752e6a02, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2ca14301, org.springframework.security.web.session.SessionManagementFilter@2d3c91b8, org.springframework.security.web.access.ExceptionTranslationFilter@32af361c, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4a22f557]
+2024-07-09 11:29:41.756  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:29:41.786  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:29:41.809  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:29:41.818  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 6.084 seconds (JVM running for 6.923)
+2024-07-09 11:29:57.923  INFO Camilla --- [nio-8080-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-09 11:29:57.923  INFO Camilla --- [nio-8080-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-09 11:29:57.924  INFO Camilla --- [nio-8080-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 0 ms
+2024-07-09 11:29:58.025  WARN Camilla --- [nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.security.access.AccessDeniedException: Access is denied]
+2024-07-09 11:30:23.057  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-07-09 11:30:23.215  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:23.215  INFO Camilla --- [       Thread-5] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-09 11:30:23.218  INFO Camilla --- [       Thread-5] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-09 11:30:23.221  WARN Camilla --- [       Thread-5] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-09 11:30:23.222  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:23.224  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:23.232  INFO Camilla --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:30:23.236  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-07-09 11:30:23.258  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-07-09 11:30:23.363  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 27716 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:30:23.363  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:30:23.692  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:30:23.757  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:30:23.922  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:30:23.924  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:23.924  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:30:23.925  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:30:23.961  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:30:23.961  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 596 ms
+2024-07-09 11:30:24.025  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:30:24.047  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Starting...
+2024-07-09 11:30:24.073  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Start completed.
+2024-07-09 11:30:24.079  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:30:24.086  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:30:24.418  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:30:24.418  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:30:24.945  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@53fd2c87, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7aa9b5bf, org.springframework.security.web.context.SecurityContextPersistenceFilter@56fd15d0, org.springframework.security.web.header.HeaderWriterFilter@15b925b7, org.springframework.web.filter.CorsFilter@4d963a80, org.springframework.security.web.authentication.logout.LogoutFilter@2393c0a9, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@624341ae, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@459b322, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5891aa83, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@30abf377, org.springframework.security.web.session.SessionManagementFilter@2d8fe4c, org.springframework.security.web.access.ExceptionTranslationFilter@596162f7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6eac7d7c]
+2024-07-09 11:30:25.381  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:30:25.391  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:25.394  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:30:25.398  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 2.082 seconds (JVM running for 50.502)
+2024-07-09 11:30:25.401  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-09 11:30:25.739  INFO Camilla --- [nio-8080-exec-2] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-09 11:30:25.739  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-09 11:30:25.740  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Completed initialization in 1 ms
+2024-07-09 11:30:25.754  WARN Camilla --- [nio-8080-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.security.access.AccessDeniedException: Access is denied]
+2024-07-09 11:30:27.226  WARN Camilla --- [nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.security.access.AccessDeniedException: Access is denied]
+2024-07-09 11:30:50.437  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-09 11:30:50.492  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20568 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:30:50.497  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:30:50.540  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-09 11:30:50.540  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-09 11:30:51.357  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:30:51.449  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:30:52.312  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:30:52.329  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:52.331  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:30:52.331  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:30:52.449  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:30:52.449  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1909 ms
+2024-07-09 11:30:52.646  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:30:52.717  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-09 11:30:52.935  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-09 11:30:52.989  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:30:53.044  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-09 11:30:53.205  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-09 11:30:53.301  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:30:54.423  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:30:54.431  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:30:55.682  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4333d9c4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@57f197ab, org.springframework.security.web.context.SecurityContextPersistenceFilter@684d92e6, org.springframework.security.web.header.HeaderWriterFilter@46b5e046, org.springframework.web.filter.CorsFilter@6d0c954f, org.springframework.security.web.authentication.logout.LogoutFilter@1bb54874, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@1a2f4789, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a8954f0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5828327c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3d1b016d, org.springframework.security.web.session.SessionManagementFilter@71587fdd, org.springframework.security.web.access.ExceptionTranslationFilter@1e7c91fa, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@71e30e66]
+2024-07-09 11:30:56.689  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:30:56.721  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:30:56.744  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:30:56.753  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 6.653 seconds (JVM running for 7.578)
+2024-07-09 11:31:01.158  INFO Camilla --- [nio-8080-exec-2] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-09 11:31:01.158  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-09 11:31:01.160  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Completed initialization in 2 ms
+2024-07-09 11:31:01.268  WARN Camilla --- [nio-8080-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.security.access.AccessDeniedException: Access is denied]
+2024-07-09 11:32:15.978  INFO Camilla --- [nio-8080-exec-2] o.s.a.AbstractOpenApiResource            : Init duration for springdoc-openapi is: 1655 ms
+2024-07-09 11:38:54.009  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-07-09 11:38:54.150  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:38:54.151  INFO Camilla --- [       Thread-5] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-09 11:38:54.152  INFO Camilla --- [       Thread-5] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-09 11:38:54.155  WARN Camilla --- [       Thread-5] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-09 11:38:54.155  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:38:54.158  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:38:54.163  INFO Camilla --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:38:54.165  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-07-09 11:38:54.172  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-07-09 11:38:54.299  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20568 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:38:54.300  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:38:54.585  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:38:54.637  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:38:54.741  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:38:54.741  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:38:54.741  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:38:54.741  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:38:54.770  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:38:54.770  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 467 ms
+2024-07-09 11:38:54.809  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:38:54.824  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Starting...
+2024-07-09 11:38:54.848  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Start completed.
+2024-07-09 11:38:54.852  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:38:54.858  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:38:55.171  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:38:55.171  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:38:55.638  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@646bd310, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@100db0c, org.springframework.security.web.context.SecurityContextPersistenceFilter@7200f333, org.springframework.security.web.header.HeaderWriterFilter@42bbd19, org.springframework.web.filter.CorsFilter@980725b, org.springframework.security.web.authentication.logout.LogoutFilter@443bf8a8, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@6c93ee1b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2ef6bd58, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@776c1eea, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2637c184, org.springframework.security.web.session.SessionManagementFilter@62f4812c, org.springframework.security.web.access.ExceptionTranslationFilter@1f386241, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1de7a69c]
+2024-07-09 11:38:55.980  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:38:55.990  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:38:55.993  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:38:55.996  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 1.758 seconds (JVM running for 486.821)
+2024-07-09 11:38:55.999  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-09 11:39:01.275  INFO Camilla --- [nio-8080-exec-2] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-09 11:39:01.275  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-09 11:39:01.276  INFO Camilla --- [nio-8080-exec-2] o.s.w.s.DispatcherServlet                : Completed initialization in 1 ms
+2024-07-09 11:43:16.264  WARN Camilla --- [nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee; nested exception is java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee]
+2024-07-09 11:45:14.337  WARN Camilla --- [nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee; nested exception is java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee]
+2024-07-09 11:48:44.442  WARN Camilla --- [nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.NullPointerException]
+2024-07-09 11:52:12.978  WARN Camilla --- [nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.NullPointerException]
+2024-07-09 11:55:11.302  WARN Camilla --- [nio-8080-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee; nested exception is java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.istt.staff_notification_v2.entity.Employee.parent -> com.istt.staff_notification_v2.entity.Employee]
+2024-07-09 11:55:23.137  WARN Camilla --- [nio-8080-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [javax.persistence.NoResultException]
+2024-07-09 11:58:57.413  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2024-07-09 11:58:57.674  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:58:57.675  INFO Camilla --- [       Thread-7] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-09 11:58:57.677  INFO Camilla --- [       Thread-7] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-09 11:58:57.680  WARN Camilla --- [       Thread-7] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-2 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-09 11:58:57.681  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:58:57.685  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:58:57.691  INFO Camilla --- [       Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:58:57.694  INFO Camilla --- [       Thread-7] c.z.h.HikariDataSource                   : HikariPool-2 - Shutdown initiated...
+2024-07-09 11:58:57.700  INFO Camilla --- [       Thread-7] c.z.h.HikariDataSource                   : HikariPool-2 - Shutdown completed.
+2024-07-09 11:58:57.889  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20568 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:58:57.892  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:58:58.250  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:58:58.323  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:58:58.458  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:58:58.460  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:58:58.460  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:58:58.461  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:58:58.504  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:58:58.505  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 610 ms
+2024-07-09 11:58:58.552  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:58:58.569  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-3 - Starting...
+2024-07-09 11:58:58.615  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-3 - Start completed.
+2024-07-09 11:58:58.623  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:58:58.632  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:58:58.999  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:58:58.999  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:58:59.551  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7848f654, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7cb0c522, org.springframework.security.web.context.SecurityContextPersistenceFilter@4c6c607, org.springframework.security.web.header.HeaderWriterFilter@15d677ee, org.springframework.web.filter.CorsFilter@3afd3d35, org.springframework.security.web.authentication.logout.LogoutFilter@49779bbe, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@6062c48c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@69c4d093, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f0ba342, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@655aeb28, org.springframework.security.web.session.SessionManagementFilter@7b59eab8, org.springframework.security.web.access.ExceptionTranslationFilter@6f6051f5, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1e0173ff]
+2024-07-09 11:58:59.895  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:58:59.902  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:58:59.906  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:58:59.910  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 2.093 seconds (JVM running for 1690.734)
+2024-07-09 11:58:59.911  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-09 11:59:03.410  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2024-07-09 11:59:03.680  INFO Camilla --- [      Thread-11] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:59:03.681  INFO Camilla --- [      Thread-11] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-09 11:59:03.686  WARN Camilla --- [      Thread-11] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-3 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-09 11:59:03.687  WARN Camilla --- [      Thread-11] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-3 connection adder] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:458)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1053)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-09 11:59:03.690  INFO Camilla --- [      Thread-11] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:59:03.693  INFO Camilla --- [      Thread-11] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:59:03.697  INFO Camilla --- [      Thread-11] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:59:03.698  INFO Camilla --- [      Thread-11] c.z.h.HikariDataSource                   : HikariPool-3 - Shutdown initiated...
+2024-07-09 11:59:03.707  INFO Camilla --- [      Thread-11] c.z.h.HikariDataSource                   : HikariPool-3 - Shutdown completed.
+2024-07-09 11:59:03.887  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20568 (D:\Eclipse\java\testpushgit\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\testpushgit\staff-notificationv2)
+2024-07-09 11:59:03.888  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-09 11:59:04.239  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-09 11:59:04.306  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 66 ms. Found 11 JPA repository interfaces.
+2024-07-09 11:59:04.418  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 8080 (http)
+2024-07-09 11:59:04.420  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:59:04.420  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-09 11:59:04.421  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-09 11:59:04.456  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-09 11:59:04.456  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 565 ms
+2024-07-09 11:59:04.496  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-09 11:59:04.516  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-4 - Starting...
+2024-07-09 11:59:04.573  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-4 - Start completed.
+2024-07-09 11:59:04.580  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-09 11:59:04.586  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-09 11:59:04.918  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-09 11:59:04.919  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-09 11:59:05.437  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@700d306, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@774f2a5e, org.springframework.security.web.context.SecurityContextPersistenceFilter@5753fb71, org.springframework.security.web.header.HeaderWriterFilter@5210bd13, org.springframework.web.filter.CorsFilter@547bf8b2, org.springframework.security.web.authentication.logout.LogoutFilter@3e3ba32, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@65fcb7ae, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6ab34b5d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3d1c8b3d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@31f272c2, org.springframework.security.web.session.SessionManagementFilter@4be7a5d7, org.springframework.security.web.access.ExceptionTranslationFilter@3a20ffb1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2ea815b2]
+2024-07-09 11:59:05.774  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-09 11:59:05.783  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8080"]
+2024-07-09 11:59:05.786  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-09 11:59:05.790  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 1.969 seconds (JVM running for 1696.615)
+2024-07-09 11:59:05.791  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged

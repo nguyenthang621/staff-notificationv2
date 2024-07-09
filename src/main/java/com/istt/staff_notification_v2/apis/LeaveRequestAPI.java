@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class LeaveRequestAPI {
 
 	private static final String ENTITY_NAME = "isttLeaveRequest";
 
+	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<MailRequestDTO> create(@RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
 		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
@@ -39,6 +41,7 @@ public class LeaveRequestAPI {
 				.build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CHANGESTATUS')")
 	@PostMapping("/changeStatusLeaveRequest")
 	public ResponseDTO<ResponseLeaveRequest> changeStatusLeaveRequest(
 			@RequestBody ResponseLeaveRequest responseLeaveRequest) throws URISyntaxException {
@@ -50,6 +53,7 @@ public class LeaveRequestAPI {
 				.data(responseLeaveRequest).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_GET')")
 	@PostMapping("/getLeaveRequest")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest(@RequestBody SearchLeaveRequest searchLeaveRequest) {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
