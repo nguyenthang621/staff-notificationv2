@@ -23,6 +23,7 @@ import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.GroupRoleDTO;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.service.GroupRoleService;
 import com.istt.staff_notification_v2.service.LeaveTypeService;
 
@@ -48,6 +49,12 @@ public class GroupRoleAPI {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
 		}
 		groupRoleService.create(groupRoleDTO);
+		return ResponseDTO.<GroupRoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupRoleDTO).build();
+	}
+	
+	@PostMapping("/addroletoadmin")
+	public ResponseDTO<GroupRoleDTO> addRoleToAdmin(@RequestBody User user) throws URISyntaxException {
+		GroupRoleDTO groupRoleDTO=  groupRoleService.addAllRole(user.getUsername());
 		return ResponseDTO.<GroupRoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupRoleDTO).build();
 	}
 	

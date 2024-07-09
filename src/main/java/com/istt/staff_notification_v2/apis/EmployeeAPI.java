@@ -141,7 +141,7 @@ public class EmployeeAPI {
 		return employeeService.getEmployeeHierarchyFrom(id);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
 	@GetMapping("/getAll")
     public List<EmployeeDTO> getAll() {
         return employeeService.getAll();

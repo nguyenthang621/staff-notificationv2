@@ -3,6 +3,7 @@ package com.istt.staff_notification_v2.apis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class MailAPI {
 	@Autowired
 	private MailService mailService;
 
+	@PreAuthorize("hasRole('ROLE_MAIL_SENDNOTIFICATION')")
 	@PostMapping("")
 	public ResponseEntity<String> sendNotification(@RequestBody MailRequestDTO mailRequestDTO) {
 

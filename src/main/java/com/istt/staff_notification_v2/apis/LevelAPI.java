@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class LevelAPI {
 	private static final String ENTITY_NAME = "isttLevel";
 
 	@PostMapping("")
-//	@PreAuthorize("hasAuthority('ADMIN') and hasAuthority('USER')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')")
 	public ResponseDTO<LevelDTO> create(@RequestBody LevelDTO levelDTO) throws URISyntaxException {
 		if (levelDTO.getLevelCode() == null || levelDTO.getLevelName() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
@@ -43,6 +44,7 @@ public class LevelAPI {
 		return ResponseDTO.<LevelDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(levelDTO).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -53,11 +55,13 @@ public class LevelAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEVEL_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<LevelDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return levelService.search(searchDTO);
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 
@@ -68,6 +72,7 @@ public class LevelAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEVEL_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<LevelDTO> update(@RequestBody @Valid LevelDTO levelDTO) throws IOException {
 		levelService.update(levelDTO);
@@ -75,6 +80,7 @@ public class LevelAPI {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_LEVEL_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<LevelDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<LevelDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
