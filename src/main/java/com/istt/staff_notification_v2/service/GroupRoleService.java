@@ -36,7 +36,7 @@ import com.istt.staff_notification_v2.repository.RoleRepo;
 public interface GroupRoleService {
 	GroupRoleDTO create(GroupRoleDTO groupRoleDTO);
 	GroupRoleDTO update(GroupRoleDTO groupRoleDTO);
-	GroupRoleDTO get(GroupRoleDTO groupRoleDTO);
+	GroupRoleDTO get(String id);
 	Boolean delete(String id);
 	List<GroupRoleDTO> deleteByList(List<String> ids);
 	List<GroupRoleDTO> getAll();
@@ -156,9 +156,9 @@ class GroupRoleServiceImpl implements GroupRoleService{
 		return null;
 	}
 	@Override
-	public GroupRoleDTO get(GroupRoleDTO groupRoleDTO) {
+	public GroupRoleDTO get(String id) {
 		try {
-			GroupRole groupRole = groupRoleRepo.findById(groupRoleDTO.getGroupId()).orElseThrow(NoResultException::new);
+			GroupRole groupRole = groupRoleRepo.findById(id).orElseThrow(NoResultException::new);
 			return new ModelMapper().map(groupRole, GroupRoleDTO.class);
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
