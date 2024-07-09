@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class DepartmentAPI {
 
 	private static final String ENTITY_NAME = "isttDepartment";
 
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<DepartmentDTO> create(@RequestBody @Valid DepartmentDTO departmentDTO)
 			throws URISyntaxException {
@@ -41,7 +43,7 @@ public class DepartmentAPI {
 		return ResponseDTO.<DepartmentDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(departmentDTO)
 				.build();
 	}
-
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		if (id == null) {
@@ -51,11 +53,13 @@ public class DepartmentAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<DepartmentDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return departmentService.search(searchDTO);
 	}
 
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 
@@ -66,6 +70,7 @@ public class DepartmentAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<DepartmentDTO> update(@RequestBody @Valid DepartmentDTO departmentDTO) throws IOException {
 		departmentService.update(departmentDTO);
@@ -74,6 +79,7 @@ public class DepartmentAPI {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_DEPARTMENT_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<DepartmentDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<DepartmentDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))

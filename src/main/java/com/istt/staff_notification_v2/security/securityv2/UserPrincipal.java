@@ -1,16 +1,22 @@
 package com.istt.staff_notification_v2.security.securityv2;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.repository.RoleRepo;
 
 public class UserPrincipal implements UserDetails {
 
@@ -19,6 +25,9 @@ public class UserPrincipal implements UserDetails {
 	private String name;
 
 	private String username;
+	
+	@Autowired 
+	private RoleRepo roleRepo;
 
 	@JsonIgnore
 	private String password;
@@ -34,8 +43,8 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	public static UserPrincipal create(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(String.valueOf(role.getRole()))).collect(Collectors.toList());
+		List<GrantedAuthority> authorities = user.getGroupRole().getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getRole().toUpperCase())).collect(Collectors.toList());
 		return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), authorities);
 	}
 

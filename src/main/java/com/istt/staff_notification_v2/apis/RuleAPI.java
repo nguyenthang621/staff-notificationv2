@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,8 +34,8 @@ public class RuleAPI {
 
 	private static final String ENTITY_NAME = "isttRule";
 
+	@PreAuthorize("hasRole('ROLE_RULE_CREATE')")
 	@PostMapping("")
-//	@PreAuthorize("hasAuthority('ADMIN') and hasAuthority('USER')")
 	public ResponseDTO<RuleDTO> create(@RequestBody RuleDTO ruleDTO) throws URISyntaxException {
 
 		if (ruleDTO.getEmployee() == null) {
@@ -44,6 +45,7 @@ public class RuleAPI {
 		return ResponseDTO.<RuleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(ruleDTO).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_RULE_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -54,11 +56,13 @@ public class RuleAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
+	@PreAuthorize("hasRole('ROLE_RULE_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<RuleDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return ruleService.search(searchDTO);
 	}
 
+	@PreAuthorize("hasRole('ROLE_RULE_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<RuleDTO> update(@RequestBody @Valid RuleDTO ruleDTO) throws IOException {
 		ruleService.update(ruleDTO);
@@ -66,6 +70,7 @@ public class RuleAPI {
 
 	}
 
+	@PreAuthorize("hasRole('ROLE_RULE_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<RuleDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<RuleDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))

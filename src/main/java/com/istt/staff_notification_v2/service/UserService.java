@@ -35,6 +35,7 @@ import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.UpdatePassword;
 import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.dto.UserResponse;
+import com.istt.staff_notification_v2.entity.GroupRole;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.RoleRepo;
@@ -92,12 +93,12 @@ class UserServiceImpl implements UserService {
 				throw new BadRequestAlertException("Bad request: USER already exists", ENTITY_NAME, "USER exists");
 			}
 			// map role
-			Set<Role> roles = new HashSet<>();
-			roles.addAll(roleRepo
-					.findByRoleIds(
-							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
-					.orElseThrow(NoResultException::new));
-			user.setRoles(roles);
+//			Set<Role> roles = new HashSet<>();
+//			roles.addAll(roleRepo
+//					.findByRoleIds(
+//							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
+//					.orElseThrow(NoResultException::new));
+//			user.setRoles(roles);
 
 			// commit save
 			userRepo.save(user);
@@ -132,14 +133,14 @@ class UserServiceImpl implements UserService {
 	@Transactional
 	public UserDTO update(UserDTO userDTO) {
 		try {
-			User user = userRepo.findByUserId(userDTO.getId()).orElseThrow(NoResultException::new);
+			User user = userRepo.findByUserId(userDTO.getUserId()).orElseThrow(NoResultException::new);
 			user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
 			Set<Role> roles = new HashSet<Role>();
-			roles.addAll(roleRepo
-					.findByRoleIds(
-							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
-					.orElseThrow(NoResultException::new));
-			user.setRoles(roles);
+//			roles.addAll(roleRepo
+//					.findByRoleIds(
+//							userDTO.getRoles().stream().map(role -> role.getRoleId()).collect(Collectors.toList()))
+//					.orElseThrow(NoResultException::new));
+//			user.setRoles(roles);
 			userRepo.save(user);
 			return userDTO;
 
