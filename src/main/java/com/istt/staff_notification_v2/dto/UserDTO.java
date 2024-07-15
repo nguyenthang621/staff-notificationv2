@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.istt.staff_notification_v2.entity.Employee;
-import com.istt.staff_notification_v2.entity.GroupRole;
+import com.istt.staff_notification_v2.entity.Group;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private Employee employee;
-	private GroupRole groupRole;
+	private Group group;
 	private String refreshToken;
 	private Long expired;
 

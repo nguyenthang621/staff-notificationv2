@@ -207,9 +207,9 @@ class RoleServiceImpl implements RoleService {
 
 	@Override
 	public List<RoleDTO> getRoleFromUser(String userId) {
-		Optional<User> user = userRepo.findById(userId);
-		List<Role> roles = roleRepo.findByGroupRole(user.get().getGroupRole());
-		ModelMapper mapper = new ModelMapper();
+//		Optional<User> user = userRepo.findById(userId);
+//		List<Role> roles = roleRepo.findByGroupRole(user.get().getGroup());
+//		ModelMapper mapper = new ModelMapper();
 		return null;
 	}
 

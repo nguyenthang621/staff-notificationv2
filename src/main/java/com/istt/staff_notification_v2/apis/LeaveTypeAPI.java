@@ -36,7 +36,7 @@ public class LeaveTypeAPI {
 	private static final String ENTITY_NAME = "isttLeaveType";
 
 	@PostMapping("")
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_CREATE')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_CREATE')")
 	public ResponseDTO<LeaveTypeDTO> create(@RequestBody LeaveTypeDTO leaveTypeDTO) throws URISyntaxException {
 		if (leaveTypeDTO.getLeavetypeName() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_leaveType");
@@ -47,7 +47,7 @@ public class LeaveTypeAPI {
 	}
 
 	
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_DELETE')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -58,12 +58,12 @@ public class LeaveTypeAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_SEARCH')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<LeaveTypeDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return leaveTypeService.search(searchDTO);
 	}
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_DELETE')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_DELETE')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 

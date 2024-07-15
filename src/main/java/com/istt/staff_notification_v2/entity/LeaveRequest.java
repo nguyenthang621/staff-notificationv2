@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "leaveqequest")
 @EqualsAndHashCode(callSuper = false)
 public class LeaveRequest {
-//	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(name = "leaveqequest_id", updatable = false, nullable = false)
 	private String leaveqequestId;
@@ -35,7 +35,7 @@ public class LeaveRequest {
 	@Column(name = "request_date", nullable = false)
 	private Date requestDate;
 
-	@Column(name = "duration", nullable = false)
+	@Column(name = "duration", updatable = false, nullable = false)
 	private float duration;
 
 	@Column(columnDefinition = "TEXT")
@@ -45,9 +45,6 @@ public class LeaveRequest {
 
 	@Column(columnDefinition = "TEXT")
 	private String anrreason;
-	
-	@Column(name = "leave_place", nullable = false)
-	private String leavePlace;
 
 //	@JsonFormat(pattern = "dd/MM/yyyy")
 //	@DateTimeFormat(pattern = "dd/MM/yyyy")

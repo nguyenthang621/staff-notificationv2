@@ -35,7 +35,7 @@ import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.UpdatePassword;
 import com.istt.staff_notification_v2.dto.UserDTO;
 import com.istt.staff_notification_v2.dto.UserResponse;
-import com.istt.staff_notification_v2.entity.GroupRole;
+import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.RoleRepo;

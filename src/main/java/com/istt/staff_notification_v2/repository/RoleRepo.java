@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.istt.staff_notification_v2.entity.GroupRole;
+import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.Role;
 
 @Repository
@@ -30,7 +30,8 @@ public interface RoleRepo extends JpaRepository<Role, String> {
 	@Query("SELECT r FROM Role r")
 	Optional<List<Role>> getAll();
 	
-	@Query("SELECT u FROM Role u WHERE u.groupRoles = :x ")
-	List<Role> findByGroupRole(@Param("x") GroupRole groupRole);
+//	@Query("SELECT u FROM Role u WHERE u.feature = :x ")
+//	List<Role> findByGroupRole(@Param("x") Group group);
+//	Optional<List<Role>> findByFeature(@Param("x") feature);
 
 }

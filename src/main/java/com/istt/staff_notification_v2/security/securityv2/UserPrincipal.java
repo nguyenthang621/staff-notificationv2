@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.RoleRepo;
@@ -43,7 +44,16 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	public static UserPrincipal create(User user) {
-		List<GrantedAuthority> authorities = user.getGroupRole().getRoles().stream()
+		
+		Set<Group> groups = user.getGroups();
+		Set<Role> roles = new HashSet<Role>();
+		for (Group group: groups) {
+			roles.addAll(group.getRoles());
+		}
+		for (Role role2 : roles) {
+			System.err.println(role2.getRole());
+		}
+		List<GrantedAuthority> authorities = roles.stream()
 				.map(role -> new SimpleGrantedAuthority(role.getRole().toUpperCase())).collect(Collectors.toList());
 		return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), authorities);
 	}

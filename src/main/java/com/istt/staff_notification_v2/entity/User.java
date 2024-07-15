@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -24,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "user")
-@EqualsAndHashCode(callSuper = false, exclude = { "groupRole", "employee" })
+@EqualsAndHashCode(callSuper = false, exclude = { "groups", "employee" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -47,9 +48,13 @@ public class User implements Serializable{
 
 	private String accessToken;
 	
-	@ManyToOne
-	@JoinColumn(name ="group_id")
-	private GroupRole groupRole;
+//	@ManyToMany
+//	@JoinColumn(name ="group_id")
+//	private Group group;
+	@JsonIgnore
+	@ManyToMany(mappedBy = "users")
+	private Set<Group> groups = new HashSet<>();
+	
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "employeeId", referencedColumnName = "employee_id")
