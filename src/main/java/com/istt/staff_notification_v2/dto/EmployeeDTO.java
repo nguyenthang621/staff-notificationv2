@@ -55,4 +55,7 @@ public class EmployeeDTO {
 	private List<EmployeeDTO> subordinates = new ArrayList<>();
 
 	private User user;
+	
+	private String jobTitle;
+
 }

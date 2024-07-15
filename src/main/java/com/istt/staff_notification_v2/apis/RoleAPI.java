@@ -22,6 +22,7 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.RoleDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.RoleService;
@@ -96,6 +97,12 @@ public class RoleAPI {
 //		}
 		roleService.createAll(roleDTO);
 		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
+	}
+	
+	@GetMapping("/feature/{feature}")
+	public ResponseDTO<List<Role>> feature(@PathVariable(value = "feature") String feature) throws URISyntaxException {
+		List<Role> roles = roleService.findbyFeature(feature);
+		return ResponseDTO.<List<Role>>builder().code(String.valueOf(HttpStatus.OK.value())).data(roles).build();
 	}
 
 }

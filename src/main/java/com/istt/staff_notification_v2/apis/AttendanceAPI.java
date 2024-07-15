@@ -70,7 +70,6 @@ public class AttendanceAPI {
 
 //	@PreAuthorize("hasRole('ROLE_ATTENDANCE_GET')")
 	@GetMapping("/{id}")
-	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<AttendanceDTO> get(@PathVariable(value = "id") String id) {
 		if (id == null) {
 			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
@@ -80,7 +79,6 @@ public class AttendanceAPI {
 	}
 //	@PreAuthorize("hasRole('ROLE_ATTENDANCE_GETTYPE')")
 	@GetMapping("/type/{type}")
-	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<List<AttendanceDTO>> getStatus(@PathVariable(value = "type") String type) {
 		if (type == null) {
 			throw new BadRequestAlertException("Bad request: missing status", ENTITY_NAME, "missing_status");

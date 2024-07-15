@@ -53,6 +53,7 @@ public interface RoleService {
 	List<RoleDTO> getRoleFromUser(String userId);
 	
 	List<RoleDTO> createAll(List<RoleDTO> roleDTO);
+	List<Role> findbyFeature(String feature);
 	
 }
 
@@ -219,6 +220,14 @@ class RoleServiceImpl implements RoleService {
 			create(roleDTO2);
 		}
 		return roles;
+	}
+
+	@Override
+	public List<Role> findbyFeature(String feature) {
+		List<Role> roleOps= roleRepo.findByFeature("%"+feature.toUpperCase()+"%");
+		System.err.println(feature.toUpperCase());
+		if(roleOps.size()==0) return null;
+		return roleOps;
 	}
 
 }

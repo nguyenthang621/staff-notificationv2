@@ -41,8 +41,18 @@ public class GroupAPI {
 	public ResponseGroupDTO get(@PathVariable(value = "id") String id) {
 		return groupService.getGroup(id);
 	}
+	@GetMapping("/getAll")
+	public List<GroupDTO> getAll() {
+		return groupService.getAll();
+	}
 	@PostMapping
 	public ResponseGroupDTO addRole(@RequestBody @Valid ResponseGroupDTO responseGroupDTO ) {
 		return groupService.addRoleToGroup(responseGroupDTO);
+	}
+	
+	@PostMapping("/addroletoadmin/{username}")
+	public ResponseDTO<Void> addRoleToAdmin(@PathVariable(value = "username") String username) throws URISyntaxException {
+		groupService.addAllRole(username);
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 }

@@ -25,10 +25,12 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.FeatureDTO;
 import com.istt.staff_notification_v2.dto.GroupDTO;
+import com.istt.staff_notification_v2.dto.GroupUserDTO;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseGroupDTO;
 import com.istt.staff_notification_v2.dto.ResponseRoleDTO;
 import com.istt.staff_notification_v2.dto.RoleDTO;
+import com.istt.staff_notification_v2.dto.UserResponse;
 import com.istt.staff_notification_v2.entity.Department;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.Feature;
@@ -52,6 +54,8 @@ public interface GroupService {
 	
 	ResponseGroupDTO getGroup(String id);
 	ResponseGroupDTO addRoleToGroup(ResponseGroupDTO resGroupDTO);
+	GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO);
+	Boolean addAllRole(String username);
 }
 
 @Service
@@ -98,14 +102,6 @@ class GroupRoleServiceImpl implements GroupService{
 			
 			if(groupRepo.existsByGroupName(groupDTO.getGroupName())) throw new BadRequestAlertException("Group role is exists",ENTITY_NAME, "exists");
 			
-			Set<Role> roles = new HashSet<Role>();
-			if(groupDTO.getRoles().size()>0) {
-			for (RoleDTO roleDTO : groupDTO.getRoles()) {
-				Role role = roleRepo.findById(roleDTO.getRoleId()).orElseThrow(NoResultException::new);
-				roles.add(role);
-			}}
-			group.setRoles(roles);
-			
 			groupRepo.save(group);
 			return modelMapper.map(group, GroupDTO.class);
 			
@@ -125,13 +121,6 @@ class GroupRoleServiceImpl implements GroupService{
 			Group group = groupRepo.findById(groupDTO.getGroupId()).get();
 			
 			group.setGroupName(groupDTO.getGroupName());
-			Set<Role> roles = new HashSet<Role>();
-			if(groupDTO.getRoles().size()>0) {
-			for (RoleDTO roleDTO : groupDTO.getRoles()) {
-				Role role = roleRepo.findById(roleDTO.getRoleId()).orElseThrow(NoResultException::new);
-				roles.add(role);
-			}}
-			group.setRoles(roles);
 			
 			groupRepo.save(group);
 			return modelMapper.map(group, GroupDTO.class);
@@ -225,6 +214,30 @@ class GroupRoleServiceImpl implements GroupService{
 		group.setRoles(role);
 		groupRepo.save(group);
 		return resGroupDTO;
+	}
+	@Override
+	public GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO) {
+		Group group = groupRepo.findById(groupUserDTO.getGroupId()).orElseThrow(NoResultException::new);
+		Set<User> users = new HashSet<User>();
+		for (UserResponse userRes : groupUserDTO.getUser()) {
+			User user = userRepo.findById(userRes.getUserId()).orElseThrow(NoResultException::new);
+			user.getGroups().add(group);
+			userRepo.save(user);
+		}
+		return groupUserDTO;
+	}
+	@Override
+	public Boolean addAllRole(String username) {
+		Group group = groupRepo.findByGroupName("admin").get();
+		List<Role> roles = roleRepo.findAll();
+		Set<Role> setRoles = new HashSet<Role>();
+		setRoles.addAll(roles);
+		group.setRoles(setRoles);
+		groupRepo.save(group);
+		User user = userRepo.findByUsername(username).get(); 
+		user.getGroups().add(group);
+		userRepo.save(user);
+		return true;
 	}
 	
 }

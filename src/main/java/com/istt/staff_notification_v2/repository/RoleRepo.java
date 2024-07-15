@@ -33,5 +33,7 @@ public interface RoleRepo extends JpaRepository<Role, String> {
 //	@Query("SELECT u FROM Role u WHERE u.feature = :x ")
 //	List<Role> findByGroupRole(@Param("x") Group group);
 //	Optional<List<Role>> findByFeature(@Param("x") feature);
-
+	
+	@Query("SELECT u FROM Role u WHERE u.role LIKE :x")
+	List<Role> findByFeature(@Param("x") String feature);
 }

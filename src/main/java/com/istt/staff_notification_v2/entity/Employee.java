@@ -82,6 +82,9 @@ public class Employee implements Serializable {
 
 	private Date offdate;
 	
+	@Column(name = "job_title")
+	private String jobTitle;
+	
 	@Column(name ="work_city", nullable = false)
 	private String workCity;
 
