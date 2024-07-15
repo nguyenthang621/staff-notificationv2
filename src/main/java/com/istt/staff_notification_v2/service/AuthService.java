@@ -62,7 +62,7 @@ class AuthServiceImpl implements AuthService {
 	private List<String> getOdooSession(LoginRequest loginRequest) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			String url = "http://localhost:5000/authOdoo"; // Thay đổi URL nếu cần
+			String url = "http://192.168.10.54:5000/authOdoo"; // Thay đổi URL nếu cần
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -172,9 +172,9 @@ class AuthServiceImpl implements AuthService {
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
-//			user.setAccessToken(accessToken);
-//			user.setRefreshToken(refreshToken);
-//			userRepo.save(user);
+			user.setAccessToken(accessToken);
+			user.setRefreshToken(refreshToken);
+			userRepo.save(user);
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 					.refreshToken(refreshToken).build();

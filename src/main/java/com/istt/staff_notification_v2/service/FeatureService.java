@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.NoResultException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public interface FeatureService {
 	Set<FeatureDTO> getFeaturesFromRoles(Set<Role> roles);
 //	Set<FeatureDTO> test(String id);
 	FeatureDTO create(FeatureDTO featureDTO);
+	
+	FeatureDTO filterRole(String id);
+	
+	List<FeatureDTO> getAll();
 }
 
 @Service
@@ -50,7 +56,6 @@ class FeatureServiceImpl implements FeatureService{
 			for (ResponseRoleDTO resRole : featureDTO.getRoles()) {
 				if(resRoles.contains(resRole)) {
 					resRole.setIsActive(true);
-					System.err.println(resRole.getRole());
 				}
 			}
 		}
@@ -62,9 +67,8 @@ class FeatureServiceImpl implements FeatureService{
 		Feature feature = new Feature();
 		feature.setFeatureId(UUID.randomUUID().toString().replaceAll("-", ""));
 		feature.setFeatureName(featureDTO.getFeatureName());
-		System.err.println(feature.getFeatureName().toUpperCase());
 		List<Role> roles= roleRepo.findByFeature("%"+feature.getFeatureName().toUpperCase()+"%");
-//		feature.setRoles(roles);
+		feature.setRoles(roles);
 //		System.err.print(roles.size());
 		featureRepo.save(feature);
 		for (Role role : roles) {
@@ -72,6 +76,27 @@ class FeatureServiceImpl implements FeatureService{
 			roleRepo.save(role);
 		}
 		return new ModelMapper().map(feature, FeatureDTO.class);
+	}
+
+	@Override
+	public FeatureDTO filterRole(String id) {
+		Feature feature = featureRepo.findById(id).orElseThrow(NoResultException::new);
+		List<Role> roles= roleRepo.findByFeature("%"+feature.getFeatureName().toUpperCase()+"%");
+		feature.setRoles(roles);
+		featureRepo.save(feature);
+		for (Role role : roles) {
+			role.setFeature(feature);
+			roleRepo.save(role);
+		}
+		return new ModelMapper().map(feature, FeatureDTO.class);
+	}
+
+	@Override
+	public List<FeatureDTO> getAll() {
+		List<Feature> features = featureRepo.findAll();
+		if(features.size()==0) return null;
+		return features.stream().map(feature -> 
+		new ModelMapper().map(feature, FeatureDTO.class)).collect(Collectors.toList());
 	}
 	
 //	@Override

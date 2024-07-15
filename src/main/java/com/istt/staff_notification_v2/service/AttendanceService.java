@@ -35,10 +35,13 @@ import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Attendance;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveType;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
+import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.utils.utils;
+import com.istt.staff_notification_v2.utils.utils.DateRange;
 
 public interface AttendanceService {
 
@@ -59,6 +62,8 @@ public interface AttendanceService {
 	List<AttendanceDTO> getStatus(String type);
 
 	ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence);
+	
+	List<AttendanceDTO> getByCurrentEmployee(String id);
 
 }
 
@@ -79,6 +84,11 @@ class AttendanceServiceImpl implements AttendanceService {
 	
 	@Autowired 
 	private EmployeeService employeeService;
+	
+	@Autowired 
+	private UserRepo userRepo;
+	
+	
 
 	private static final String ENTITY_NAME = "isttAttendance";
 
@@ -318,17 +328,31 @@ class AttendanceServiceImpl implements AttendanceService {
 
 			Page<Attendance> page = attendanceRepo.searchByEmployeeName(searchDTO.getValue(), pageable);
 			ModelMapper mapper = new ModelMapper();
-			List<AttendanceDTO> levelDTOs = page.getContent().stream()
+			List<AttendanceDTO> attendanceDTOs = page.getContent().stream()
 					.map(attendance -> mapper.map(attendance, AttendanceDTO.class)).collect(Collectors.toList());
-
+//			System.err.println(searchDTO.getValue());
+//			System.err.print(page.getContent().size());
 			ResponseDTO<List<AttendanceDTO>> responseDTO = mapper.map(page, ResponseDTO.class);
-			responseDTO.setData(levelDTOs);
+			responseDTO.setData(attendanceDTOs);
 			return responseDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
+	}
+
+	@Override
+	public List<AttendanceDTO> getByCurrentEmployee(String id) {
+		User user = userRepo.findById(id).orElseThrow(NoResultException::new);
+		Employee employee = user.getEmployee();
+		List<Attendance> attendances = attendanceRepo.findByEmployee(employee);
+		ModelMapper mapper = new ModelMapper();
+		
+		return attendances
+				  .stream()
+				  .map(attendance-> mapper.map(attendance, AttendanceDTO.class))
+				  .collect(Collectors.toList());
 	}
 
 }

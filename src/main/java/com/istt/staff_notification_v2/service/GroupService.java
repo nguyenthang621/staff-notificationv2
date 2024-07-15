@@ -54,6 +54,7 @@ public interface GroupService {
 	
 	ResponseGroupDTO getGroup(String id);
 	ResponseGroupDTO addRoleToGroup(ResponseGroupDTO resGroupDTO);
+	GroupUserDTO getUser(String id);
 	GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO);
 	Boolean addAllRole(String username);
 }
@@ -200,6 +201,19 @@ class GroupRoleServiceImpl implements GroupService{
 		resGroup.setFeatures(featureDTOs);
 		return resGroup;
 	}
+	
+	@Override
+	public GroupUserDTO getUser(String id) {
+		ModelMapper mapper = new ModelMapper();
+		Group group = groupRepo.findById(id).orElseThrow(NoResultException::new);
+		GroupUserDTO groupUserDTO = mapper.map(group, GroupUserDTO.class);
+		Set<UserResponse> userResponses = new HashSet<UserResponse>();
+		System.err.println(group.getUsers().size());
+		userResponses = group.getUsers().stream().map(userR -> mapper.map(userR, UserResponse.class))
+				.collect(Collectors.toSet());
+		groupUserDTO.setUser(userResponses);
+		return groupUserDTO;
+	}
 	@Override
 	public ResponseGroupDTO addRoleToGroup(ResponseGroupDTO resGroupDTO) {
 		Group group = groupRepo.findById(resGroupDTO.getGroupId()).orElseThrow(NoResultException::new);
@@ -222,8 +236,11 @@ class GroupRoleServiceImpl implements GroupService{
 		for (UserResponse userRes : groupUserDTO.getUser()) {
 			User user = userRepo.findById(userRes.getUserId()).orElseThrow(NoResultException::new);
 			user.getGroups().add(group);
-			userRepo.save(user);
+			users.add(user);
 		}
+		userRepo.saveAll(users);
+		group.setUsers(users);
+		groupRepo.save(group);
 		return groupUserDTO;
 	}
 	@Override
@@ -233,10 +250,11 @@ class GroupRoleServiceImpl implements GroupService{
 		Set<Role> setRoles = new HashSet<Role>();
 		setRoles.addAll(roles);
 		group.setRoles(setRoles);
-		groupRepo.save(group);
 		User user = userRepo.findByUsername(username).get(); 
 		user.getGroups().add(group);
 		userRepo.save(user);
+		group.getUsers().add(user);
+		groupRepo.save(group);
 		return true;
 	}
 	

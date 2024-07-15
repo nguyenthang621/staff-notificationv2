@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -40,6 +41,15 @@ public class FeatureAPI {
 			throws URISyntaxException {
 		featureService.create(featureDTO);
 		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureDTO)
+				.build();
+	}
+	
+	@GetMapping("/getAll")
+	public ResponseDTO<List<FeatureDTO>> getAll()
+			throws URISyntaxException {
+		List<FeatureDTO> featureDTOs = featureService.getAll();
+		featureService.getAll();
+		return ResponseDTO.<List<FeatureDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureDTOs)
 				.build();
 	}
 	

@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.istt.staff_notification_v2.entity.Attendance;
+import com.istt.staff_notification_v2.entity.Employee;
 
 @Repository
 public interface AttendanceRepo extends JpaRepository<Attendance, String> {
@@ -52,4 +53,9 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a where a.startDate = :d and a.employee.employeeId = :y ")
 	Optional<Attendance> findByStartDate(@Param("d") Date startDate, @Param("y") String employee_id);
 
+//	@Query("SELECT a FROM Attendance a WHERE a.employee = :z and (a.startDate between :x and :y) ")
+	@Query("Select a from Attendance a where a.employee = :x")
+	List<Attendance> findByEmployee(@Param("x") Employee value);
+	
+	
 }

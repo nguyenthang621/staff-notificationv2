@@ -27,6 +27,8 @@ import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.AttendanceService;
 
 @RestController
@@ -150,6 +152,18 @@ public class AttendanceAPI {
 		} catch (DateTimeParseException | IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid year or month provided.");
 		}
+	}
+	
+	@GetMapping("/currentuser")
+	public ResponseDTO<List<AttendanceDTO>> myattendance(@CurrentUser UserPrincipal currentUser)
+			throws URISyntaxException {
+		if (currentUser == null) {
+			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
+		}
+		List<AttendanceDTO> attendanceDTOs =
+		attendanceService.getByCurrentEmployee(currentUser.getUser_id());
+		return ResponseDTO.<List<AttendanceDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceDTOs)
+				.build();
 	}
 
 }

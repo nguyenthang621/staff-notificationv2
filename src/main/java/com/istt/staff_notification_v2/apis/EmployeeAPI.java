@@ -90,7 +90,6 @@ public class EmployeeAPI {
 
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_SEARCH')")
 	@PostMapping("/search")
-//	 @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<List<EmployeeDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return employeeService.search(searchDTO);
 	}
