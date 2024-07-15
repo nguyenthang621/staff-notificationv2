@@ -35,7 +35,7 @@ public class RoleAPI {
 	private static final String ENTITY_NAME = "isttRole";
 
 	@PostMapping("")
-	@PreAuthorize("hasRole('ROLE_ROLE_CREATE')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_CREATE')")
 	public ResponseDTO<RoleDTO> create(@RequestBody RoleDTO roleDTO) throws URISyntaxException {
 
 		if (roleDTO.getRole() == null) {
@@ -44,7 +44,7 @@ public class RoleAPI {
 		roleService.create(roleDTO);
 		return ResponseDTO.<RoleDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleDTO).build();
 	}
-	@PreAuthorize("hasRole('ROLE_ROLE_DELETE')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_DELETE')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -55,13 +55,13 @@ public class RoleAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ROLE_SEARCH')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_SEARCH')")
 	@PostMapping("/search")
 	public ResponseDTO<List<RoleDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return roleService.search(searchDTO);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ROLE_DELETE')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_DELETE')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 
@@ -72,7 +72,7 @@ public class RoleAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ROLE_UPDATE')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<RoleDTO> update(@RequestBody @Valid RoleDTO roleDTO) throws IOException {
 		roleService.update(roleDTO);
@@ -80,14 +80,14 @@ public class RoleAPI {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_ROLE_GETALL')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<RoleDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(roleService.getAll()).build();
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ROLE_CREATEALL')")
+//	@PreAuthorize("hasRole('ROLE_ROLE_CREATEALL')")
 	@PostMapping("/createAll")
 	public ResponseDTO<List<RoleDTO>> createALL(@RequestBody List<RoleDTO> roleDTO) throws URISyntaxException {
 

@@ -27,7 +27,7 @@ public class LeaveRequestAPI {
 
 	private static final String ENTITY_NAME = "isttLeaveRequest";
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<MailRequestDTO> create(@RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
 		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
@@ -41,7 +41,7 @@ public class LeaveRequestAPI {
 				.build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CHANGESTATUS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CHANGESTATUS')")
 	@PostMapping("/changeStatusLeaveRequest")
 	public ResponseDTO<ResponseLeaveRequest> changeStatusLeaveRequest(
 			@RequestBody ResponseLeaveRequest responseLeaveRequest) throws URISyntaxException {
@@ -53,7 +53,7 @@ public class LeaveRequestAPI {
 				.data(responseLeaveRequest).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_GET')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_GET')")
 	@PostMapping("/getLeaveRequest")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest(@RequestBody SearchLeaveRequest searchLeaveRequest) {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))

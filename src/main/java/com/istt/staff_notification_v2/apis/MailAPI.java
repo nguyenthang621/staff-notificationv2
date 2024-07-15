@@ -20,7 +20,7 @@ public class MailAPI {
 	@Autowired
 	private MailService mailService;
 
-	@PreAuthorize("hasRole('ROLE_MAIL_SENDNOTIFICATION')")
+//	@PreAuthorize("hasRole('ROLE_MAIL_SENDNOTIFICATION')")
 	@PostMapping("")
 	public ResponseEntity<String> sendNotification(@RequestBody MailRequestDTO mailRequestDTO) {
 

@@ -25,7 +25,7 @@ public class DownloadAPI {
 	@Autowired
 	private ApplicationProperties props;
 
-	@PreAuthorize("hasRole('ROLE_DOWLOAD')")
+//	@PreAuthorize("hasRole('ROLE_DOWLOAD')")
 	@PostMapping("/download")
 	public ResponseEntity<InputStreamResource> proxyDownload(@RequestBody RequestDownload requestDownload) {
 		String flaskUrl = props.getApiServerHandleExcel();

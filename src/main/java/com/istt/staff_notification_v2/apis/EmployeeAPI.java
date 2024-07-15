@@ -146,13 +146,13 @@ public class EmployeeAPI {
         return employeeService.getAll();
     }
 	
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE_FILTERBYSTAFFID')")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_FILTERBYSTAFFID')")
 	@GetMapping("/filterbystaffid")
     public List<EmployeeDTO> getByStaffId() {
         return employeeService.filterStaffId();
     }
 	
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE_EMPLOYEEINFO')")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_EMPLOYEEINFO')")
 	@GetMapping("/employeeInfo")
 	public ResponseDTO<EmployeeDTO> getEmployee(@CurrentUser UserPrincipal currentUser) {
 		if (currentUser == null) {

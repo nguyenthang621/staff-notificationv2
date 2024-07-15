@@ -74,7 +74,7 @@ public class LeaveTypeAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_UPDATE')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_UPDATE')")
 	@PutMapping("/")
 	public ResponseDTO<LeaveTypeDTO> update(@RequestBody @Valid LeaveTypeDTO leaveTypeDTO) throws IOException {
 		leaveTypeService.update(leaveTypeDTO);
@@ -83,7 +83,7 @@ public class LeaveTypeAPI {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVETYPE_GETALL')")
+//	@PreAuthorize("hasRole('ROLE_LEAVETYPE_GETALL')")
 	@GetMapping("/all")
 	public ResponseDTO<List<LeaveTypeDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<LeaveTypeDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
