@@ -9,5 +9,6 @@ import lombok.Data;
 public class GroupUserDTO {
 	private String groupId;
 	private String groupName;
+	
 	private Set<UserResponse> user = new HashSet<>();
 }
