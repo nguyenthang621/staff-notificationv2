@@ -287,7 +287,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			}
 			Employee employeeInDB = employeeRepo.findByEmployeeId(employeeDTO.getEmployeeId())
 					.orElseThrow(NoResultException::new);
-
+			Long staff_id = employeeInDB.getStaffId();
 			if (employeeDTO.getEmployeeDependence().size() > 0) {
 				for (String employeeId : employeeDTO.getEmployeeDependence()) {
 					if (!employeeRepo.existsByEmployeeId(employeeId))
@@ -313,7 +313,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			Employee employee = mapper.map(employeeDTO, Employee.class);
 			employee.setEmployeeId(employeeInDB.getEmployeeId());
 			employee.setParent(parnet);
-
+			employee.setStaffId(staff_id);
 			employeeRepo.save(employee);
 			return employeeDTO;
 		} catch (ResourceAccessException e) {

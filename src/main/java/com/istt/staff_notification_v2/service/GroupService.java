@@ -134,27 +134,33 @@ class GroupRoleServiceImpl implements GroupService{
 	}
 	@Override
 	public Boolean delete(String id) {
-//		try {
-//			Group group = new Group();
-//			if(groupRepo.existsById(id)) {
-//				group = groupRepo.findById(id).get();
-//				List<Role> roles = roleRepo.findByGroupRole(group);
-//				if(roles.size()>0) {
-//					for (Role role : roles) {
-//						role.getGroups().remove(group);
-//					}
-//				}
-//				groupRepo.deleteById(id);
-//				return true;
+		try {
+			Optional<Group> groupOp = groupRepo.findById(id);
+			if(groupOp.isEmpty()) return false;
+			Group group = groupOp.get();
+			
+//			Set<Role> roles = group.getRoles();
+//			for (Role role : roles) {
+//				role.getGroups().remove(group);
 //			}
-//			return false;
-//			
-//		} catch (ResourceAccessException e) {
-//			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
-//		} catch (HttpServerErrorException | HttpClientErrorException e) {
-//			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
-//		}
-		return null;
+//			roleRepo.saveAll(roles);
+			group.setRoles(null);
+			
+//			Set<User> users = group.getUsers();
+//			for (User user : users) {
+//				user.getGroups().remove(group);
+//			}
+//			userRepo.saveAll(users);
+			group.setUsers(null);
+			
+			groupRepo.delete(group);
+			return true;
+			
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 	@Override
 	public List<GroupDTO> deleteByList(List<String> ids) {

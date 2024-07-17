@@ -47,14 +47,16 @@ public class UserPrincipal implements UserDetails {
 		
 		Set<Group> groups = user.getGroups();
 		Set<Role> roles = new HashSet<Role>();
+		Set<String> permissions = new HashSet<String>();
 		for (Group group: groups) {
 			roles.addAll(group.getRoles());
 		}
-		for (Role role2 : roles) {
-			System.err.println(role2.getRole());
+		for (Role role : roles) {
+			permissions.add(role.getRole());
 		}
-		List<GrantedAuthority> authorities = roles.stream()
-				.map(role -> new SimpleGrantedAuthority(role.getRole().toUpperCase())).collect(Collectors.toList());
+		
+		List<GrantedAuthority> authorities = permissions.stream()
+				.map(permission -> new SimpleGrantedAuthority(permission.toUpperCase())).collect(Collectors.toList());
 		return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), authorities);
 	}
 

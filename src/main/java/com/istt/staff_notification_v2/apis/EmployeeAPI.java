@@ -61,7 +61,6 @@ public class EmployeeAPI {
 
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GET')")
 	@GetMapping("/{id}")
-	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<EmployeeDTO> get(@PathVariable(value = "id") String id) {
 		if (id == null) {
 			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
@@ -139,7 +138,7 @@ public class EmployeeAPI {
 		return employeeService.getEmployeeHierarchyFrom(id);
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
 	@GetMapping("/getAll")
     public List<EmployeeDTO> getAll() {
         return employeeService.getAll();
@@ -152,6 +151,8 @@ public class EmployeeAPI {
     }
 	
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_EMPLOYEEINFO')")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_READ')")
+//	@PreAuthorize("hasRole('ROLE_USER")
 	@GetMapping("/employeeInfo")
 	public ResponseDTO<EmployeeDTO> getEmployee(@CurrentUser UserPrincipal currentUser) {
 		if (currentUser == null) {

@@ -76,4 +76,9 @@ public class GroupAPI {
 		return ResponseDTO.<GroupDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupDTO)
 				.build();
 	}
+	@DeleteMapping("/{id}")
+	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
+		groupService.delete(id);
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+	}
 }

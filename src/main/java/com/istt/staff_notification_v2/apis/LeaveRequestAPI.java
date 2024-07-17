@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,10 @@ import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
 import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
+import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.repository.UserRepo;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.LeaveRequestService;
 
 @RestController
@@ -24,6 +29,9 @@ import com.istt.staff_notification_v2.service.LeaveRequestService;
 public class LeaveRequestAPI {
 	@Autowired
 	private LeaveRequestService leaveRequestService;
+	
+	@Autowired
+	private UserRepo userRepo ;
 
 	private static final String ENTITY_NAME = "isttLeaveRequest";
 
@@ -59,5 +67,14 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
-
+	
+	@GetMapping("/getLeaveRequest2")
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
+		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
+		SearchLeaveRequest searchLeaveRequest = new SearchLeaveRequest();
+		User user = userRepo.findById(currentuser.getUser_id()).get();
+		searchLeaveRequest.setMailReciver(user.getEmployee().getEmail());
+		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
+	}
 }

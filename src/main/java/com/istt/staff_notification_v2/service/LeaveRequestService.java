@@ -328,6 +328,16 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
 			}
+			else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
+						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEmail() == null) {
+					searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));;
+					Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiverStatus(
+							searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus());
+				if (resultOp.isEmpty())
+					return new ArrayList<>();
+				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+						.collect(Collectors.toList());
+			}
 			return new ArrayList<>();
 
 		} catch (ResourceAccessException e) {
