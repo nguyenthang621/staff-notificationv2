@@ -27,6 +27,8 @@ import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseGroupDTO;
 import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.GroupService;
 import com.istt.staff_notification_v2.service.LeaveTypeService;
 
@@ -80,5 +82,13 @@ public class GroupAPI {
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		groupService.delete(id);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+	}
+	
+	@GetMapping("/getGroup")
+	public ResponseDTO<GroupDTO> getGroup(@CurrentUser UserPrincipal currentuser)
+			throws URISyntaxException {
+		if(currentuser == null) throw new BadRequestAlertException("missing data", ENTITY_NAME, "missingdata");
+		return ResponseDTO.<GroupDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupService.getMinGroupFromUser(currentuser.getUser_id()))
+				.build();
 	}
 }

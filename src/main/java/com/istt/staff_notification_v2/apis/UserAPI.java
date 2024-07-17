@@ -38,7 +38,7 @@ public class UserAPI {
 //	@PreAuthorize("hasRole('ROLE_USER_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<UserDTO> create(@RequestBody UserDTO userDTO) throws URISyntaxException {
-		System.out.println("=========================username: " + userDTO.getUsername());
+//		System.out.println("=========================username: " + userDTO.getUsername());
 //		if (userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getRoles() == null) {
 //			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing");
 //		}

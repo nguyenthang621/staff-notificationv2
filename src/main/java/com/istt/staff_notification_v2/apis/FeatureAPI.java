@@ -31,10 +31,12 @@ public class FeatureAPI {
 
 	private static final String ENTITY_NAME = "isttFeature";
 	
-//	@GetMapping("/{id}")
-//	public Set<FeatureDTO> get(@PathVariable(value = "id") String id) {
-//		return featureService.test(id);
-//	}
+	@GetMapping("/{id}")
+	public ResponseDTO<FeatureDTO> get(@PathVariable(value = "id") String id) {
+		if(id == null) throw new BadRequestAlertException("Not Found Id", ENTITY_NAME, "exists");
+		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.get(id))
+				.build();
+	}
 	
 	@PostMapping("")
 	public ResponseDTO<FeatureDTO> create(@RequestBody @Valid FeatureDTO featureDTO)
@@ -52,6 +54,15 @@ public class FeatureAPI {
 		return ResponseDTO.<List<FeatureDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureDTOs)
 				.build();
 	}
+	
+	
+//	@GetMapping("/filter/{id}")
+//	public ResponseDTO<FeatureDTO> filter(@PathVariable(value = "id") String id)
+//			throws URISyntaxException {
+////		featureService.getAll();
+//		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterRole(id))
+//				.build();
+//	}
 	
 	
 }

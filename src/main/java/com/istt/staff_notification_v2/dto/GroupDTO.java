@@ -12,4 +12,5 @@ import lombok.Data;
 public class GroupDTO {
 	private String groupId;
 	private String groupName;
+	private Long groupLevel;
 }

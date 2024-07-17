@@ -68,7 +68,8 @@ public class LeaveRequestAPI {
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
 	
-	@GetMapping("/getLeaveRequest2")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+	@GetMapping("")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
 		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
 		SearchLeaveRequest searchLeaveRequest = new SearchLeaveRequest();

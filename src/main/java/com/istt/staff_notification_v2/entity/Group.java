@@ -32,6 +32,8 @@ public class Group {
 	@Column(unique = true)
 	private String groupName;
 	
+	private Long groupLevel;
+	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "group_role", joinColumns = @JoinColumn(name = "group_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))

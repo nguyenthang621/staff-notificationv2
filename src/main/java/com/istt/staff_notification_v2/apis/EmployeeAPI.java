@@ -150,9 +150,7 @@ public class EmployeeAPI {
         return employeeService.filterStaffId();
     }
 	
-//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_EMPLOYEEINFO')")
-//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_READ')")
-//	@PreAuthorize("hasRole('ROLE_USER")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_ACCESS')")
 	@GetMapping("/employeeInfo")
 	public ResponseDTO<EmployeeDTO> getEmployee(@CurrentUser UserPrincipal currentUser) {
 		if (currentUser == null) {

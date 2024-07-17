@@ -105,7 +105,7 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 			for (BusinessDays splitBusinessDay : splitBusinessDays) {
 				splitBusinessDay.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
 				if (!businessDaysRepo.existsByStartdate(splitBusinessDay.getStartdate())) {
-					System.out.println(splitBusinessDay.getStartdate());
+//					System.out.println(splitBusinessDay.getStartdate());
 					count++;
 					businessDaysRepo.save(splitBusinessDay);
 				}

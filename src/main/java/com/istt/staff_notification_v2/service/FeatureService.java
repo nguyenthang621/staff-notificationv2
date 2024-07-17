@@ -31,6 +31,8 @@ public interface FeatureService {
 	
 	FeatureDTO filterRole(String id);
 	
+	FeatureDTO get (String id);
+	
 	List<FeatureDTO> getAll();
 }
 
@@ -97,6 +99,12 @@ class FeatureServiceImpl implements FeatureService{
 		if(features.size()==0) return null;
 		return features.stream().map(feature -> 
 		new ModelMapper().map(feature, FeatureDTO.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public FeatureDTO get(String id) {
+		Feature feature = featureRepo.findById(id).orElseThrow(NoResultException::new);
+		return new ModelMapper().map(feature, FeatureDTO.class);
 	}
 	
 //	@Override

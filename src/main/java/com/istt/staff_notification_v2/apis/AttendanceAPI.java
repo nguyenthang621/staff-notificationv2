@@ -154,7 +154,8 @@ public class AttendanceAPI {
 		}
 	}
 	
-	@GetMapping("/currentuser")
+//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')")
+	@GetMapping("/get")
 	public ResponseDTO<List<AttendanceDTO>> myattendance(@CurrentUser UserPrincipal currentUser)
 			throws URISyntaxException {
 		if (currentUser == null) {
