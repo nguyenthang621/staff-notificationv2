@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,10 +68,17 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
-	@PostMapping("/test")
-	public ResponseDTO<List<LeaveRequestDTO>> test(@RequestBody SearchLeaveRequest searchLeaveRequest) {
+//	@PostMapping("/test")
+//	public ResponseDTO<List<LeaveRequestDTO>> test(@RequestBody SearchLeaveRequest searchLeaveRequest) {
+//		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+//				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
+//	}
+	
+	@GetMapping("/test")
+	public ResponseDTO<List<LeaveRequestDTO>> test(@CurrentUser UserPrincipal currentUser) {
+		if(currentUser==null) throw new BadRequestAlertException("Not Found User", ENTITY_NAME, "missing data");
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
+				.data(leaveRequestService.testPheduyet(currentUser.getUser_id())).build();
 	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")

@@ -52,7 +52,7 @@ public class User implements Serializable{
 //	@JoinColumn(name ="group_id")
 //	private Group group;
 	@JsonIgnore
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
 	private Set<Group> groups = new HashSet<>();
 	
 

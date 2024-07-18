@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "groupss")
-@EqualsAndHashCode(callSuper = false, exclude = { "roles"})
+@EqualsAndHashCode(callSuper = false, exclude = { "roles, users"})
 public class Group {
 	
 	@Id

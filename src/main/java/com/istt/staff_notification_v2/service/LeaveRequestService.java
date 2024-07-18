@@ -375,10 +375,15 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Override
 	public List<LeaveRequestDTO> testPheduyet(String id) {
-		User user = userRepo.findById(id).orElseThrow(NoResultException::new);
-//		User.get
-		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(user.getEmployee().getEmail(), id);
-		return null;
+		ModelMapper mapper = new ModelMapper();
+		User user = userRepo.findByUserId(id).orElseThrow(NoResultException::new);
+		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal());
+		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(user.getEmployee().getEmail(), status);
+		if(listOp.isEmpty()) return null;
+		
+		return listOp.get().stream()
+				  .map(employee -> mapper.map(employee, LeaveRequestDTO.class))
+				  .collect(Collectors.toList());
 	}
 
 }
