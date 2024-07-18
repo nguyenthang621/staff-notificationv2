@@ -85,14 +85,12 @@ class GroupRoleServiceImpl implements GroupService{
 	private static final String ENTITY_NAME = "isttGroupRole";
 	private static final Logger logger = LogManager.getLogger(GroupService.class);
 	
-	private static Long getMinGroupLevel(User user) {
+	private static Long getMaxGroupLevel(User user) {
 		ModelMapper mapper = new ModelMapper();
-		Long min = Long.MAX_VALUE;
-		min =(long) 99;
+		Long min = Long.MIN_VALUE;
 		List<GroupDTO> groupDTOs = user.getGroups().stream().map(group -> mapper.map(group, GroupDTO.class)).collect(Collectors.toList());
-		System.out.println(groupDTOs.size()+"/size:");
 		for (GroupDTO groupDTO : groupDTOs) {
-			if(min> groupDTO.getGroupLevel()) min = groupDTO.getGroupLevel();
+			if(min < groupDTO.getGroupLevel()) min = groupDTO.getGroupLevel();
 		}
 		return min;
 	}
@@ -290,7 +288,7 @@ class GroupRoleServiceImpl implements GroupService{
 		GroupDTO groupDTO = new GroupDTO();
 		User user = userRepo.findById(userId).orElseThrow(NoResultException::new);
 		if(user.getGroups().size()>0) {
-			Long min = getMinGroupLevel(user);
+			Long min = getMaxGroupLevel(user);
 			Group group = groupRepo.findByGroupLevel(min).get();
 			return new ModelMapper().map(group, GroupDTO.class);
 		}
