@@ -74,7 +74,7 @@ public class LeaveRequestAPI {
 //				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
 //	}
 	
-	@GetMapping("/test")
+	@GetMapping("/waiting")
 	public ResponseDTO<List<LeaveRequestDTO>> test(@CurrentUser UserPrincipal currentUser) {
 		if(currentUser==null) throw new BadRequestAlertException("Not Found User", ENTITY_NAME, "missing data");
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
