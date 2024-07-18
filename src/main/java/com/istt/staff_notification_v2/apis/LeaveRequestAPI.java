@@ -67,6 +67,11 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
+	@PostMapping("/test")
+	public ResponseDTO<List<LeaveRequestDTO>> test(@RequestBody SearchLeaveRequest searchLeaveRequest) {
+		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
+	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@GetMapping("")

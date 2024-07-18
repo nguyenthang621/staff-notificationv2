@@ -56,5 +56,7 @@ public class LeaveRequest {
 
 	@Column(name = "receiver", nullable = false)
 	private String receiver;
+	
+	private Date responseDate;
 
 }

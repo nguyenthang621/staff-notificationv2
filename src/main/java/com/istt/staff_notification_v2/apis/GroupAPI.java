@@ -54,7 +54,7 @@ public class GroupAPI {
 	public List<GroupDTO> getAll() {
 		return groupService.getAll();
 	}
-	@PostMapping
+	@PostMapping("")
 	public ResponseGroupDTO addRole(@RequestBody @Valid ResponseGroupDTO responseGroupDTO ) {
 		return groupService.addRoleToGroup(responseGroupDTO);
 	}

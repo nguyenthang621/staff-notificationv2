@@ -77,6 +77,15 @@ public class utils {
 			return null;
 		}
 	}
+	
+	public static DateRange getCurrentWeek() {
+		Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date sevenDaysBefore = calendar.getTime();
+
+		return new DateRange(today, sevenDaysBefore,7);
+	}
 
 	public static Date resetStartDate(Date startDate) {
 		try {

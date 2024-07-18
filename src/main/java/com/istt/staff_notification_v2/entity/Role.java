@@ -44,7 +44,7 @@ public class Role {
     @ToString.Exclude
 	private Set<Group> groups = new HashSet<>();
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "feature_id")
 	@JsonBackReference
 	@EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode

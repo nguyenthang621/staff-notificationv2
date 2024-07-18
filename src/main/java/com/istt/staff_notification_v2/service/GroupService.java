@@ -230,17 +230,24 @@ class GroupRoleServiceImpl implements GroupService{
 	}
 	@Override
 	public ResponseGroupDTO addRoleToGroup(ResponseGroupDTO resGroupDTO) {
+		Set<Role> roles = new HashSet<Role>();
+		Role role = new Role();
 		Group group = groupRepo.findById(resGroupDTO.getGroupId()).orElseThrow(NoResultException::new);
 		Set<ResponseRoleDTO> resRoles = new HashSet<ResponseRoleDTO>();
 		for (FeatureDTO featureDTO : resGroupDTO.getFeatures()) {
 			for (ResponseRoleDTO responseRoleDTO : featureDTO.getRoles()) {
-				if(responseRoleDTO.getIsActive()) resRoles.add(responseRoleDTO);
+				if(responseRoleDTO.getIsActive()) {
+					role= roleRepo.findById(responseRoleDTO.getRoleId()).get();
+					roles.add(role);
+				}
 			}
 		}
 		ModelMapper mapper = new ModelMapper();
-		Set<Role> role = resRoles.stream().map(resRole -> mapper.map(resRole, Role.class)).collect(Collectors.toSet());
-		group.setRoles(role);
+//		Set<Role> role = resRoles.stream().map(resRole -> mapper.map(resRole, Role.class)).collect(Collectors.toSet());
+		
+		group.setRoles(roles);
 		groupRepo.save(group);
+		
 		return resGroupDTO;
 	}
 	@Override

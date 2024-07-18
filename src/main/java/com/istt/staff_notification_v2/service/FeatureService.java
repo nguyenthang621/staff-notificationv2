@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,6 +32,8 @@ public interface FeatureService {
 	
 	FeatureDTO filterRole(String id);
 	
+	List<FeatureDTO> filterALL();
+	
 	FeatureDTO get (String id);
 	
 	List<FeatureDTO> getAll();
@@ -49,6 +52,7 @@ class FeatureServiceImpl implements FeatureService{
 	
 	@Override
 	public Set<FeatureDTO> getFeaturesFromRoles(Set<Role> roles) {
+		boolean k = true;
 		ModelMapper mapper= new ModelMapper();
 		Set<ResponseRoleDTO> resRoles = roles.stream().map(role -> mapper.map(role, ResponseRoleDTO.class))
 				.collect(Collectors.toSet());
@@ -57,7 +61,8 @@ class FeatureServiceImpl implements FeatureService{
 		for (FeatureDTO featureDTO : featureDTOs) {
 			for (ResponseRoleDTO resRole : featureDTO.getRoles()) {
 				if(resRoles.contains(resRole)) {
-					resRole.setIsActive(true);
+					resRole.setIsActive(k);
+//					System.err.println(resRole.getRole()+"/"+ resRole.getIsActive());
 				}
 			}
 		}
@@ -82,7 +87,7 @@ class FeatureServiceImpl implements FeatureService{
 
 	@Override
 	public FeatureDTO filterRole(String id) {
-		Feature feature = featureRepo.findById(id).orElseThrow(NoResultException::new);
+		Feature feature = featureRepo.findByFeatureId(id).orElseThrow(NoResultException::new);
 		List<Role> roles= roleRepo.findByFeature("%"+feature.getFeatureName().toUpperCase()+"%");
 		feature.setRoles(roles);
 		featureRepo.save(feature);
@@ -103,8 +108,21 @@ class FeatureServiceImpl implements FeatureService{
 
 	@Override
 	public FeatureDTO get(String id) {
-		Feature feature = featureRepo.findById(id).orElseThrow(NoResultException::new);
+		Feature feature = featureRepo.findByFeatureId(id).orElseThrow(NoResultException::new);
 		return new ModelMapper().map(feature, FeatureDTO.class);
+	}
+
+	@Override
+	public List<FeatureDTO> filterALL() {
+		ModelMapper modelMapper = new ModelMapper();
+		List<Feature> features = featureRepo.findAll();
+		for (Feature feature : features) {
+			filterRole(feature.getFeatureId());
+		}
+		List<Feature> feature2 = featureRepo.findAll();
+		return feature2.stream()
+				  .map(employee -> modelMapper.map(employee, FeatureDTO.class))
+				  .collect(Collectors.toList());
 	}
 	
 //	@Override

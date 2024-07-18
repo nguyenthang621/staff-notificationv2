@@ -33,7 +33,7 @@ public class Feature {
 	@Column(name = "feature_name", nullable = false, unique = true)
 	private String featureName;
 	
-	@OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "feature", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	@EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
     @ToString.Exclude

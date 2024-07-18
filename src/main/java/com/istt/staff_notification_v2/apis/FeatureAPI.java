@@ -56,13 +56,21 @@ public class FeatureAPI {
 	}
 	
 	
-//	@GetMapping("/filter/{id}")
-//	public ResponseDTO<FeatureDTO> filter(@PathVariable(value = "id") String id)
-//			throws URISyntaxException {
-////		featureService.getAll();
-//		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterRole(id))
-//				.build();
-//	}
+	@GetMapping("/filter/{id}")
+	public ResponseDTO<FeatureDTO> filter(@PathVariable(value = "id") String id)
+			throws URISyntaxException {
+//		featureService.getAll();
+		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterRole(id))
+				.build();
+	}
+	
+	@GetMapping("/filterall")
+	public ResponseDTO<List<FeatureDTO>> filterall()
+			throws URISyntaxException {
+//		featureService.getAll();
+		return ResponseDTO.<List<FeatureDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterALL())
+				.build();
+	}
 	
 	
 }

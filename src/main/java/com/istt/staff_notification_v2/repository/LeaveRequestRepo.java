@@ -34,6 +34,12 @@ public interface LeaveRequestRepo extends JpaRepository<LeaveRequest, String> {
 
 	@Query("SELECT l FROM LeaveRequest l WHERE l.status = :t")
 	Optional<List<LeaveRequest>> findstatus(@Param("t") String status);
+	
+	Optional<List<LeaveRequest>> findByStatusOrderByResponseDateDesc(@Param("t") String status);
+	
+//	@Query("SELECT l FROM LeaveRequest l WHERE l.status = :t AND (l.responseDate between :x and :y) ORDER BY l.responseDate desc")
+	@Query("SELECT l FROM LeaveRequest l WHERE l.responseDate between :y and :x ORDER BY l.responseDate desc")
+	Optional<List<LeaveRequest>> findByStatusResdateDesc(@Param("x") Date startdate,@Param("y") Date enddate);
 
 	@Query("SELECT COUNT(l) FROM LeaveRequest l")
 	Optional<Long> returnCheckCount();

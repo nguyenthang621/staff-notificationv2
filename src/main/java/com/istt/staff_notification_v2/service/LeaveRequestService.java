@@ -31,11 +31,13 @@ import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
 import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LeaveRequestRepo;
 import com.istt.staff_notification_v2.repository.LeaveTypeRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.utils.utils;
+import com.istt.staff_notification_v2.utils.utils.DateRange;
 
 public interface LeaveRequestService {
 
@@ -49,7 +51,11 @@ public interface LeaveRequestService {
 	LeaveRequestDTO delete(String id);
 
 	LeaveRequestDTO get(String id);
+	
+	List<LeaveRequestDTO> test(String status);
 
+	List<LeaveRequestDTO> testPheduyet(String id);
+	
 	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
 }
@@ -312,7 +318,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 			} else if (searchLeaveRequest.getEmail() == null && searchLeaveRequest.getStatus() != null
 					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findstatus(searchLeaveRequest.getStatus());
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusOrderByResponseDateDesc(searchLeaveRequest.getStatus());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
@@ -338,6 +344,16 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
 			}
+			else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
+					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEmail() == null) {
+				searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
+				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiverStatus(
+						searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus());
+			if (resultOp.isEmpty())
+				return new ArrayList<>();
+			return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+					.collect(Collectors.toList());
+			}
 			return new ArrayList<>();
 
 		} catch (ResourceAccessException e) {
@@ -345,6 +361,24 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
+	}
+
+	@Override
+	public List<LeaveRequestDTO> test(String status) {
+		DateRange dateRange = utils.getCurrentWeek();
+		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusResdateDesc(dateRange.getStartDate(), dateRange.getEndDate());
+		if (resultOp.isEmpty())
+			return new ArrayList<>();
+		return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<LeaveRequestDTO> testPheduyet(String id) {
+		User user = userRepo.findById(id).orElseThrow(NoResultException::new);
+//		User.get
+		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(user.getEmployee().getEmail(), id);
+		return null;
 	}
 
 }
