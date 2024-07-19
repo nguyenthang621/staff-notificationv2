@@ -49,7 +49,7 @@ public class utils {
 	public static String toStringDate(Date date){
 
         // Create a SimpleDateFormat object and define the desired date format
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         // Format the date
         String formattedDate = formatter.format(date);

@@ -2,6 +2,7 @@ package com.istt.staff_notification_v2.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +56,8 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	@Query("SELECT a from Employee a")
 	List<Employee> getAll();
+	@Query("SELECT a from Employee a where a.jobTitle like :x")
+	List<Employee> filterLevel(@Param("x") String x);
 	
 	List<Employee> findByOrderByHiredateAsc();
 	

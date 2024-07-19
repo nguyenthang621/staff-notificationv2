@@ -26,4 +26,8 @@ public interface LevelRepo extends JpaRepository<Level, String> {
 
 	@Query("SELECT l FROM Level l")
 	Optional<List<Level>> getAll();
+	
+	@Query("SELECT l FROM Level l WHERE l.levelName = :n or l.description = :c ")
+	Optional<Level> findByLevelNameorDes(@Param("n") String levelName, @Param("c") Long levelCode);
+
 }

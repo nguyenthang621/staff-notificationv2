@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.EmployeeDependence;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
+import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Employee;
@@ -106,11 +108,11 @@ public class EmployeeAPI {
 	}
 
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_ALLRELATIONSHIP')")
-	@GetMapping("/allRelationship")
-	public ResponseDTO<List<EmployeeRelationshipResponse>> getAllRelationshipByRule() {
-		return ResponseDTO.<List<EmployeeRelationshipResponse>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(employeeService.getAllRelationshipByRule()).build();
-	}
+//	@GetMapping("/allRelationship")
+//	public ResponseDTO<List<EmployeeRelationshipResponse>> getAllRelationshipByRule() {
+//		return ResponseDTO.<List<EmployeeRelationshipResponse>>builder().code(String.valueOf(HttpStatus.OK.value()))
+//				.data(employeeService.getAllRelationshipByRule()).build();
+//	}
 
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_FINDEMPLOYEETOEXPORTEXCEL')")
 	@GetMapping("/findEmployeeToExportExcel")
@@ -138,7 +140,7 @@ public class EmployeeAPI {
 		return employeeService.getEmployeeHierarchyFrom(id);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
+//	@PreAuthorize("hasRole('ROLE_EMPLOYEE_GETALL')")
 	@GetMapping("/getAll")
     public List<EmployeeDTO> getAll() {
         return employeeService.getAll();
@@ -159,5 +161,29 @@ public class EmployeeAPI {
 		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(employeeService.getEmployeeFromUser(currentUser.getUser_id())).build();
 	}
+	
+	@GetMapping("/filter")
+	public ResponseDTO<Void> filter() {
+		employeeService.filterLevel();
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.build();
+	}
+	
+	@GetMapping("/filterDE")
+	public ResponseDTO<Void> filterDe() {
+		employeeService.filterEmployeeDepend();
+		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.build();
+	}
+	
+	@PostMapping("/testLevel")
+    public List<EmployeeDTO> testlevel(@RequestBody @Valid LevelDTO levelDTO) {
+        return employeeService.filterEmployeeByJobTitleLevel(levelDTO.getLevelId());
+    }
+	
+	@PostMapping("/getDe")
+    public List<EmployeeDependence> showDE(@RequestBody @Valid Employee employee) {
+        return employeeService.getDE(employee.getEmployeeId());
+    }
 
 }

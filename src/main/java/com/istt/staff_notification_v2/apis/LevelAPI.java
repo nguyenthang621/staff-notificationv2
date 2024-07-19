@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LevelDTO;
@@ -33,6 +35,16 @@ public class LevelAPI {
 	private LevelService levelService;
 
 	private static final String ENTITY_NAME = "isttLevel";
+	
+//	@Autowired
+//	private FileService fileService;
+
+//	@PostMapping("/uploadFilesIntoDB")
+//	public ResponseDTO<String> storeFilesIntoDB(@RequestParam MultipartFile file) throws IOException, CsvException {
+//		fileService.save(file);
+//
+//		return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+//	}
 
 	@PostMapping("")
 //	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')")

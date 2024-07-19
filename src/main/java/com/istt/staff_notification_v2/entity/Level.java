@@ -31,7 +31,7 @@ public class Level implements Serializable {
 	@Column(name = "levelname", nullable = false, unique = true)
 	private String levelName;
 
-	@Column(name = "levelcode", nullable = false, unique = true)
+	@Column(name = "levelcode", nullable = false)
 	private Long levelCode;
 
 	@JsonIgnore

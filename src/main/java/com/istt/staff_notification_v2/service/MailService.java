@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -17,6 +18,7 @@ import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailDTO;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
+import com.istt.staff_notification_v2.utils.utils;
 
 public interface MailService {
 	void sendEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO receiver, String subject);
@@ -66,6 +68,8 @@ class MailServiceImpl implements MailService {
 
 			mailDTO.setContent(leaveRequestDTO.getReason());
 
+			Date endDate = utils.calculatorEndDate(leaveRequestDTO.getStartDate(), leaveRequestDTO.getDuration());
+			
 			// Load template email with content
 			Context context = new Context();
 			context.setVariable("senderName", senderName);
@@ -73,8 +77,8 @@ class MailServiceImpl implements MailService {
 			context.setVariable("senderDepartment", senderDepartment);
 //			context.setVariable("senderLevel", senderLevel);
 			context.setVariable("reason", leaveRequestDTO.getReason());
-			context.setVariable("startDate", leaveRequestDTO.getStartDate());
-			context.setVariable("endDate", leaveRequestDTO.getStartDate());
+			context.setVariable("startDate", utils.toStringDate(leaveRequestDTO.getStartDate()));
+			context.setVariable("endDate", utils.toStringDate(endDate));
 			context.setVariable("receiverName", receiverName);
 
 			String html = templateEngine.process("email", context);
@@ -118,6 +122,9 @@ class MailServiceImpl implements MailService {
 
 			mailDTO.setContent(leaveRequestDTO.getReason());
 
+			Date endDate = utils.calculatorEndDate(leaveRequestDTO.getStartDate(), leaveRequestDTO.getDuration());
+
+			
 			// Load template email with content
 			Context context = new Context();
 			context.setVariable("senderName", senderName);
@@ -125,10 +132,15 @@ class MailServiceImpl implements MailService {
 			context.setVariable("senderDepartment", senderDepartment);
 //			context.setVariable("senderLevel", senderLevel);
 
-			context.setVariable("startDate", leaveRequestDTO.getStartDate());
-			context.setVariable("endDate", leaveRequestDTO.getStartDate());
+			context.setVariable("startDate", utils.toStringDate(leaveRequestDTO.getStartDate()));
+			context.setVariable("endDate", utils.toStringDate(endDate));
+			context.setVariable("requestDate", utils.toStringDate(leaveRequestDTO.getRequestDate()));
 			context.setVariable("receiverName", receiverName);
-
+			
+//			System.err.println(utils.toStringDate(leaveRequestDTO.getStartDate()));
+//			System.err.println( utils.toStringDate(endDate));
+//			System.err.println( utils.toStringDate(leaveRequestDTO.getRequestDate()));
+			
 			String html = templateEngine.process("responseEmail", context);
 
 			// Send email
@@ -151,6 +163,7 @@ class MailServiceImpl implements MailService {
 		MailDTO mailDTO = new MailDTO();
 
 		try {
+			Date date = new Date();
 			Employee employeeSender = employeeRepo.findByEmployeeId(sender.getEmployeeId()).get();
 
 			String senderEmail = employeeSender.getEmail();
@@ -171,6 +184,8 @@ class MailServiceImpl implements MailService {
 			MimeMessageHelper helper = new MimeMessageHelper(email, StandardCharsets.UTF_8.name());
 
 			mailDTO.setContent(leaveRequestDTO.getReason());
+			
+			Date endDate = utils.calculatorEndDate(leaveRequestDTO.getStartDate(), leaveRequestDTO.getDuration());
 
 			// Load template email with content
 			Context context = new Context();
@@ -181,10 +196,17 @@ class MailServiceImpl implements MailService {
 
 			context.setVariable("status", status);
 			context.setVariable("reason", reason);
-			context.setVariable("startDate", leaveRequestDTO.getStartDate());
-			context.setVariable("endDate", leaveRequestDTO.getStartDate());
+			context.setVariable("startDate", utils.toStringDate(leaveRequestDTO.getStartDate()));
+			context.setVariable("endDate", utils.toStringDate(endDate));
+			context.setVariable("requestDate", utils.toStringDate(leaveRequestDTO.getRequestDate()));
+			
 			context.setVariable("receiverName", receiverName);
-
+			
+//			System.err.println(utils.toStringDate(leaveRequestDTO.getStartDate()));
+//			System.err.println( utils.toStringDate(endDate));
+//			System.err.println( utils.toStringDate(leaveRequestDTO.getRequestDate()));
+			
+			
 			String html = templateEngine.process("responseReject", context);
 
 			// Send email

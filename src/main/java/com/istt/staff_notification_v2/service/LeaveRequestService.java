@@ -140,12 +140,18 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 //			}
 
 			leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
-
+			
+			//valid receiver in dependences
+			
+			if(!employee.getEmployeeDependence().contains(mailRequestDTO.getRecceiverList().get(0).getEmployeeId())) {
+				throw new BadRequestAlertException("Bad request: Can only send to superior", ENTITY_NAME, "Invalid");
+			}
+			
 			// Valid only send to a employee
 			if (mailRequestDTO.getRecceiverList().size() != 1)
 				throw new BadRequestAlertException("Bad request: Can only be sent to 1 person", ENTITY_NAME, "Invalid");
 			leaveRequest.setReceiver(mailRequestDTO.getRecceiverList().get(0).getEmployeeId());
-
+			
 			// Handle send mail:
 //			Optional<List<Employee>> employeeDependences = employeeRepo
 //					.findByEmployeeIds(employee.getEmployeeDependence());
@@ -205,7 +211,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				throw new BadRequestAlertException("Bad request: Invalid STATUS_LEAVER_REQUEST", ENTITY_NAME,
 						"Invalid");
 			}
-
+			
 			Employee employee = employeeRepo.findByEmployeeId(responseLeaveRequest.getByEmployeeId())
 					.orElseThrow(NoResultException::new);
 
@@ -261,7 +267,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				ModelMapper mapper = new ModelMapper();
 				String subject = "Phản hồi đơn xin nghỉ phép";
 				mailService.sendReponseApprovedEmail(mapper.map(leaveRequest, LeaveRequestDTO.class),
-						mapper.map(attendanceDTO.getEmployee(), EmployeeDTO.class), subject);
+						mapper.map(employee, EmployeeDTO.class), subject);
 			} else if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.NOT_APPROVED.toString())
 					|| responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.REJECT.toString())) { // Case
 																											// reject or
@@ -273,7 +279,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 				String reason = responseLeaveRequest.getAnrreason();
 				mailService.sendReponseRejectEmail(mapper.map(leaveRequest, LeaveRequestDTO.class),
-						mapper.map(leaveRequest.getEmployee(), EmployeeDTO.class), subject, reason,
+						mapper.map(employee, EmployeeDTO.class), subject, reason,
 						responseLeaveRequest.getStatus());
 			}
 			// handle date

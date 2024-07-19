@@ -42,6 +42,7 @@ import com.istt.staff_notification_v2.configuration.ApplicationProperties.Status
 import com.istt.staff_notification_v2.configuration.EmployeeComparator;
 import com.istt.staff_notification_v2.configuration.EmployeeHireDateComparator;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.EmployeeDependence;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
@@ -50,14 +51,12 @@ import com.istt.staff_notification_v2.entity.Attendance;
 import com.istt.staff_notification_v2.entity.Department;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.Level;
-import com.istt.staff_notification_v2.entity.Rule;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.AttendanceRepo;
 import com.istt.staff_notification_v2.repository.BusinessDaysRepo;
 import com.istt.staff_notification_v2.repository.DepartmentRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
 import com.istt.staff_notification_v2.repository.LevelRepo;
-import com.istt.staff_notification_v2.repository.RuleRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.utils.utils;
 import com.istt.staff_notification_v2.utils.utils.DateRange;
@@ -90,8 +89,10 @@ public interface EmployeeService {
 	Map<String, List<EmployeeRelationshipResponse>> getEmployeeRelationship();
 
 	List<EmployeeDTO> test();
+	
+	List<EmployeeDependence> getDE(String employeeID);
 
-	List<EmployeeRelationshipResponse> getAllRelationshipByRule();
+//	List<EmployeeRelationshipResponse> getAllRelationshipByRule();
 
 //	NodeDepartment buildDepartmentTree(List<Employee> employees);
 
@@ -108,6 +109,11 @@ public interface EmployeeService {
 	List<EmployeeDTO> filterStaffId();
 	
 	EmployeeDTO getEmployeeFromUser(String userId);
+	Boolean filterLevel();
+	
+	Boolean filterEmployeeDepend();
+	
+	List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId);
 
 }
 
@@ -122,8 +128,8 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private LevelRepo levelRepo;
 
-	@Autowired
-	private RuleRepo ruleRepo;
+//	@Autowired
+//	private RuleRepo ruleRepo;
 	@Autowired
 	private DepartmentRepo departmentRepo;
 	
@@ -187,14 +193,24 @@ class EmployeeServiceImpl implements EmployeeService {
 		if (employeesRaw.isEmpty())
 			throw new BadRequestAlertException("Bad request: Not found employee in employee` department", ENTITY_NAME,
 					"Not found");
-
+//		System.err.println(employeeCurrent.getFullname()+"/"+employeesRaw.get().size());
 		Long maxLevelCurrentEmployee = getMaxLevelCode(employeeCurrent);
 		List<String> employeeIdDependences = new ArrayList<>();
-
+		
 		for (Employee e : employeesRaw.get()) {
-			if (getMaxLevelCode(e) > maxLevelCurrentEmployee)
+			if (getMaxLevelCode(e) > maxLevelCurrentEmployee) {
 				employeeIdDependences.add(e.getEmployeeId());
+				System.err.println(e.getEmployeeId());
+			}
 		}
+		if(employeeCurrent.getParent()!= null) {
+			if(!employeeIdDependences.contains(employeeCurrent.getParent().getEmployeeId())||employeeIdDependences.size()==0) {
+				employeeIdDependences.add(employeeCurrent.getParent().getEmployeeId());
+			}
+		}
+		
+		
+//		if(employeeIdDependences.size()==0) employeeIdDependences.add(employeeCurrent.getParent().getEmployeeId());
 
 		return employeeIdDependences;
 	}
@@ -528,101 +544,101 @@ class EmployeeServiceImpl implements EmployeeService {
 		return null;
 	}
 
-	@Override
-	public List<EmployeeRelationshipResponse> getAllRelationshipByRule() { // Handle rules only department` Director
-		try {
-
-			Map<String, List<EmployeeRelationshipResponse>> employeeRelationships = getEmployeeRelationship();
-
-//			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
+//	@Override
+//	public List<EmployeeRelationshipResponse> getAllRelationshipByRule() { // Handle rules only department` Director
+//		try {
 //
-//			Map<String, List<EmployeeRelationshipResponse>> nodeByDepartment = new HashMap<>();
-
-			Map<Long, List<EmployeeRelationshipResponse>> employeesByLevel = new HashMap<>();
-			List<Rule> rules = ruleRepo.getAll().orElseThrow(NoResultException::new);
-			if (rules != null && rules.size() > 0) {
-				for (Rule rule : rules) {
-					List<Level> levels = rule.getEmployee().getLevels().stream()
-							.sorted(Comparator.comparingLong((Level level) -> level.getLevelCode()).reversed())
-							.collect(Collectors.toList());
-
-					if (!employeesByLevel.containsKey(levels.get(0).getLevelCode())) { // add key level into map
-																						// employeesByLevel if
-						// // not found
-						employeesByLevel.put(levels.get(0).getLevelCode(), new ArrayList<>());
-
-					}
-					employeesByLevel.get(levels.get(0).getLevelCode())
-							.add(new ModelMapper().map(rule.getEmployee(), EmployeeRelationshipResponse.class));
-				}
-			}
-
-			// Sort levels in descending order
-			List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
-					.collect(Collectors.toList());
-
-			if (sortedLevels.size() > 0) {
-
-				List<EmployeeRelationshipResponse> initSubordinatesCurrent = new ArrayList<>();
-				for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
-					for (EmployeeRelationshipResponse employeeRelationshipResponse : employeesByLevel
-							.get(sortedLevels.get(i))) {
-
-						Optional<Rule> ruleOfEmployeeOp = ruleRepo
-								.findByEmployeeId(employeeRelationshipResponse.getEmployeeId());
-
-						if (ruleOfEmployeeOp.isPresent()) {
-							Rule ruleOfEmployee = ruleOfEmployeeOp.get();
-
-							System.out.println(i + ", " + employeeRelationshipResponse.getFullname() + " : "
-									+ ruleOfEmployee.getDepartmentDependence().size());
-
-							if (ruleOfEmployee.getDepartmentDependence() != null
-									&& ruleOfEmployee.getDepartmentDependence().size() > 1) {
-								for (String departmentId : ruleOfEmployee.getDepartmentDependence()) {
-									System.out.println("departmentId: " + departmentId);
-									initSubordinatesCurrent = Stream
-											.of(initSubordinatesCurrent, employeeRelationships.get(departmentId))
-											.flatMap(Collection::stream).collect(Collectors.toList());
-								}
-
-							}
-							System.out.println("1-->> " + initSubordinatesCurrent.size());
-
-							if (ruleOfEmployee.getEmployeeDependenceSpecial() != null
-									&& ruleOfEmployee.getEmployeeDependenceSpecial().size() > 0) {
-								List<Employee> employeeSubordinates = employeeRepo
-										.findByEmployeeIds(ruleOfEmployee.getEmployeeDependenceSpecial()).get();
-								List<EmployeeRelationshipResponse> employeeSubordinateRelationships = employeeSubordinates
-										.stream().map(e -> new ModelMapper().map(e, EmployeeRelationshipResponse.class))
-										.collect(Collectors.toList());
-								initSubordinatesCurrent = Stream
-										.of(initSubordinatesCurrent, employeeSubordinateRelationships)
-										.flatMap(Collection::stream).collect(Collectors.toList());
-
-							}
-
-							System.out.println("2-->> " + initSubordinatesCurrent.size());
-							employeeRelationshipResponse.setSubordinates(initSubordinatesCurrent);
-							System.out.println("----------------");
-							System.out.println("level: " + sortedLevels.get(i) + " ");
-
-						}
-					}
-				}
-
-				return employeesByLevel.get(sortedLevels.get(sortedLevels.size() - 1));
-			}
-
-			return null;
-
-		} catch (ResourceAccessException e) {
-			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
-		} catch (HttpServerErrorException | HttpClientErrorException e) {
-			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
-		}
-
-	}
+//			Map<String, List<EmployeeRelationshipResponse>> employeeRelationships = getEmployeeRelationship();
+//
+////			List<Department> departments = departmentRepo.getAll().orElseThrow(NoResultException::new);
+////
+////			Map<String, List<EmployeeRelationshipResponse>> nodeByDepartment = new HashMap<>();
+//
+//			Map<Long, List<EmployeeRelationshipResponse>> employeesByLevel = new HashMap<>();
+//			List<Rule> rules = ruleRepo.getAll().orElseThrow(NoResultException::new);
+//			if (rules != null && rules.size() > 0) {
+//				for (Rule rule : rules) {
+//					List<Level> levels = rule.getEmployee().getLevels().stream()
+//							.sorted(Comparator.comparingLong((Level level) -> level.getLevelCode()).reversed())
+//							.collect(Collectors.toList());
+//
+//					if (!employeesByLevel.containsKey(levels.get(0).getLevelCode())) { // add key level into map
+//																						// employeesByLevel if
+//						// // not found
+//						employeesByLevel.put(levels.get(0).getLevelCode(), new ArrayList<>());
+//
+//					}
+//					employeesByLevel.get(levels.get(0).getLevelCode())
+//							.add(new ModelMapper().map(rule.getEmployee(), EmployeeRelationshipResponse.class));
+//				}
+//			}
+//
+//			// Sort levels in descending order
+//			List<Long> sortedLevels = employeesByLevel.keySet().stream().sorted(Comparator.naturalOrder())
+//					.collect(Collectors.toList());
+//
+//			if (sortedLevels.size() > 0) {
+//
+//				List<EmployeeRelationshipResponse> initSubordinatesCurrent = new ArrayList<>();
+//				for (int i = 0; i <= (sortedLevels.size() - 1); i++) {
+//					for (EmployeeRelationshipResponse employeeRelationshipResponse : employeesByLevel
+//							.get(sortedLevels.get(i))) {
+//
+//						Optional<Rule> ruleOfEmployeeOp = ruleRepo
+//								.findByEmployeeId(employeeRelationshipResponse.getEmployeeId());
+//
+//						if (ruleOfEmployeeOp.isPresent()) {
+//							Rule ruleOfEmployee = ruleOfEmployeeOp.get();
+//
+//							System.out.println(i + ", " + employeeRelationshipResponse.getFullname() + " : "
+//									+ ruleOfEmployee.getDepartmentDependence().size());
+//
+//							if (ruleOfEmployee.getDepartmentDependence() != null
+//									&& ruleOfEmployee.getDepartmentDependence().size() > 1) {
+//								for (String departmentId : ruleOfEmployee.getDepartmentDependence()) {
+//									System.out.println("departmentId: " + departmentId);
+//									initSubordinatesCurrent = Stream
+//											.of(initSubordinatesCurrent, employeeRelationships.get(departmentId))
+//											.flatMap(Collection::stream).collect(Collectors.toList());
+//								}
+//
+//							}
+//							System.out.println("1-->> " + initSubordinatesCurrent.size());
+//
+//							if (ruleOfEmployee.getEmployeeDependenceSpecial() != null
+//									&& ruleOfEmployee.getEmployeeDependenceSpecial().size() > 0) {
+//								List<Employee> employeeSubordinates = employeeRepo
+//										.findByEmployeeIds(ruleOfEmployee.getEmployeeDependenceSpecial()).get();
+//								List<EmployeeRelationshipResponse> employeeSubordinateRelationships = employeeSubordinates
+//										.stream().map(e -> new ModelMapper().map(e, EmployeeRelationshipResponse.class))
+//										.collect(Collectors.toList());
+//								initSubordinatesCurrent = Stream
+//										.of(initSubordinatesCurrent, employeeSubordinateRelationships)
+//										.flatMap(Collection::stream).collect(Collectors.toList());
+//
+//							}
+//
+//							System.out.println("2-->> " + initSubordinatesCurrent.size());
+//							employeeRelationshipResponse.setSubordinates(initSubordinatesCurrent);
+//							System.out.println("----------------");
+//							System.out.println("level: " + sortedLevels.get(i) + " ");
+//
+//						}
+//					}
+//				}
+//
+//				return employeesByLevel.get(sortedLevels.get(sortedLevels.size() - 1));
+//			}
+//
+//			return null;
+//
+//		} catch (ResourceAccessException e) {
+//			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+//		} catch (HttpServerErrorException | HttpClientErrorException e) {
+//			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+//		}
+//
+//	}
 
 	@Override
 	public List<EmployeeDTO> test() {
@@ -786,6 +802,70 @@ class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = user.getEmployee();
 		return new ModelMapper().map(employee, EmployeeDTO.class);
 	}
+
+
+	@Override
+	public Boolean filterLevel() {
+		List<Level> allLevel = levelRepo.findAll();
+		if(allLevel.size()==0) return false;
+		for (Level level : allLevel) {
+			filterEmployeeByJobTitleLevel(level.getLevelId());
+		}
+		return true;
+	}
+	
+	
+
+
+	@Override
+	public List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId) {
+		Level level = levelRepo.findById(levelId).orElseThrow(NoResultException::new);
+		List<Employee> employees = new ArrayList<Employee>();
+		employees = employeeRepo.filterLevel("%"+level.getDescription()+"%");
+		
+		if(employees.size()>0) {
+			for (Employee employee:employees) {
+				System.err.println(employee.getJobTitle());
+				employee.getLevels().add(level);
+				employeeRepo.save(employee);
+			}
+		}
+		return employees.stream()
+				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public Boolean filterEmployeeDepend() {
+		List<Employee> employees = employeeRepo
+		.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
+		.orElseThrow(NoResultException::new);
+		System.err.println(employees.size());
+		for (Employee employee : employees) {
+			List<String> dependences = filterEmployeeDependence(employee);
+//			System.err.println(employee.getFullname()+"/"+ dependences.size());
+			if(dependences.size()==0) System.err.println(employee.getFullname());
+			employee.setEmployeeDependence(dependences);
+			employeeRepo.save(employee);
+//			update(new ModelMapper().map(employee, EmployeeDTO.class));
+		}
+		return true;
+	}
+
+
+	@Override
+	public List<EmployeeDependence> getDE(String employeeID) {
+		Employee employee = employeeRepo.findByEmployeeId(employeeID).orElseThrow(NoResultException::new);
+		List<String> de = employee.getEmployeeDependence();
+		List<Employee> employees = new ArrayList<Employee>();
+		for (String string : de) {
+			Employee e = employeeRepo.findByEmployeeId(string).orElseThrow(NoResultException::new);
+			employees.add(e);
+		}
+		ModelMapper mapper = new ModelMapper();
+		return employees.stream().map(em -> mapper.map(em, EmployeeDependence.class)).collect(Collectors.toList());
+	}
+	
 	
 
 }

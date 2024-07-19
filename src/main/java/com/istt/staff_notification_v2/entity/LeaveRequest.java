@@ -58,5 +58,7 @@ public class LeaveRequest {
 	private String receiver;
 	
 	private Date responseDate;
+	
+	private String placeOff;
 
 }

@@ -42,6 +42,8 @@ public interface LevelService {
 	List<LevelDTO> getAll();
 
 	List<LevelDTO> deleteAllbyIds(List<String> ids);
+	
+	
 
 }
 
@@ -57,9 +59,9 @@ class LevelServiceImpl implements LevelService {
 	@Transactional
 	public LevelDTO create(LevelDTO levelDTO) {
 		try {
-			if (levelRepo.findByLevelNameorLevelCode(levelDTO.getLevelName(), levelDTO.getLevelCode()).isPresent()) {
-				throw new BadRequestAlertException("Level Name or Level code already exists", ENTITY_NAME, "exist");
-			}
+//			if (levelRepo.findByLevelNameorLevelCode(levelDTO.getLevelName(), levelDTO.getLevelCode()).isPresent()) {
+//				throw new BadRequestAlertException("Level Name or Level code already exists", ENTITY_NAME, "exist");
+//			}
 			ModelMapper mapper = new ModelMapper();
 			Level level = mapper.map(levelDTO, Level.class);
 			level.setLevelId(UUID.randomUUID().toString().replaceAll("-", ""));
