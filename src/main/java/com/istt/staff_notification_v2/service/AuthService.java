@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -25,12 +26,13 @@ import org.springframework.web.client.RestTemplate;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
-import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.JwtTokenProvider;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.utils.exception.AccessDeniedException;
 
 public interface AuthService {
@@ -39,6 +41,9 @@ public interface AuthService {
 	ResponseDTO<String> handleRefreshToken(String refreshToken_in);
 
 	ResponseDTO<String> signup(LoginRequest loginRequest, User user);
+	
+//	ResponseDTO<String> logout(@CurrentUser UserPrincipal currentuser);
+	
 
 }
 
@@ -114,9 +119,9 @@ class AuthServiceImpl implements AuthService {
 //				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
 //			}
 
-			user.setAccessToken(accessToken);
-			user.setRefreshToken(refreshToken);
-			userRepo.save(user);
+//			user.setAccessToken(accessToken);
+//			user.setRefreshToken(refreshToken);
+//			userRepo.save(user);
 
 //			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 //					.sessionId(session_id).refreshToken(refreshToken).build();
@@ -185,5 +190,15 @@ class AuthServiceImpl implements AuthService {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
 	}
+
+//	@Override
+//	public ResponseDTO<String> logout(UserPrincipal currentuser) {
+//		SecurityContext context = SecurityContextHolder.getContext();
+//		// xóa thông tin authentication khỏi Security Context
+//		context.setAuthentication(null);
+//		return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).build();
+//	}
+	
+	
 
 }

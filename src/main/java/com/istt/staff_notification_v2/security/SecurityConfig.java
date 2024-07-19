@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -68,7 +69,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/**/*.css", "/**/*.js")
 				.permitAll().antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/auth/**","**") // dev
 				// **
-				.permitAll().anyRequest().authenticated();
+				.permitAll().anyRequest().authenticated()
+				.and()
+//				.logout()
+//                .logoutSuccessHandler(myLogoutSuccessHandler)
+//                .invalidateHttpSession(false)
+//                .logoutSuccessUrl("/logout.html?logSucc=true")
+////                .deleteCookies("JSESSIONID")
+//                .permitAll()
+				
+//				.logout()
+//                .logoutSuccessUrl("/login?logout")
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID")
+//                .permitAll();
+				
+				
+				
+				;
 //
 //		// Add our custom JWT security filter
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

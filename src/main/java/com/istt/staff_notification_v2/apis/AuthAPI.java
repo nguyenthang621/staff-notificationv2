@@ -4,9 +4,17 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +29,8 @@ import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.AuthService;
 import com.istt.staff_notification_v2.service.UserService;
 
@@ -93,5 +103,22 @@ public class AuthAPI {
 			throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("SERVER ERROR").build();
 		}
 	}
+	
+	@GetMapping("/logout")
+    public ResponseDTO<String> fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        String username = "Logout successfull";
+//        Object principal = SecurityContextHolder
+//        		.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            username = ((UserDetails) principal).getUsername();
+//        } else {
+//            username = principal.toString();
+//        }
+        return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).data(username).build();
+    }
 
 }

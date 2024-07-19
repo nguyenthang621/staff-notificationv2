@@ -25,7 +25,7 @@ public class MailAPI {
 	public ResponseEntity<String> sendNotification(@RequestBody MailRequestDTO mailRequestDTO) {
 
 		try {
-			System.err.println(mailRequestDTO.getRecceiverList().size());
+			// System.err.println(mailRequestDTO.getRecceiverList().size());
 			for (int i = 0; i < mailRequestDTO.getRecceiverList().size(); i++) {
 				EmployeeDTO receiver = new EmployeeDTO();
 				receiver = mailRequestDTO.getRecceiverList().get(i);

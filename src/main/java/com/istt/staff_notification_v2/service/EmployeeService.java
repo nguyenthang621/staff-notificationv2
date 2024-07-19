@@ -109,6 +109,7 @@ public interface EmployeeService {
 	List<EmployeeDTO> filterStaffId();
 	
 	EmployeeDTO getEmployeeFromUser(String userId);
+	
 	Boolean filterLevel();
 	
 	Boolean filterEmployeeDepend();
@@ -200,7 +201,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		for (Employee e : employeesRaw.get()) {
 			if (getMaxLevelCode(e) > maxLevelCurrentEmployee) {
 				employeeIdDependences.add(e.getEmployeeId());
-				System.err.println(e.getEmployeeId());
+				// System.err.println(e.getEmployeeId());
 			}
 		}
 		if(employeeCurrent.getParent()!= null) {
@@ -753,7 +754,7 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> calListDayOff(float duration, boolean type) {
-		System.err.println("calListDayOff");
+		// System.err.println("calListDayOff");
 		List<Employee> employees = employeeRepo.getByEmployeeStatus("ACTIVE").get();
 		if(employees.size()>0) {
 			for (Employee employee : employees) {
@@ -825,7 +826,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		
 		if(employees.size()>0) {
 			for (Employee employee:employees) {
-				System.err.println(employee.getJobTitle());
+				// System.err.println(employee.getJobTitle());
 				employee.getLevels().add(level);
 				employeeRepo.save(employee);
 			}
@@ -840,7 +841,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> employees = employeeRepo
 		.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
 		.orElseThrow(NoResultException::new);
-		System.err.println(employees.size());
+		// System.err.println(employees.size());
 		for (Employee employee : employees) {
 			List<String> dependences = filterEmployeeDependence(employee);
 //			System.err.println(employee.getFullname()+"/"+ dependences.size());

@@ -224,7 +224,7 @@ class GroupRoleServiceImpl implements GroupService{
 		Group group = groupRepo.findById(id).orElseThrow(NoResultException::new);
 		GroupUserDTO groupUserDTO = mapper.map(group, GroupUserDTO.class);
 		Set<UserResponse> userResponses = new HashSet<UserResponse>();
-		System.err.println(group.getUsers().size());
+		// System.err.println(group.getUsers().size());
 		userResponses = group.getUsers().stream().map(userR -> mapper.map(userR, UserResponse.class))
 				.collect(Collectors.toSet());
 		groupUserDTO.setUser(userResponses);
@@ -255,9 +255,9 @@ class GroupRoleServiceImpl implements GroupService{
 	@Override
 	public GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO) {
 		Group group = groupRepo.findById(groupUserDTO.getGroupId()).orElseThrow(NoResultException::new);
-		if(group!=null)
-			System.err.println(group.getGroupId());
-		else System.err.println("NOT FOUND GROUP");
+		// if(group!=null)
+		// 	System.err.println(group.getGroupId());
+		// else System.err.println("NOT FOUND GROUP");
 		Set<User> users = new HashSet<User>();
 		for (UserResponse userRes : groupUserDTO.getUser()) {
 			User user = userRepo.findById(userRes.getUserId()).orElseThrow(NoResultException::new);

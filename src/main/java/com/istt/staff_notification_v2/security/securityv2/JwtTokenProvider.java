@@ -37,6 +37,10 @@ public class JwtTokenProvider {
 				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 	
+	// public boolean logout(Authentication authentication) {
+	// 	return true;
+	// }
+	
 //	public String generateRefreshToken(Authentication authentication) {
 //
 //		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

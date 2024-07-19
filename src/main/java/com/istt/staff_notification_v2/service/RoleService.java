@@ -225,7 +225,7 @@ class RoleServiceImpl implements RoleService {
 	@Override
 	public List<Role> findbyFeature(String feature) {
 		List<Role> roleOps= roleRepo.findByFeature("%"+feature.toUpperCase()+"%");
-		System.err.println(feature.toUpperCase());
+		// System.err.println(feature.toUpperCase());
 		if(roleOps.size()==0) return null;
 		return roleOps;
 	}

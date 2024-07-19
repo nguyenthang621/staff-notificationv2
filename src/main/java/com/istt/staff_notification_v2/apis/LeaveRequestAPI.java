@@ -87,7 +87,7 @@ public class LeaveRequestAPI {
 		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
 		SearchLeaveRequest searchLeaveRequest = new SearchLeaveRequest();
 		User user = userRepo.findById(currentuser.getUser_id()).get();
-		searchLeaveRequest.setMailReciver(user.getEmployee().getEmail());
+		searchLeaveRequest.setMailReciver(user.getEmployee().getEmployeeId());
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}

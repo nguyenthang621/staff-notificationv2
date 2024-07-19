@@ -138,6 +138,8 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 //			} else {
 //				leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
 //			}
+			
+			
 
 			leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
 			
@@ -163,7 +165,8 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			if (employeeDependences.isEmpty())
 				throw new BadRequestAlertException("Bad request: Not found employee dependence in employee` department",
 						ENTITY_NAME, "Not found");
-
+			
+			
 			MailRequestDTO mailRequestEachEmployee = new MailRequestDTO();
 			mailRequestEachEmployee.setLeaveRequestDTO(leaveRequestDTO);
 			mailRequestEachEmployee.setRecceiverList(employeeDependences.get().stream()
