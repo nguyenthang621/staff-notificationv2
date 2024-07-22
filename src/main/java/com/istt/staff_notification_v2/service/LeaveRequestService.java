@@ -52,7 +52,7 @@ public interface LeaveRequestService {
 
 	LeaveRequestDTO get(String id);
 	
-	List<LeaveRequestDTO> test(String status);
+	List<LeaveRequestDTO> getApprovedThisWeek();
 
 	List<LeaveRequestDTO> testPheduyet(String id);
 	
@@ -118,6 +118,10 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 			leaveRequest.setLeaveqequestId(UUID.randomUUID().toString().replaceAll("-", ""));
 
+			Date requestDate = new Date();
+			leaveRequest.setRequestDate(requestDate);
+			
+			
 			// Validate employeeId in leaveRequest
 			if (leaveRequestDTO.getEmployee().getEmployeeId() == null)
 				throw new BadRequestAlertException("Bad request: Employee not found!", ENTITY_NAME, "Not Found!");
@@ -242,7 +246,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			leaveRequest.setAnrreason(responseLeaveRequest.getAnrreason());
 			leaveRequest.setStatus(responseLeaveRequest.getStatus());
 			leaveRequest.setResponseBy(responseLeaveRequest.getByEmployeeId());
-
+			leaveRequest.setResponseDate(new Date());
 			leaveRequestRepo.save(leaveRequest);
 
 			if (responseLeaveRequest.getStatus().equals(StatusLeaveRequestRef.APPROVED.toString())) { // Case approved
@@ -345,7 +349,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			}
 			else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
 						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEmail() == null) {
-					searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));;
+					searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
 					Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiverStatus(
 							searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus());
 				if (resultOp.isEmpty())
@@ -373,9 +377,10 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public List<LeaveRequestDTO> test(String status) {
+	public List<LeaveRequestDTO> getApprovedThisWeek() {
 		DateRange dateRange = utils.getCurrentWeek();
-		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusResdateDesc(dateRange.getStartDate(), dateRange.getEndDate());
+		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
+		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusResdateDesc(dateRange.getStartDate(), dateRange.getEndDate(), status);
 		if (resultOp.isEmpty())
 			return new ArrayList<>();
 		return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.istt.staff_notification_v2.entity.Department;
 import com.istt.staff_notification_v2.entity.Employee;
+import com.istt.staff_notification_v2.entity.Level;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, String> {
@@ -60,8 +61,6 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	List<Employee> filterLevel(@Param("x") String x);
 	
 	List<Employee> findByOrderByHiredateAsc();
-	
-	
 	
 	@Query("SELECT a from Employee a where a.parent.employeeId = :x")
 	List<Employee> findByParent(@Param("x") String parentEmployeeId);

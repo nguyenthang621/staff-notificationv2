@@ -13,7 +13,7 @@ public class StaffNotificationV2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(StaffNotificationV2Application.class, args);
 	}
-
+	
 	@Bean
 	public ObjectMapper objectMapper() {
 		ObjectMapper mapper = new ObjectMapper();

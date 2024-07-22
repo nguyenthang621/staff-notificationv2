@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 
 import javax.persistence.NoResultException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.istt.staff_notification_v2.apis.EmployeeAPI;
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
@@ -60,6 +63,8 @@ import com.istt.staff_notification_v2.repository.LevelRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.utils.utils;
 import com.istt.staff_notification_v2.utils.utils.DateRange;
+
+import lombok.extern.java.Log;
 
 public interface EmployeeService {
 	EmployeeDTO create(EmployeeDTO employeeDTO);
@@ -115,6 +120,9 @@ public interface EmployeeService {
 	Boolean filterEmployeeDepend();
 	
 	List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId);
+	
+	List<Employee> setLevelIfLevelNull();
+	List<EmployeeDTO> testLevel();
 
 }
 
@@ -128,7 +136,7 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private LevelRepo levelRepo;
-
+	
 //	@Autowired
 //	private RuleRepo ruleRepo;
 	@Autowired
@@ -143,6 +151,9 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	ApplicationProperties props;
+	
+	private static final Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
+
 
 	private static final String ENTITY_NAME = "isttEmployee";
 
@@ -812,6 +823,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		for (Level level : allLevel) {
 			filterEmployeeByJobTitleLevel(level.getLevelId());
 		}
+		
 		return true;
 	}
 	
@@ -822,15 +834,18 @@ class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId) {
 		Level level = levelRepo.findById(levelId).orElseThrow(NoResultException::new);
 		List<Employee> employees = new ArrayList<Employee>();
-		employees = employeeRepo.filterLevel("%"+level.getDescription()+"%");
+		employees = employeeRepo.filterLevel(level.getDescription());
+		if(employees.size()==0) {
+			employeeRepo.filterLevel("%"+level.getDescription()+"%");
+		}
 		
 		if(employees.size()>0) {
 			for (Employee employee:employees) {
-				// System.err.println(employee.getJobTitle());
 				employee.getLevels().add(level);
 				employeeRepo.save(employee);
 			}
 		}
+		setLevelIfLevelNull();
 		return employees.stream()
 				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
 	}
@@ -841,14 +856,11 @@ class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> employees = employeeRepo
 		.getByEmployeeStatus(props.getSTATUS_EMPLOYEE().get(StatusEmployeeRef.ACTIVE.ordinal()))
 		.orElseThrow(NoResultException::new);
-		// System.err.println(employees.size());
 		for (Employee employee : employees) {
 			List<String> dependences = filterEmployeeDependence(employee);
-//			System.err.println(employee.getFullname()+"/"+ dependences.size());
 			if(dependences.size()==0) System.err.println(employee.getFullname());
 			employee.setEmployeeDependence(dependences);
 			employeeRepo.save(employee);
-//			update(new ModelMapper().map(employee, EmployeeDTO.class));
 		}
 		return true;
 	}
@@ -865,6 +877,34 @@ class EmployeeServiceImpl implements EmployeeService {
 		}
 		ModelMapper mapper = new ModelMapper();
 		return employees.stream().map(em -> mapper.map(em, EmployeeDependence.class)).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public List<Employee> setLevelIfLevelNull() {
+		List<Employee> employees = employeeRepo.findAll();
+		Level level = levelRepo.findByLevelNameorDes("NV", "Nhân viên").orElseThrow(NoResultException::new);
+		for (Employee employee : employees) {
+			if(employee.getLevels().size()==0) employee.getLevels().add(level);
+		}
+		return employees;
+	}
+
+
+	@Override
+	public List<EmployeeDTO> testLevel() {
+		ModelMapper mapper = new ModelMapper();
+		List<Employee> employees = employeeRepo.findAll();
+		List<Employee> employees2 = new ArrayList<Employee>();
+		for (Employee employee : employees) {
+			if(employee.getLevels().size()!= 1) {
+				employees2.add(employee);
+				logger.error(employee.getFullname()+"/"+ employee.getLevels().size());
+			}
+		}
+		System.err.println(employees2.size());
+		if(employees2.size()==0) return null;
+		return employees2.stream().map(em -> mapper.map(em, EmployeeDTO.class)).collect(Collectors.toList());
 	}
 	
 	

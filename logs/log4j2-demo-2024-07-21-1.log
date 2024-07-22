@@ -1,0 +1,486 @@
+2024-07-21 23:18:08.269  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-21 23:18:08.310  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20060 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:18:08.313  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:18:08.349  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-21 23:18:08.360  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-21 23:18:09.151  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:18:09.236  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:18:10.080  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:18:10.093  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:18:10.094  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:18:10.095  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:18:10.189  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:18:10.189  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1828 ms
+2024-07-21 23:18:10.381  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:18:10.440  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-21 23:18:10.594  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-21 23:18:10.638  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:18:10.685  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-21 23:18:10.824  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-21 23:18:10.898  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:18:11.579  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:18:11.587  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:18:12.732  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@103d0ba5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2db06cb9, org.springframework.security.web.context.SecurityContextPersistenceFilter@3fd55ef5, org.springframework.security.web.header.HeaderWriterFilter@1562c435, org.springframework.web.filter.CorsFilter@6c6caf6f, org.springframework.security.web.authentication.logout.LogoutFilter@5b5bfd8a, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@34e271e2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5940b7f0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1583cf29, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@52a4e38c, org.springframework.security.web.session.SessionManagementFilter@22162058, org.springframework.security.web.access.ExceptionTranslationFilter@6d450fc9, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3f156f81]
+2024-07-21 23:18:13.763  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:18:13.793  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:18:13.833  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:18:13.843  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 5.846 seconds (JVM running for 6.665)
+2024-07-21 23:18:18.761  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:18:18.762  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:18:18.762  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 0 ms
+2024-07-21 23:19:27.941  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2024-07-21 23:19:28.106  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:19:28.106  INFO Camilla --- [       Thread-5] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-21 23:19:28.108  INFO Camilla --- [       Thread-5] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-21 23:19:28.111  WARN Camilla --- [       Thread-5] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-21 23:19:28.112  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:19:28.114  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:19:28.121  INFO Camilla --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:19:28.123  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-07-21 23:19:28.132  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-07-21 23:19:28.238  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 20060 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:19:28.238  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:19:28.516  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:19:28.571  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:19:28.686  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:19:28.687  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:19:28.687  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:19:28.687  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:19:28.711  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:19:28.711  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 471 ms
+2024-07-21 23:19:28.750  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:19:28.765  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Starting...
+2024-07-21 23:19:28.772  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Start completed.
+2024-07-21 23:19:28.778  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:19:28.782  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:19:29.054  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:19:29.054  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:19:29.536  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@27973ad4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@656e03ab, org.springframework.security.web.context.SecurityContextPersistenceFilter@62e58af9, org.springframework.security.web.header.HeaderWriterFilter@3854b6fe, org.springframework.web.filter.CorsFilter@4be8a9c5, org.springframework.security.web.authentication.logout.LogoutFilter@5b116dba, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@34ae2401, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@41474657, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5c39ebc7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@514852aa, org.springframework.security.web.session.SessionManagementFilter@189128e, org.springframework.security.web.access.ExceptionTranslationFilter@6548c923, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@66357336]
+2024-07-21 23:19:30.001  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:19:30.013  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:19:30.015  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:19:30.020  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 1.83 seconds (JVM running for 82.842)
+2024-07-21 23:19:30.022  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-21 23:19:32.056  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:19:32.056  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:19:32.057  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 1 ms
+2024-07-21 23:19:32.886 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Đỗ Phương Nam/2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Hồng Nhật/2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Thanh Sơn /2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phan Văn Chuyền/2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Xuân Tương/2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hồ Long/2
+2024-07-21 23:19:32.887 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Đỗ Ngọc Thắng/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hữu Trường/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Chi/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Thị Lan/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Đào Minh Khôi/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phan Trường Phúc/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Khang/2
+2024-07-21 23:19:32.888 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Bùi Thị Dung/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Phương Thảo/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phan Huỳnh Khôi Nguyên/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Quốc Thắng/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Cường/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Long Vũ/2
+2024-07-21 23:19:32.889 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Hoàng Sơn/2
+2024-07-21 23:19:33.040  WARN Camilla --- [nio-5050-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Failure in @ExceptionHandler com.istt.staff_notification_v2.utils.GlobalExceptionHandler#handleGenericException(Exception)
+org.apache.catalina.connector.ClientAbortException: java.io.IOException: An established connection was aborted by the software in your host machine
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:351)
+	at org.apache.catalina.connector.OutputBuffer.flushByteBuffer(OutputBuffer.java:784)
+	at org.apache.catalina.connector.OutputBuffer.append(OutputBuffer.java:687)
+	at org.apache.catalina.connector.OutputBuffer.writeBytes(OutputBuffer.java:386)
+	at org.apache.catalina.connector.OutputBuffer.write(OutputBuffer.java:364)
+	at org.apache.catalina.connector.CoyoteOutputStream.write(CoyoteOutputStream.java:97)
+	at org.springframework.security.web.util.OnCommittedResponseWrapper$SaveContextServletOutputStream.write(OnCommittedResponseWrapper.java:638)
+	at org.springframework.util.StreamUtils$NonClosingOutputStream.write(StreamUtils.java:287)
+	at com.fasterxml.jackson.core.json.UTF8JsonGenerator._flushBuffer(UTF8JsonGenerator.java:2171)
+	at com.fasterxml.jackson.core.json.UTF8JsonGenerator.flush(UTF8JsonGenerator.java:1184)
+	at com.fasterxml.jackson.databind.ObjectWriter.writeValue(ObjectWriter.java:1009)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.writeInternal(AbstractJackson2HttpMessageConverter.java:456)
+	at org.springframework.http.converter.AbstractGenericHttpMessageConverter.write(AbstractGenericHttpMessageConverter.java:104)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:290)
+	at org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor.handleReturnValue(HttpEntityMethodProcessor.java:219)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:78)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:135)
+	at org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:428)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:75)
+	at org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:142)
+	at org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:80)
+	at org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1332)
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1143)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:111)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:111)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.servlet.resource.ResourceUrlEncodingFilter.doFilter(ResourceUrlEncodingFilter.java:67)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:337)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:61)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:112)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:82)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:346)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:221)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:186)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1791)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+Caused by: java.io.IOException: An established connection was aborted by the software in your host machine
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:51)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:113)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:79)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:50)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:466)
+	at org.apache.tomcat.util.net.NioChannel.write(NioChannel.java:136)
+	at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.doWrite(NioEndpoint.java:1431)
+	at org.apache.tomcat.util.net.SocketWrapperBase.doWrite(SocketWrapperBase.java:775)
+	at org.apache.tomcat.util.net.SocketWrapperBase.writeBlocking(SocketWrapperBase.java:600)
+	at org.apache.tomcat.util.net.SocketWrapperBase.write(SocketWrapperBase.java:544)
+	at org.apache.coyote.http11.Http11OutputBuffer$SocketOutputBuffer.doWrite(Http11OutputBuffer.java:540)
+	at org.apache.coyote.http11.filters.ChunkedOutputFilter.doWrite(ChunkedOutputFilter.java:110)
+	at org.apache.coyote.http11.Http11OutputBuffer.doWrite(Http11OutputBuffer.java:193)
+	at org.apache.coyote.Response.doWrite(Response.java:603)
+	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:338)
+	... 115 more
+2024-07-21 23:19:34.545  INFO Camilla --- [io-5050-exec-10] o.s.a.AbstractOpenApiResource            : Init duration for springdoc-openapi is: 1451 ms
+2024-07-21 23:19:37.856 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Đỗ Phương Nam/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Trần Hồng Nhật/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Trần Thanh Sơn /2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Phan Văn Chuyền/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Xuân Tương/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hồ Long/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Đỗ Ngọc Thắng/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hữu Trường/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Chi/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Trần Thị Lan/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Đào Minh Khôi/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Phan Trường Phúc/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Khang/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Bùi Thị Dung/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Phương Thảo/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Phan Huỳnh Khôi Nguyên/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Quốc Thắng/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Cường/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Nguyễn Long Vũ/2
+2024-07-21 23:19:37.857 ERROR Camilla --- [nio-5050-exec-4] c.i.s.s.EmployeeServiceImpl              : Phạm Hoàng Sơn/2
+2024-07-21 23:23:06.090  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-21 23:23:06.135  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 9112 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:23:06.139  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:23:06.174  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-21 23:23:06.174  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-21 23:23:06.901  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:23:06.987  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:23:07.843  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:23:07.857  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:23:07.858  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:23:07.858  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:23:07.952  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:23:07.953  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1779 ms
+2024-07-21 23:23:08.138  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:23:08.199  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-21 23:23:08.354  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-21 23:23:08.401  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:23:08.447  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-21 23:23:08.593  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-21 23:23:08.677  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:23:09.418  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:23:09.427  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:23:10.586  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@47bd1433, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6a50148e, org.springframework.security.web.context.SecurityContextPersistenceFilter@6eb86b9c, org.springframework.security.web.header.HeaderWriterFilter@7e031aed, org.springframework.web.filter.CorsFilter@2f726221, org.springframework.security.web.authentication.logout.LogoutFilter@5efdf5ce, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@8560, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@76dbb6ac, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@35940914, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5a182bb1, org.springframework.security.web.session.SessionManagementFilter@a4af3f9, org.springframework.security.web.access.ExceptionTranslationFilter@3236eb8, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@34180e28]
+2024-07-21 23:23:11.485  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:23:11.528  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:23:11.550  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:23:11.560  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 5.739 seconds (JVM running for 6.565)
+2024-07-21 23:23:25.510  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:23:25.511  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:23:25.511  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 0 ms
+2024-07-21 23:23:53.284 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Giang Anh Đức/0
+2024-07-21 23:23:53.284 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Văn Khánh/0
+2024-07-21 23:23:53.284 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Ngọc Duyên/0
+2024-07-21 23:23:53.284 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Dương Nông Mạnh Thành/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Ngọc Khánh/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Đức Chung/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lê Ngọc An/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Thanh Nhàn/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Ngô Đức Thắng/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hoàng Minh Phúc/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thanh Tâm/0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Tuấn Kiên /0
+2024-07-21 23:23:53.285 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Administrator/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Văn Lâm/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Văn Tiến/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Thị Cẩm Liên/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Thu Trang/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phan Ánh Dung/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyên Văn Trọng/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hồng Thắng/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Việt Dũng/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Thái Công/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lê Hồ Khánh/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Minh Đức/0
+2024-07-21 23:23:53.286 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Bùi Trọng Danh/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Văn Đình Quân/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Đình Nam/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Đình Thắng/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Hà Hữu Đạt/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phan Ngọc Sơn/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lê Hữu Đức/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Ngọc Phan/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Thị Gái/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Đỗ Trung Kiên/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lê Ngọc Trung Kiên/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Chu Nam/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lưu Việt Hoàng/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Vũ Thành Công/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Quốc Tuấn/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Văn Thắng/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Thị Thu Hà/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Thế Dương/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Cẩm Mỹ/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lương Phạm Bình An/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Lưu Hoàng Đức Vượng/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Trần Anh Quân/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Võ Quang Huy/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phùng Nguyễn Hiển/0
+2024-07-21 23:23:53.287 ERROR Camilla --- [nio-5050-exec-2] c.i.s.s.EmployeeServiceImpl              : Phạm Thế Đạt/0
+2024-07-21 23:24:46.556  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2024-07-21 23:24:46.723  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:24:46.723  INFO Camilla --- [       Thread-5] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-21 23:24:46.726  INFO Camilla --- [       Thread-5] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-21 23:24:46.730  WARN Camilla --- [       Thread-5] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-21 23:24:46.732  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:24:46.735  INFO Camilla --- [       Thread-5] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:24:46.743  INFO Camilla --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:24:46.747  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-07-21 23:24:46.758  INFO Camilla --- [       Thread-5] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-07-21 23:24:46.863  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 9112 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:24:46.864  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:24:47.127  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:24:47.180  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 52 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:24:47.284  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:24:47.285  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:24:47.286  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:24:47.286  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:24:47.311  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:24:47.312  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 446 ms
+2024-07-21 23:24:47.350  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:24:47.367  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Starting...
+2024-07-21 23:24:47.374  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-2 - Start completed.
+2024-07-21 23:24:47.379  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:24:47.385  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:24:47.594  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:24:47.594  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:24:48.040  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@57b73345, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@57689901, org.springframework.security.web.context.SecurityContextPersistenceFilter@b65a3b1, org.springframework.security.web.header.HeaderWriterFilter@736396ab, org.springframework.web.filter.CorsFilter@3e54f01a, org.springframework.security.web.authentication.logout.LogoutFilter@56702b36, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@6e7e4fed, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7aedc091, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1554d7a9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@79d3ff8d, org.springframework.security.web.session.SessionManagementFilter@3dfb0c86, org.springframework.security.web.access.ExceptionTranslationFilter@68e33347, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@18ed03e4]
+2024-07-21 23:24:48.485  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:24:48.492  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:24:48.495  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:24:48.500  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 1.683 seconds (JVM running for 103.506)
+2024-07-21 23:24:48.502  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-21 23:24:52.233  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:24:52.233  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:24:52.234  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 1 ms
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Đỗ Phương Nam/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Trần Hồng Nhật/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Hồng Ngân/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Trương Thị Hồng Lê/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Trần Thanh Sơn /1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Thúy Quỳnh/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Đỗ Quốc Uy/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Việt Thắng/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Phan Văn Chuyền/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Xuân Tương/1
+2024-07-21 23:24:52.343 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hồ Long/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Đỗ Ngọc Thắng/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Hữu Trường/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Hiền/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Chi/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Trần Thị Lan/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Thái Thị Hiền/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Lê Thị Tuyết/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Đào Minh Khôi/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Phan Trường Phúc/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Hảo/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Khang/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Phạm Quang Thảo /1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Bùi Thị Dung/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Phương Thảo/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Phan Huỳnh Khôi Nguyên/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Quốc Thắng/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Huỳnh Mạnh Cường/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Long Vũ/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Trần Thu Hồng/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Phạm Hoàng Sơn/1
+2024-07-21 23:24:52.344 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Hoàng Thị Nguyệt/1
+2024-07-21 23:24:52.345 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Ma Khánh Sơn/1
+2024-07-21 23:24:52.345 ERROR Camilla --- [nio-5050-exec-1] c.i.s.s.EmployeeServiceImpl              : Nguyễn Thị Mai Anh/1
+2024-07-21 23:25:48.614  INFO Camilla --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2024-07-21 23:25:48.774  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Pausing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:25:48.774  INFO Camilla --- [       Thread-7] o.a.c.c.StandardService                  : Stopping service [Tomcat]
+2024-07-21 23:25:48.775  INFO Camilla --- [       Thread-7] o.a.c.c.C.[.[.[/]                        : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-07-21 23:25:48.776  WARN Camilla --- [       Thread-7] o.a.c.l.WebappClassLoaderBase            : The web application [ROOT] appears to have started a thread named [HikariPool-2 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@11.0.17/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@11.0.17/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:234)
+ java.base@11.0.17/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:2123)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@11.0.17/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1054)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1114)
+ java.base@11.0.17/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+ java.base@11.0.17/java.lang.Thread.run(Thread.java:834)
+2024-07-21 23:25:48.777  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Stopping ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:25:48.778  INFO Camilla --- [       Thread-7] o.a.c.h.Http11NioProtocol                : Destroying ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:25:48.781  INFO Camilla --- [       Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:25:48.782  INFO Camilla --- [       Thread-7] c.z.h.HikariDataSource                   : HikariPool-2 - Shutdown initiated...
+2024-07-21 23:25:48.786  INFO Camilla --- [       Thread-7] c.z.h.HikariDataSource                   : HikariPool-2 - Shutdown completed.
+2024-07-21 23:25:48.878  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 9112 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:25:48.879  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:25:49.122  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:25:49.165  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:25:49.254  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:25:49.255  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:25:49.255  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:25:49.255  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:25:49.279  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:25:49.279  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 399 ms
+2024-07-21 23:25:49.312  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:25:49.323  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-3 - Starting...
+2024-07-21 23:25:49.329  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-3 - Start completed.
+2024-07-21 23:25:49.335  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:25:49.342  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:25:49.553  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:25:49.553  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:25:49.950  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@45ae932a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42483ed, org.springframework.security.web.context.SecurityContextPersistenceFilter@e8c7f56, org.springframework.security.web.header.HeaderWriterFilter@26daf20a, org.springframework.web.filter.CorsFilter@7633978d, org.springframework.security.web.authentication.logout.LogoutFilter@707b1dd9, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@cdd26fe, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@29a8da76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@581327eb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@75f2fb70, org.springframework.security.web.session.SessionManagementFilter@3e5f7d28, org.springframework.security.web.access.ExceptionTranslationFilter@6b398746, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@676ef886]
+2024-07-21 23:25:50.305  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:25:50.312  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:25:50.316  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:25:50.319  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 1.481 seconds (JVM running for 165.325)
+2024-07-21 23:25:50.320  INFO Camilla --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-07-21 23:26:00.511  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:26:00.511  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:26:00.511  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 0 ms
+2024-07-21 23:27:44.450  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-07-21 23:27:44.493  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 10096 (D:\Eclipse\java\staff\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff\staff-notificationv2)
+2024-07-21 23:27:44.497  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-07-21 23:27:44.537  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-21 23:27:44.537  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-21 23:27:45.311  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21 23:27:45.402  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 11 JPA repository interfaces.
+2024-07-21 23:27:46.246  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-07-21 23:27:46.259  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:27:46.261  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-07-21 23:27:46.261  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-07-21 23:27:46.356  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-07-21 23:27:46.356  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1818 ms
+2024-07-21 23:27:46.538  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21 23:27:46.597  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-07-21 23:27:46.772  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-07-21 23:27:46.820  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21 23:27:46.866  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-07-21 23:27:47.011  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-21 23:27:47.106  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-07-21 23:27:47.785  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-21 23:27:47.793  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21 23:27:48.934  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4dfb1b04, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@fe70deb, org.springframework.security.web.context.SecurityContextPersistenceFilter@1fb4f94a, org.springframework.security.web.header.HeaderWriterFilter@23663129, org.springframework.web.filter.CorsFilter@33aecfb8, org.springframework.security.web.authentication.logout.LogoutFilter@1838ec03, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@605d61fa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@27b40f19, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10721960, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@483e14d6, org.springframework.security.web.session.SessionManagementFilter@7a83c17a, org.springframework.security.web.access.ExceptionTranslationFilter@56758ebf, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1628c239]
+2024-07-21 23:27:49.905  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-21 23:27:49.933  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-07-21 23:27:49.965  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-07-21 23:27:49.976  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 5.805 seconds (JVM running for 6.626)
+2024-07-21 23:28:07.296  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-21 23:28:07.296  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-07-21 23:28:07.296  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 0 ms
+2024-07-21 23:30:28.915  WARN Camilla --- [nio-5050-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('f' (code 102)): was expecting comma to separate Object entries; nested exception is com.fasterxml.jackson.core.JsonParseException: Unexpected character ('f' (code 102)): was expecting comma to separate Object entries<EOL> at [Source: (org.springframework.util.StreamUtils$NonClosingInputStream); line: 2, column: 20]]

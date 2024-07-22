@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.LogManager;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +40,7 @@ public class EmployeeAPI {
 	private EmployeeService employeeService;
 
 	private static final String ENTITY_NAME = "isttEmployee";
-
+	
 //	@PreAuthorize("hasRole('ROLE_EMPLOYEE_CREATE')")
 	@PostMapping("")
 	public ResponseDTO<EmployeeDTO> create(@RequestBody @Valid EmployeeDTO employeeDTO) throws URISyntaxException {
@@ -162,7 +164,7 @@ public class EmployeeAPI {
 				.data(employeeService.getEmployeeFromUser(currentUser.getUser_id())).build();
 	}
 	
-	@GetMapping("/filter")
+	@GetMapping("/filterLevel")
 	public ResponseDTO<Void> filter() {
 		employeeService.filterLevel();
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value()))
@@ -175,11 +177,6 @@ public class EmployeeAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.build();
 	}
-	
-	@PostMapping("/testLevel")
-    public List<EmployeeDTO> testlevel(@RequestBody @Valid LevelDTO levelDTO) {
-        return employeeService.filterEmployeeByJobTitleLevel(levelDTO.getLevelId());
-    }
 	
 	@PostMapping("/getDe")
     public List<EmployeeDependence> showDE(@RequestBody @Valid Employee employee) {

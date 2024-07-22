@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +26,10 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.entity.Level;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
+import com.istt.staff_notification_v2.service.ExcelReadService;
 import com.istt.staff_notification_v2.service.LevelService;
 
 @RestController
@@ -36,15 +40,15 @@ public class LevelAPI {
 
 	private static final String ENTITY_NAME = "isttLevel";
 	
-//	@Autowired
-//	private FileService fileService;
+	@Autowired
+	private ExcelReadService excelReadService;
 
-//	@PostMapping("/uploadFilesIntoDB")
-//	public ResponseDTO<String> storeFilesIntoDB(@RequestParam MultipartFile file) throws IOException, CsvException {
-//		fileService.save(file);
-//
-//		return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).build();
-//	}
+	@GetMapping("/uploadleveldata")
+	public ResponseDTO<List<LevelDTO>> storeFilesIntoDB() throws EncryptedDocumentException, IOException, URISyntaxException, InvalidFormatException {
+
+		return ResponseDTO.<List<LevelDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+				.data(excelReadService.ReadDataFromExcel()).build();	
+		}
 
 	@PostMapping("")
 //	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')")
