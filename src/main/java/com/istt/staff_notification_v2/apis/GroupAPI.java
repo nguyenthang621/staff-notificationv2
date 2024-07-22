@@ -87,6 +87,7 @@ public class GroupAPI {
 	@GetMapping("/getGroup")
 	public ResponseDTO<GroupDTO> getGroup(@CurrentUser UserPrincipal currentuser)
 			throws URISyntaxException {
+		System.err.println(currentuser.getUser_id());
 		if(currentuser == null) throw new BadRequestAlertException("missing data", ENTITY_NAME, "missingdata");
 		return ResponseDTO.<GroupDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(groupService.getMinGroupFromUser(currentuser.getUser_id()))
 				.build();

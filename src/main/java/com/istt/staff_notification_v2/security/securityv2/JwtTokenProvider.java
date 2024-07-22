@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.istt.staff_notification_v2.utils.exception.UnauthorizedException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -69,18 +71,23 @@ public class JwtTokenProvider {
 	public boolean validateToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			System.err.println(authToken);
 			return true;
 		} catch (SignatureException ex) {
 			System.out.println("Invalid JWT signature");
+			throw new UnauthorizedException("Invalid JWT signature");
 		} catch (MalformedJwtException ex) {
 			System.out.println("Invalid JWT token");
+			throw new UnauthorizedException("Invalid JWT signature");
 		} catch (ExpiredJwtException ex) {
 			System.out.println("Expired JWT token");
+			throw new UnauthorizedException("Invalid JWT signature");
 		} catch (UnsupportedJwtException ex) {
 			System.out.println("Unsupported JWT token");
+			throw new UnauthorizedException("Invalid JWT signature");
 		} catch (IllegalArgumentException ex) {
 			System.out.println("JWT claims string is empty.");
+			throw new UnauthorizedException("Invalid JWT signature");
 		}
-		return false;
 	}
 }
