@@ -42,6 +42,7 @@ public interface AuthService {
 
 	ResponseDTO<String> signup(LoginRequest loginRequest, User user);
 	
+	
 //	ResponseDTO<String> logout(@CurrentUser UserPrincipal currentuser);
 	
 
@@ -61,6 +62,7 @@ class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	JwtTokenProvider tokenProvider;
+	
 
 	private static final String ENTITY_NAME = "isttAuth";
 

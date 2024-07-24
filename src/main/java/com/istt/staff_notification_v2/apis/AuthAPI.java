@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.apis;
 
-import java.util.Iterator;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -12,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,14 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
+import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
-import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
-import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
-import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
+import com.istt.staff_notification_v2.service.AttendanceService;
 import com.istt.staff_notification_v2.service.AuthService;
+import com.istt.staff_notification_v2.service.LeaveRequestService;
 import com.istt.staff_notification_v2.service.UserService;
 
 @RestController
@@ -45,6 +46,12 @@ public class AuthAPI {
 
 	@Autowired
 	AuthService authService;
+	
+	@Autowired
+	LeaveRequestService leaveRequestService;
+	
+	@Autowired
+	AttendanceService attendanceService;
 
 	private static final String ENTITY_NAME = "isttAuth";
 
@@ -120,5 +127,22 @@ public class AuthAPI {
 //        }
         return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).data(username).build();
     }
+	
+	@GetMapping("/getWaiting/{email}")
+	public ResponseDTO<List<EmployeeLeaveDTO>> getWaiting(@PathVariable(value = "email") String email) throws URISyntaxException{
+		if (email == null) {
+			throw new BadRequestAlertException("Bad request: missing email", ENTITY_NAME, "missing_email");
+		}
+		return ResponseDTO.<List<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.getApproved(email))
+				.build();
+	}
+	
+	@GetMapping("/getLeave")
+	public ResponseDTO<Set<EmployeeLeaveDTO>> getLeave() throws URISyntaxException{
+		
+		return ResponseDTO.<Set<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceService.getEmployeeLeave())
+				.build();
+	}
+	
 
 }

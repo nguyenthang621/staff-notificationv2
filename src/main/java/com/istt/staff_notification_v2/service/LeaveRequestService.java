@@ -28,6 +28,7 @@ import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusLeaveRequestRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
+import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
@@ -61,6 +62,7 @@ public interface LeaveRequestService {
 	
 	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
+	List<EmployeeLeaveDTO> getApproved(String email);
 }
 
 @Service
@@ -405,6 +407,23 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		return listOp.get().stream()
 				  .map(employee -> mapper.map(employee, LeaveRequestDTO.class))
 				  .collect(Collectors.toList());
+	}
+
+	@Override
+	public List<EmployeeLeaveDTO> getApproved(String email) {
+		Employee employee = employeeRepo.findByEmail(email);
+		List<EmployeeLeaveDTO> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDTO>();
+		if(employee==null) throw new BadRequestAlertException("not found employee", ENTITY_NAME, "missing data");
+		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal());
+		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(employee.getEmployeeId(), status);
+		if(listOp.isEmpty()) return null;
+		EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
+		for (LeaveRequest leaveRequest : listOp.get()) {
+			employeeLeaveDTO.setEmployeeName(leaveRequest.getEmployee().getFullname());
+			employeeLeaveDTO.setEmployeeDepartment(leaveRequest.getEmployee().getDepartment().getDepartmentName());
+			employeeLeaveDTOs.add(employeeLeaveDTO);
+		}
+		return employeeLeaveDTOs;
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.istt.staff_notification_v2.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,6 +32,7 @@ import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
+import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
@@ -64,6 +68,8 @@ public interface AttendanceService {
 	ResponseDTO<List<AttendanceDTO>> search(SearchAttendence searchAttendence);
 	
 	List<AttendanceDTO> getByCurrentEmployee(String id);
+	
+	Set<EmployeeLeaveDTO> getEmployeeLeave();
 
 }
 
@@ -354,5 +360,22 @@ class AttendanceServiceImpl implements AttendanceService {
 				  .map(attendance-> mapper.map(attendance, AttendanceDTO.class))
 				  .collect(Collectors.toList());
 	}
+
+	@Override
+	public Set<EmployeeLeaveDTO> getEmployeeLeave() {
+		Date date = new Date();
+		DateRange dateRange = utils.getDate(date);
+		Set<EmployeeLeaveDTO> employeeLeaveDTOs = new HashSet<EmployeeLeaveDTO>();
+		Optional<List<Attendance>> attendances = attendanceRepo.findByDate(dateRange.getStartDate(), dateRange.getEndDate());
+		if(attendances.isEmpty()) return null;
+		for (Attendance attendance: attendances.get()) {
+			EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
+			employeeLeaveDTO.setEmployeeName(attendance.getEmployee().getFullname());
+			employeeLeaveDTO.setEmployeeDepartment(attendance.getEmployee().getDepartment().getDepartmentName());
+			employeeLeaveDTOs.add(employeeLeaveDTO);
+		}
+		return employeeLeaveDTOs;
+	}
+	
 
 }

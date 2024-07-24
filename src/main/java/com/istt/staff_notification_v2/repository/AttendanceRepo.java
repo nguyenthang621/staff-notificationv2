@@ -57,5 +57,9 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a where a.employee = :x")
 	List<Attendance> findByEmployee(@Param("x") Employee value);
 	
+	@Query("Select a from Attendance a where a.startDate between :x and :y")
+	Optional<List<Attendance>> findByDate(@Param("x") Date startDate, @Param("y") Date endDate);
+
+	
 	
 }

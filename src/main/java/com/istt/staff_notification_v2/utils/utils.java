@@ -26,6 +26,8 @@ public class utils {
 			this.endDate = endDate;
 			this.duration = duration;
 		}
+		public DateRange() {
+		}
 
 		public Date getStartDate() {
 			return startDate;
@@ -298,4 +300,18 @@ public class utils {
         String remainingString = result.substring(0, lastSpaceIndex);
         return lastWord + " " + remainingString;
     }
+	
+	public static DateRange getDate(Date date) {
+		DateRange dateRange = new DateRange();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		dateRange.startDate= calendar.getTime();
+		calendar.set(Calendar.HOUR_OF_DAY, 24);
+		dateRange.endDate= calendar.getTime();
+		return dateRange;
+	}
 }
