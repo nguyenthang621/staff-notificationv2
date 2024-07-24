@@ -129,11 +129,11 @@ public class AuthAPI {
     }
 	
 	@GetMapping("/getWaiting/{email}")
-	public ResponseDTO<List<EmployeeLeaveDTO>> getWaiting(@PathVariable(value = "email") String email) throws URISyntaxException{
+	public ResponseDTO<Set<EmployeeLeaveDTO>> getWaiting(@PathVariable(value = "email") String email) throws URISyntaxException{
 		if (email == null) {
 			throw new BadRequestAlertException("Bad request: missing email", ENTITY_NAME, "missing_email");
 		}
-		return ResponseDTO.<List<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.getApproved(email))
+		return ResponseDTO.<Set<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.getApproved(email))
 				.build();
 	}
 	

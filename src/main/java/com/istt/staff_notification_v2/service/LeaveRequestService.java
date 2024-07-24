@@ -2,8 +2,10 @@ package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,7 +64,7 @@ public interface LeaveRequestService {
 	
 	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
-	List<EmployeeLeaveDTO> getApproved(String email);
+	Set<EmployeeLeaveDTO> getApproved(String email);
 }
 
 @Service
@@ -410,9 +412,9 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public List<EmployeeLeaveDTO> getApproved(String email) {
+	public Set<EmployeeLeaveDTO> getApproved(String email) {
 		Employee employee = employeeRepo.findByEmail(email);
-		List<EmployeeLeaveDTO> employeeLeaveDTOs = new ArrayList<EmployeeLeaveDTO>();
+		Set<EmployeeLeaveDTO> employeeLeaveDTOs = new HashSet<EmployeeLeaveDTO>();
 		if(employee==null) throw new BadRequestAlertException("not found employee", ENTITY_NAME, "missing data");
 		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal());
 		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(employee.getEmployeeId(), status);
