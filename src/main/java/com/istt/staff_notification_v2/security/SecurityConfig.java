@@ -29,7 +29,7 @@ import com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilte
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	CustomUserDetailsService customUserDetailsService;
-
+ 
 	@Autowired
 	private JwtAuthenticationEntryPoint unauthorizedHandler;
 
