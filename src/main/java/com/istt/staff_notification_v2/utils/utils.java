@@ -310,7 +310,10 @@ public class utils {
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		dateRange.startDate= calendar.getTime();
-		calendar.set(Calendar.HOUR_OF_DAY, 24);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 0);
 		dateRange.endDate= calendar.getTime();
 		return dateRange;
 	}

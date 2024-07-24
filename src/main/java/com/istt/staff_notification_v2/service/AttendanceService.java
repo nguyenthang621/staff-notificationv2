@@ -370,6 +370,7 @@ class AttendanceServiceImpl implements AttendanceService {
 		if(attendances.isEmpty()) return null;
 		for (Attendance attendance: attendances.get()) {
 			EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
+			employeeLeaveDTO.setId(attendance.getAttendanceId());
 			employeeLeaveDTO.setEmployeeName(attendance.getEmployee().getFullname());
 			employeeLeaveDTO.setEmployeeDepartment(attendance.getEmployee().getDepartment().getDepartmentName());
 			employeeLeaveDTOs.add(employeeLeaveDTO);
