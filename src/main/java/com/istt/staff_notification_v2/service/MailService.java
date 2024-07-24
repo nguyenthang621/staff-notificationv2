@@ -6,9 +6,12 @@ import java.util.Date;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -40,7 +43,11 @@ class MailServiceImpl implements MailService {
 
 	@Autowired
 	EmployeeRepo employeeRepo;
+	
+	private static final Logger logger = LogManager.getLogger(MailServiceImpl.class);
+	
 
+	@Async
 	@Override
 	public void sendEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO receiver, String subject) {
 		MailDTO mailDTO = new MailDTO();
@@ -90,12 +97,15 @@ class MailServiceImpl implements MailService {
 			helper.setFrom(senderEmail);
 
 			javaMailSender.send(email);
+			
+			logger.error("Email sent successful ");
 
 		} catch (MessagingException e) {
-			System.out.println("Email sent with error: " + e.getMessage());
+			logger.error("Email sent with error: " + e.getMessage());
 		}
 	}
 
+	@Async
 	@Override
 	public void sendReponseApprovedEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO sender, String subject) {
 		MailDTO mailDTO = new MailDTO();
@@ -157,6 +167,7 @@ class MailServiceImpl implements MailService {
 
 	}
 
+	@Async
 	@Override
 	public void sendReponseRejectEmail(LeaveRequestDTO leaveRequestDTO, EmployeeDTO sender, String subject,
 			String reason, String status) {

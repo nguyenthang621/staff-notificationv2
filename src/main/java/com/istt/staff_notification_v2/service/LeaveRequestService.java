@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.HttpClientErrorException;
@@ -85,7 +88,9 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	private LeaveTypeRepo leaveTypeRepo;
 
 	private static final String ENTITY_NAME = "isttLeaveRequestType";
-
+	
+	private static final Logger logger = LogManager.getLogger(LeaveRequestServiceImpl.class);
+	
 	private Boolean sendNotification(@RequestBody MailRequestDTO mailRequestDTO) {
 
 		try {
@@ -94,7 +99,9 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				EmployeeDTO receiver = new EmployeeDTO();
 				receiver = mailRequestDTO.getRecceiverList().get(i);
 				System.out.println("receiver maiL : " + receiver.getEmail());
+				
 				mailService.sendEmail(mailRequestDTO.getLeaveRequestDTO(), receiver, mailRequestDTO.getSubject());
+				logger.error("mail start send");
 			}
 			return true;
 
@@ -180,7 +187,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			// Excute send mail
 			if (!sendNotification(mailRequestEachEmployee))
 				throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("ERROR SEND MAIL").build();
-
+			logger.error("mail sending");
 			// Commit leaveRequest
 			leaveRequestRepo.save(leaveRequest);
 			return mailRequestDTO;

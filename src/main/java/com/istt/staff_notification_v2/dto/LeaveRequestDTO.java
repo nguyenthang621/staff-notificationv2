@@ -2,6 +2,9 @@ package com.istt.staff_notification_v2.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveType;
 
@@ -27,6 +30,8 @@ public class LeaveRequestDTO {
 	
 	private String leavePlace;
 
+	// @JsonFormat(pattern = "dd/MM/yyyy")
+	// @DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date startDate;
 
 	private String receiver;
