@@ -406,12 +406,19 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal());
 		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(employee.getEmployeeId(), status);
 		if(listOp.isEmpty()) return null;
-		EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
+		
 		for (LeaveRequest leaveRequest : listOp.get()) {
+			EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
+			employeeLeaveDTO.setId(leaveRequest.getLeaveqequestId());
+//			logger.error("employee_1:"+leaveRequest.getEmployee().getFullname());
 			employeeLeaveDTO.setEmployeeName(leaveRequest.getEmployee().getFullname());
 			employeeLeaveDTO.setEmployeeDepartment(leaveRequest.getEmployee().getDepartment().getDepartmentName());
 			employeeLeaveDTOs.add(employeeLeaveDTO);
 		}
+//		for (EmployeeLeaveDTO employeeLeaveDTO2 : employeeLeaveDTOs) {
+//			logger.error("employee_service:"+employeeLeaveDTO2.getEmployeeName());
+//		}
+//		System.err.println(employeeLeaveDTOs.size() +"-/-"+listOp.get().size());
 		return employeeLeaveDTOs;
 	}
 

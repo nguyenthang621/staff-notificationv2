@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.apis;
 
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -54,6 +57,7 @@ public class AuthAPI {
 	AttendanceService attendanceService;
 
 	private static final String ENTITY_NAME = "isttAuth";
+	private static final Logger logger = LogManager.getLogger(AuthAPI.class);
 
 	@PostMapping("/signin")
 	public ResponseDTO<String> signin(@Valid @RequestBody LoginRequest loginRequest) {
@@ -133,7 +137,14 @@ public class AuthAPI {
 		if (email == null) {
 			throw new BadRequestAlertException("Bad request: missing email", ENTITY_NAME, "missing_email");
 		}
-		return ResponseDTO.<Set<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.getApproved(email))
+		
+		Set<EmployeeLeaveDTO> employeeLeaveDTOs = leaveRequestService.getApproved(email);
+		
+//		for (EmployeeLeaveDTO employeeLeaveDTO : employeeLeaveDTOs) {
+//			logger.error("employee:"+employeeLeaveDTO.getEmployeeName());
+//		}
+		
+		return ResponseDTO.<Set<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeLeaveDTOs)
 				.build();
 	}
 	
