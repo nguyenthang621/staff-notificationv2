@@ -219,13 +219,18 @@ class AuthServiceImpl implements AuthService {
 
 	@Override
 	public void logout(String accesstoken, String refreshToken) {
-		
-		InvalidToken invalidAccessToken = tokenProvider.getToken(accesstoken);
+		try {
+			InvalidToken invalidAccessToken = tokenProvider.getToken(accesstoken);
+			invalidTokenRepo.save(invalidAccessToken);
+		}catch (Exception e) {
+			logger.error("access_token is expired"+ accesstoken);
+		}
+		try {
 		InvalidToken invalidRefreshToken = tokenProvider.getToken(refreshToken);
-		invalidTokenRepo.save(invalidAccessToken);
 		invalidTokenRepo.save(invalidRefreshToken);
-//		logger.error(invalidAccessToken);
-//		logger.error(invalidRefreshToken);
+		}catch (Exception e) {
+			logger.error("refresh_token is expired"+ refreshToken);
+		}
 	}
 	
 	
