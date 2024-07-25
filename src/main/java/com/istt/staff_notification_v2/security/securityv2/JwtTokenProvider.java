@@ -1,11 +1,15 @@
 package com.istt.staff_notification_v2.security.securityv2;
 
 import java.util.Date;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.istt.staff_notification_v2.entity.InvalidToken;
+import com.istt.staff_notification_v2.repository.InvalidTokenRepo;
 import com.istt.staff_notification_v2.utils.exception.UnauthorizedException;
 
 import io.jsonwebtoken.Claims;
@@ -18,6 +22,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenProvider {
+	
+	@Autowired
+	private InvalidTokenRepo invalidTokenRepo;
 
 	@Value("${app.jwtSecret}")
 	private String jwtSecret;
@@ -36,7 +43,9 @@ public class JwtTokenProvider {
 		Date expiryDate = new Date(now.getTime() + jwtExpirationAT);
 
 		return Jwts.builder().setSubject(String.valueOf(userPrincipal.getUser_id())).setIssuedAt(new Date())
-				.setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+				.setExpiration(expiryDate)
+				.setId(UUID.randomUUID().toString())
+				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 	
 	// public boolean logout(Authentication authentication) {
@@ -59,19 +68,33 @@ public class JwtTokenProvider {
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + jwtExpirationRT);
 
-		return Jwts.builder().setSubject(String.valueOf(uid)).setIssuedAt(new Date()).setExpiration(expiryDate)
+		return Jwts.builder().setSubject(String.valueOf(uid))
+				.setId(UUID.randomUUID().toString())
+				.setIssuedAt(new Date()).setExpiration(expiryDate)
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
 	public String getUserIdFromJWT(String token) {
 		Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+		
 		return String.valueOf(claims.getSubject());
 	}
+	
+	public InvalidToken getToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+		InvalidToken invalidToken = new InvalidToken();
+		invalidToken.setId(claims.getId());
+		invalidToken.setExpiryTime(claims.getExpiration());
+		return invalidToken;
+	}
 
+	
+	
 	public boolean validateToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-			System.err.println(authToken);
+			InvalidToken token = getToken(authToken);
+			if(invalidTokenRepo.existsById(token.getId())) throw new UnauthorizedException("Invalid JWT signature");
 			return true;
 		} catch (SignatureException ex) {
 			System.out.println("Invalid JWT signature");

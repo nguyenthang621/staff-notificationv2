@@ -1,11 +1,15 @@
 package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.NoResultException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,9 +30,13 @@ import org.springframework.web.client.RestTemplate;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.istt.staff_notification_v2.apis.AuthAPI;
+import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
+import com.istt.staff_notification_v2.entity.InvalidToken;
 import com.istt.staff_notification_v2.entity.User;
+import com.istt.staff_notification_v2.repository.InvalidTokenRepo;
 import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.JwtTokenProvider;
@@ -43,7 +51,7 @@ public interface AuthService {
 	ResponseDTO<String> signup(LoginRequest loginRequest, User user);
 	
 	
-//	ResponseDTO<String> logout(@CurrentUser UserPrincipal currentuser);
+	void logout(String accesstoken,String refreshtoken);
 	
 
 }
@@ -63,8 +71,12 @@ class AuthServiceImpl implements AuthService {
 	@Autowired
 	JwtTokenProvider tokenProvider;
 	
+	@Autowired
+	InvalidTokenRepo invalidTokenRepo;
+	
 
 	private static final String ENTITY_NAME = "isttAuth";
+	private static final Logger logger = LogManager.getLogger(AuthServiceImpl.class);
 
 	private List<String> getOdooSession(LoginRequest loginRequest) {
 		try {
@@ -111,6 +123,7 @@ class AuthServiceImpl implements AuthService {
 
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
+			
 //			List<String> response = getOdooSession(loginRequest);
 //			if (response == null)
 //				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
@@ -150,7 +163,7 @@ class AuthServiceImpl implements AuthService {
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 
 			user.setRefreshToken(refreshToken);
-
+			
 			userRepo.save(user);
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
@@ -166,7 +179,18 @@ class AuthServiceImpl implements AuthService {
 	@Override
 	public ResponseDTO<String> handleRefreshToken(String refreshToken_in) {
 		try {
-
+			InvalidToken invalidToken = tokenProvider.getToken(refreshToken_in);
+			if(invalidTokenRepo.existsById(invalidToken.getId())) {
+				logger.error(invalidToken.toString());
+				throw new BadRequestAlertException("Token is expired", ENTITY_NAME, "expired");
+			}
+			Optional<List<InvalidToken>> tokenOps = invalidTokenRepo.getExpireToken(new Date());
+			
+			if(tokenOps.isPresent()) {
+				invalidTokenRepo.deleteAll(tokenOps.get());
+			}
+				
+			
 			String username = tokenProvider.getUserIdFromJWT(refreshToken_in);
 			if (username.isEmpty())
 				throw new AccessDeniedException("Access Denied");
@@ -193,13 +217,16 @@ class AuthServiceImpl implements AuthService {
 		}
 	}
 
-//	@Override
-//	public ResponseDTO<String> logout(UserPrincipal currentuser) {
-//		SecurityContext context = SecurityContextHolder.getContext();
-//		// xóa thông tin authentication khỏi Security Context
-//		context.setAuthentication(null);
-//		return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).build();
-//	}
+	@Override
+	public void logout(String accesstoken, String refreshToken) {
+		
+		InvalidToken invalidAccessToken = tokenProvider.getToken(accesstoken);
+		InvalidToken invalidRefreshToken = tokenProvider.getToken(refreshToken);
+		invalidTokenRepo.save(invalidAccessToken);
+		invalidTokenRepo.save(invalidRefreshToken);
+//		logger.error(invalidAccessToken);
+//		logger.error(invalidRefreshToken);
+	}
 	
 	
 

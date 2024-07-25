@@ -39,7 +39,8 @@ public class AttendanceAPI {
 
 	private static final String ENTITY_NAME = "isttAttendance";
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_CREATE')")
+	
+//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_CREATE')&& has('ROLE_ATTENDANCE_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<AttendanceDTO> create(@RequestBody @Valid AttendanceDTO attendanceDTO)
 			throws URISyntaxException {

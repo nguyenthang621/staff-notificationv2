@@ -103,6 +103,9 @@ class AttendanceServiceImpl implements AttendanceService {
 	public AttendanceDTO create(AttendanceDTO attendanceDTO) {
 		try {
 			float count=0;
+			
+			Optional<List<Attendance>> attendanceOp = attendanceRepo.existsAttendance(attendanceDTO.getStartDate(), attendanceDTO.getEndDate(), attendanceDTO.getEmployee().getEmployeeId());
+			
 			Attendance attendance = new ModelMapper().map(attendanceDTO, Attendance.class);
 			attendance.setAttendanceId(UUID.randomUUID().toString().replaceAll("-", ""));
 
