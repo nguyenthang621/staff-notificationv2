@@ -179,8 +179,9 @@ public class EmployeeAPI {
 	}
 	
 	@PostMapping("/getDe")
-    public List<EmployeeDependence> showDE(@RequestBody @Valid Employee employee) {
-        return employeeService.getDE(employee.getEmployeeId());
+    public ResponseDTO<List<EmployeeDependence>> showDE(@RequestBody @Valid Employee employee) {
+        return ResponseDTO.<List<EmployeeDependence>>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeService.getDE(employee.getEmployeeId()))
+				.build();
     }
 
 }
