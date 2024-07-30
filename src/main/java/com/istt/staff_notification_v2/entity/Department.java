@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "department")
 @EqualsAndHashCode(callSuper = false)
-public class Department implements Serializable{
+public class Department{
 	private static final long serialVersionUID = 1L;
 	
 	@Id

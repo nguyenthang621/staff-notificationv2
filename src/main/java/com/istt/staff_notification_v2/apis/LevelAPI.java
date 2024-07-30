@@ -43,13 +43,6 @@ public class LevelAPI {
 	@Autowired
 	private ExcelReadService excelReadService;
 
-	@GetMapping("/uploadleveldata")
-	public ResponseDTO<List<LevelDTO>> storeFilesIntoDB() throws EncryptedDocumentException, IOException, URISyntaxException, InvalidFormatException {
-
-		return ResponseDTO.<List<LevelDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(excelReadService.ReadDataFromExcel()).build();	
-		}
-
 	@PostMapping("")
 //	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')")
 	public ResponseDTO<LevelDTO> create(@RequestBody LevelDTO levelDTO) throws URISyntaxException {

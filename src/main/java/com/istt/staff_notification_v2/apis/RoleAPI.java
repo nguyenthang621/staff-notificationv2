@@ -25,6 +25,7 @@ import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
 import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
+import com.istt.staff_notification_v2.service.ExcelReadService;
 import com.istt.staff_notification_v2.service.RoleService;
 
 @RestController
@@ -104,5 +105,12 @@ public class RoleAPI {
 		List<Role> roles = roleService.findbyFeature(feature);
 		return ResponseDTO.<List<Role>>builder().code(String.valueOf(HttpStatus.OK.value())).data(roles).build();
 	}
-
+	
+	@GetMapping("/roleFromUser")
+	public ResponseDTO<List<RoleDTO>> getRoleFromUser(@CurrentUser UserPrincipal currentuser) throws URISyntaxException {
+		if(currentuser==null) throw new BadRequestAlertException("not found user", ENTITY_NAME, "missingdata");
+		
+		return ResponseDTO.<List<RoleDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(roleService.getRoleFromUser(currentuser.getUser_id())).build();
+	}
+	
 }

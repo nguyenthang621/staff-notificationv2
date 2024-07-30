@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent", "subordinatesOdoo" })
 //@EqualsAndHashCode(callSuper = false, exclude = { "levels", "department", "parent" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Employee implements Serializable {
+public class Employee{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "employee_id", updatable = false, nullable = false)

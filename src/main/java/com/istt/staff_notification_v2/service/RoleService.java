@@ -2,9 +2,11 @@ package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,9 +27,12 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
+import com.istt.staff_notification_v2.dto.FeatureDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.RoleDTO;
 import com.istt.staff_notification_v2.dto.SearchDTO;
+import com.istt.staff_notification_v2.entity.Feature;
+import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.Role;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.RoleRepo;
@@ -53,6 +58,7 @@ public interface RoleService {
 	List<RoleDTO> getRoleFromUser(String userId);
 	
 	List<RoleDTO> createAll(List<RoleDTO> roleDTO);
+	
 	List<Role> findbyFeature(String feature);
 	
 }
@@ -208,10 +214,18 @@ class RoleServiceImpl implements RoleService {
 
 	@Override
 	public List<RoleDTO> getRoleFromUser(String userId) {
-//		Optional<User> user = userRepo.findById(userId);
-//		List<Role> roles = roleRepo.findByGroupRole(user.get().getGroup());
-//		ModelMapper mapper = new ModelMapper();
-		return null;
+		User user = userRepo.findById(userId).orElseThrow(NoResultException::new);
+		Set<Role> roles = new HashSet<Role>();
+		if(user.getGroups().size()>0) {
+		for (Group group : user.getGroups()) {
+			if(user.getGroups().size()==0) continue;
+			roles.addAll(group.getRoles());		}
+		}
+		ModelMapper mapper = new ModelMapper();
+		if(roles.size()==0) return null;
+		return roles.stream()
+				  .map(employee -> mapper.map(employee, RoleDTO.class))
+				  .collect(Collectors.toList());
 	}
 
 	@Override

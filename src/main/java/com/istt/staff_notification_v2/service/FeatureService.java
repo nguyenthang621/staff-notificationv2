@@ -21,9 +21,11 @@ import com.istt.staff_notification_v2.dto.ResponseRoleDTO;
 import com.istt.staff_notification_v2.entity.Feature;
 import com.istt.staff_notification_v2.entity.Group;
 import com.istt.staff_notification_v2.entity.Role;
+import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.FeatureRepo;
 import com.istt.staff_notification_v2.repository.GroupRepo;
 import com.istt.staff_notification_v2.repository.RoleRepo;
+import com.istt.staff_notification_v2.repository.UserRepo;
 
 public interface FeatureService {
 	Set<FeatureDTO> getFeaturesFromRoles(Set<Role> roles);
@@ -37,6 +39,8 @@ public interface FeatureService {
 	FeatureDTO get (String id);
 	
 	List<FeatureDTO> getAll();
+	
+	List<FeatureDTO> getFeatureFromUser(String userId);
 }
 
 @Service
@@ -47,8 +51,12 @@ class FeatureServiceImpl implements FeatureService{
 	
 	@Autowired
 	private GroupRepo groupRepo;
+	
 	@Autowired
 	private RoleRepo roleRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
 	
 	@Override
 	public Set<FeatureDTO> getFeaturesFromRoles(Set<Role> roles) {
@@ -122,6 +130,26 @@ class FeatureServiceImpl implements FeatureService{
 		List<Feature> feature2 = featureRepo.findAll();
 		return feature2.stream()
 				  .map(employee -> modelMapper.map(employee, FeatureDTO.class))
+				  .collect(Collectors.toList());
+	}
+
+	@Override
+	public List<FeatureDTO> getFeatureFromUser(String userId) {
+		User user = userRepo.findById(userId).orElseThrow(NoResultException::new);
+		Set<Feature> features = new HashSet<Feature>();
+		if(user.getGroups().size()>0) {
+		for (Group group : user.getGroups()) {
+			if(user.getGroups().size()==0) continue;
+			for (Role role : group.getRoles()) {
+				if(role.getDescription().toLowerCase().equals("access")||role.getDescription().toLowerCase().equals("view"))
+					features.add(role.getFeature());
+			}
+		}
+		}
+		ModelMapper mapper = new ModelMapper();
+		if(features.size()==0) return null;
+		return features.stream()
+				  .map(employee -> mapper.map(employee, FeatureDTO.class))
 				  .collect(Collectors.toList());
 	}
 	

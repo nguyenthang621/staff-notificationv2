@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "businessdays")
-public class BusinessDays implements Serializable {
+public class BusinessDays {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "bussinessdays_id", updatable = false, nullable = false)

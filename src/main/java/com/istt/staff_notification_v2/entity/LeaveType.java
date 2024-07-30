@@ -16,7 +16,6 @@ import org.springframework.core.serializer.Deserializer;
 import org.springframework.core.serializer.Serializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.istt.staff_notification_v2.apis.AbstractAuditingEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Table(name = "leavetype")
 @EqualsAndHashCode(callSuper = false)
-public class LeaveType implements Serializable {
+public class LeaveType{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "leavetype_id", updatable = false, nullable = false)

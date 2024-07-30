@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "user")
 @EqualsAndHashCode(callSuper = false, exclude = { "groups", "employee" })
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class User implements Serializable{
+public class User{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "user_id", updatable = false, nullable = false)

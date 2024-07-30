@@ -14,6 +14,8 @@ public interface FeatureRepo extends JpaRepository<Feature, String> {
 	@Query("SELECT u FROM Feature u WHERE u.featureName = :x ")
 	Optional<Feature> findByFeatureName(@Param("x") String name);
 	
+	Boolean existsByFeatureName(String name);
+	
 	@Query("SELECT u FROM Feature u WHERE u.featureId = :x ")
 	Optional<Feature> findByFeatureId(@Param("x") String name);
 }

@@ -21,6 +21,8 @@ import com.istt.staff_notification_v2.dto.FeatureDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseGroupDTO;
 import com.istt.staff_notification_v2.dto.ResponseRoleDTO;
+import com.istt.staff_notification_v2.security.securityv2.CurrentUser;
+import com.istt.staff_notification_v2.security.securityv2.UserPrincipal;
 import com.istt.staff_notification_v2.service.FeatureService;
 import com.istt.staff_notification_v2.service.GroupService;
 @RestController
@@ -72,5 +74,12 @@ public class FeatureAPI {
 				.build();
 	}
 	
+	@GetMapping("/getFeature")
+	public ResponseDTO<List<FeatureDTO>> getFeatureFromUser(@CurrentUser UserPrincipal currentuser)
+			throws URISyntaxException {
+		if(currentuser==null) throw new BadRequestAlertException("not found user", ENTITY_NAME, "missingdata");
+		return ResponseDTO.<List<FeatureDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.getFeatureFromUser(currentuser.getUser_id()))
+				.build();
+	}
 	
 }

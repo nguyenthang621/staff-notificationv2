@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "level")
 @EqualsAndHashCode(callSuper = false)
-public class Level implements Serializable {
+public class Level {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "level_id", updatable = false, nullable = false)
