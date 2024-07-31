@@ -219,7 +219,8 @@ class RoleServiceImpl implements RoleService {
 		if(user.getGroups().size()>0) {
 		for (Group group : user.getGroups()) {
 			if(user.getGroups().size()==0) continue;
-			roles.addAll(group.getRoles());		}
+			roles.addAll(group.getRoles());		
+			}
 		}
 		ModelMapper mapper = new ModelMapper();
 		if(roles.size()==0) return null;
