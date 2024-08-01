@@ -470,25 +470,27 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	
 	@Override
 	public ResponseDTO<List<LeaveAprroveDTO>> getApproveCurrentDay() {
-//		List<LeaveAprroveDTO> leaveRequestDTOs = new ArrayList<>();
-//		ModelMapper mapper = new ModelMapper();
-//		DateRange dateRange = utils.getDate(new Date());
-//		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
-//		Optional<List<LeaveRequest>> leaveOptional = leaveRequestRepo.findByResponsedate(dateRange.getStartDate(), dateRange.getEndDate(), status);
-//		if(leaveOptional.isPresent()) {
-//			for (LeaveRequest leaveRequest : leaveOptional.get()) {
-//				LeaveAprroveDTO leaveAprroveDTO = new LeaveAprroveDTO();
-//				leaveAprroveDTO.setLeaveId(leaveRequest.getLeaveqequestId());
-//				leaveAprroveDTO.setFullName(leaveRequest.getEmployee().getFullname());
-//				leaveAprroveDTO.setDepartmentName(leaveRequest.getEmployee().getDepartment().getDepartmentName());
-//				leaveAprroveDTO.setStartDate(leaveRequest.getStartDate());
-//				leaveAprroveDTO.setEndDate();
-//			}
-//		}
-//		ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(leaveRequestDTOs, ResponseDTO.class);
-//		responseDTO.setData(leaveRequestDTOs);
-//		return responseDTO;
-		return null;
+		List<LeaveAprroveDTO> leaveRequestDTOs = new ArrayList<>();
+		ModelMapper mapper = new ModelMapper();
+		DateRange dateRange = utils.getDate(new Date());
+		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
+		Optional<List<LeaveRequest>> leaveOptional = leaveRequestRepo.findByResponsedate(dateRange.getStartDate(), dateRange.getEndDate(), status);
+//		logger.error(dateRange);
+		if(leaveOptional.isPresent()) {
+			for (LeaveRequest leaveRequest : leaveOptional.get()) {
+				LeaveAprroveDTO leaveAprroveDTO = new LeaveAprroveDTO();
+				leaveAprroveDTO.setLeaveId(leaveRequest.getLeaveqequestId());
+				leaveAprroveDTO.setFullName(leaveRequest.getEmployee().getFullname());
+				leaveAprroveDTO.setDepartmentName(leaveRequest.getEmployee().getDepartment().getDepartmentName());
+				leaveAprroveDTO.setStartDate(leaveRequest.getStartDate());
+				leaveAprroveDTO.setEndDate(utils.calculatorEndDate(leaveRequest.getStartDate(), leaveRequest.getDuration()));
+				leaveRequestDTOs.add(leaveAprroveDTO);
+			}
+		}
+		
+		ResponseDTO<List<LeaveAprroveDTO>> responseDTO = mapper.map(leaveRequestDTOs, ResponseDTO.class);
+		responseDTO.setData(leaveRequestDTOs);
+		return responseDTO;
 	}
 
 }

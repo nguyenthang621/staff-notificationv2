@@ -30,6 +30,7 @@ import org.zalando.problem.Status;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
+import com.istt.staff_notification_v2.dto.LeaveAprroveDTO;
 import com.istt.staff_notification_v2.dto.LoginRequest;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.TokenDTO;
@@ -144,10 +145,8 @@ public class AuthAPI {
 	}
 	
 	@GetMapping("/getLeave")
-	public ResponseDTO<Set<EmployeeLeaveDTO>> getLeave() throws URISyntaxException{
-		
-		return ResponseDTO.<Set<EmployeeLeaveDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceService.getEmployeeLeave())
-				.build();
+	public ResponseDTO<List<LeaveAprroveDTO>> getLeave() throws URISyntaxException{
+		return leaveRequestService.getApproveCurrentDay();
 	}
 	
 
