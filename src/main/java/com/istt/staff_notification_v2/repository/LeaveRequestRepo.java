@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,10 +39,9 @@ public interface LeaveRequestRepo extends JpaRepository<LeaveRequest, String> {
 	
 	Optional<List<LeaveRequest>> findByStatusOrderByResponseDateDesc(@Param("t") String status);
 	
-//	@Query("SELECT l FROM LeaveRequest l WHERE l.status = :t AND (l.responseDate between :x and :y) ORDER BY l.responseDate desc")
 	@Query("SELECT l FROM LeaveRequest l WHERE l.status like :z and l.requestDate between :x and :y ORDER BY l.requestDate desc")
-	Optional<List<LeaveRequest>> findByStatusReqdateDesc(@Param("x") Date startdate,@Param("y") Date enddate, @Param("z") String status);
-
+	Page<LeaveRequest> findByStatusReqdateDesc(@Param("z") String status,@Param("x") Date startDate, @Param("y") Date endDate, Pageable pageable);
+	
 	@Query("SELECT COUNT(l) FROM LeaveRequest l")
 	Optional<Long> returnCheckCount();
 

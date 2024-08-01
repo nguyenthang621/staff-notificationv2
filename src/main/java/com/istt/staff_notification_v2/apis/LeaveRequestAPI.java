@@ -3,6 +3,8 @@ package com.istt.staff_notification_v2.apis;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,7 @@ import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.entity.User;
 import com.istt.staff_notification_v2.repository.UserRepo;
@@ -74,10 +77,9 @@ public class LeaveRequestAPI {
 //				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
 //	}
 	
-	@GetMapping("/getLeaveThisMonth")
-	public ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth() {
-		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.getLeaveThisMonth()).build();
+	@PostMapping("/getLeaveThisMonth")
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(@RequestBody @Valid SearchDTO searchDTO) {
+		return leaveRequestService.getLeaveThisMonth(searchDTO);
 	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")

@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -33,7 +40,9 @@ import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
+import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.ResponseLeaveRequest;
+import com.istt.staff_notification_v2.dto.SearchDTO;
 import com.istt.staff_notification_v2.dto.SearchLeaveRequest;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.entity.LeaveRequest;
@@ -58,7 +67,7 @@ public interface LeaveRequestService {
 
 	LeaveRequestDTO get(String id);
 	
-	List<LeaveRequestDTO> getLeaveThisMonth();
+	ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(SearchDTO searchDTO);
 
 //	List<LeaveRequestDTO> testPheduyet(String id);
 	
@@ -387,16 +396,6 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		}
 	}
 
-	@Override
-	public List<LeaveRequestDTO> getLeaveThisMonth() {
-		DateRange dateRange = utils.getCurrentMonth();
-//		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
-		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusReqdateDesc(dateRange.getStartDate(), dateRange.getEndDate(), "%%");
-		if (resultOp.isEmpty())
-			return new ArrayList<>();
-		return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-				.collect(Collectors.toList());
-	}
 
 	@Override
 	public Set<EmployeeLeaveDTO> getApproved(String email) {
@@ -415,6 +414,40 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			employeeLeaveDTOs.add(employeeLeaveDTO);
 		}
 		return employeeLeaveDTOs;
+	}
+
+	@Override
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(SearchDTO searchDTO) {
+		List<Sort.Order> orders = Optional.ofNullable(searchDTO.getOrders()).orElseGet(Collections::emptyList).stream()
+				.map(order -> {
+					if (order.getOrder().equals(SearchDTO.ASC))
+						return Sort.Order.asc(order.getProperty());
+
+					return Sort.Order.desc(order.getProperty());
+				}).collect(Collectors.toList());
+		Pageable pageable = PageRequest.of(searchDTO.getPage(), searchDTO.getSize(), Sort.by(orders));
+		String status = "%%";
+		String date= "";
+		DateRange dateRange = utils.getCurrentMonth();
+		Date startDate = dateRange.getStartDate();
+		Date endDate = dateRange.getEndDate();
+		if(StringUtils.hasText(searchDTO.getFilterBys().get("status"))) {
+			status = String.valueOf(searchDTO.getFilterBys().get("status")).toUpperCase();
+		}
+		if(StringUtils.hasText(searchDTO.getFilterBys().get("startDate"))) {
+			startDate = utils.format(String.valueOf(searchDTO.getFilterBys().get("startDate")));
+		}
+		if(StringUtils.hasText(searchDTO.getFilterBys().get("endDate"))) {
+				endDate = utils.format(String.valueOf(searchDTO.getFilterBys().get("endDate")));
+		}
+		if(!props.getSTATUS_LEAVER_REQUEST().contains(status)) status = "%%";
+		ModelMapper mapper = new ModelMapper();
+		Page<LeaveRequest> page = leaveRequestRepo.findByStatusReqdateDesc(status,startDate, endDate, pageable);
+			List<LeaveRequestDTO> leaveRequestDTOs = page.getContent().stream().map(l -> mapper.map(l, LeaveRequestDTO.class))
+					.collect(Collectors.toList());
+			ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(page, ResponseDTO.class);
+			responseDTO.setData(leaveRequestDTOs);
+			return responseDTO;
 	}
 
 }

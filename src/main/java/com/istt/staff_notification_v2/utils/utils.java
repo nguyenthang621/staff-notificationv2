@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.utils;
 
 import java.text.Normalizer;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -274,8 +275,15 @@ public class utils {
 	public static DateRange getCurrentMonth() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		Date startDate = calendar.getTime();
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
 		Date endDate = calendar.getTime();
 
 		long durationInMillis = endDate.getTime() - startDate.getTime();
@@ -283,7 +291,6 @@ public class utils {
 
 		return new DateRange(startDate, endDate, durationInDays);
 	}
-	
 	public static String changeName(String input) {
         // Normalize the input string to decompose accents
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
@@ -300,6 +307,24 @@ public class utils {
         String remainingString = result.substring(0, lastSpaceIndex);
         return lastWord + " " + remainingString;
     }
+	
+	 public static Date format(String dateString){
+	        String dateFormat = "dd/MM/yyyy";
+
+	        Date currentDate = new Date();
+
+	        // Create a SimpleDateFormat object
+	        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+	        try {
+	            // Parse the string into a Date object
+	            currentDate = formatter.parse(dateString);
+
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	        }
+	        return currentDate;
+	    }
 	
 	public static DateRange getDate(Date date) {
 		DateRange dateRange = new DateRange();
