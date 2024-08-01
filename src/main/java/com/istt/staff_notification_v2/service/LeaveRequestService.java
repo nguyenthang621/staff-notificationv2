@@ -38,6 +38,7 @@ import com.istt.staff_notification_v2.configuration.ApplicationProperties.Status
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
+import com.istt.staff_notification_v2.dto.LeaveAprroveDTO;
 import com.istt.staff_notification_v2.dto.LeaveRequestDTO;
 import com.istt.staff_notification_v2.dto.MailRequestDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
@@ -68,12 +69,14 @@ public interface LeaveRequestService {
 	LeaveRequestDTO get(String id);
 	
 	ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(SearchDTO searchDTO);
-
-//	List<LeaveRequestDTO> testPheduyet(String id);
+	ResponseDTO<List<LeaveRequestDTO>> getAllLeaveThisMonth();
 	
 	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
 	Set<EmployeeLeaveDTO> getApproved(String email);
+	
+	ResponseDTO<List<LeaveAprroveDTO>> getApproveCurrentDay();
+	
 }
 
 @Service
@@ -448,6 +451,44 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(page, ResponseDTO.class);
 			responseDTO.setData(leaveRequestDTOs);
 			return responseDTO;
+	}
+
+	@Override
+	public ResponseDTO<List<LeaveRequestDTO>> getAllLeaveThisMonth() {
+		List<LeaveRequestDTO> leaveRequestDTOs = new ArrayList<>();
+		ModelMapper mapper = new ModelMapper();
+		DateRange dateRange = utils.getCurrentMonth();
+		Optional<List<LeaveRequest>> leaveOptional = leaveRequestRepo.findByReqdate(dateRange.getStartDate(), dateRange.getEndDate());
+		if(leaveOptional.isPresent()) {
+			leaveRequestDTOs = leaveOptional.get().stream().map(l -> mapper.map(l, LeaveRequestDTO.class))
+					.collect(Collectors.toList());
+		}
+		ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(leaveRequestDTOs, ResponseDTO.class);
+		responseDTO.setData(leaveRequestDTOs);
+		return responseDTO;
+	}
+	
+	@Override
+	public ResponseDTO<List<LeaveAprroveDTO>> getApproveCurrentDay() {
+//		List<LeaveAprroveDTO> leaveRequestDTOs = new ArrayList<>();
+//		ModelMapper mapper = new ModelMapper();
+//		DateRange dateRange = utils.getDate(new Date());
+//		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
+//		Optional<List<LeaveRequest>> leaveOptional = leaveRequestRepo.findByResponsedate(dateRange.getStartDate(), dateRange.getEndDate(), status);
+//		if(leaveOptional.isPresent()) {
+//			for (LeaveRequest leaveRequest : leaveOptional.get()) {
+//				LeaveAprroveDTO leaveAprroveDTO = new LeaveAprroveDTO();
+//				leaveAprroveDTO.setLeaveId(leaveRequest.getLeaveqequestId());
+//				leaveAprroveDTO.setFullName(leaveRequest.getEmployee().getFullname());
+//				leaveAprroveDTO.setDepartmentName(leaveRequest.getEmployee().getDepartment().getDepartmentName());
+//				leaveAprroveDTO.setStartDate(leaveRequest.getStartDate());
+//				leaveAprroveDTO.setEndDate();
+//			}
+//		}
+//		ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(leaveRequestDTOs, ResponseDTO.class);
+//		responseDTO.setData(leaveRequestDTOs);
+//		return responseDTO;
+		return null;
 	}
 
 }

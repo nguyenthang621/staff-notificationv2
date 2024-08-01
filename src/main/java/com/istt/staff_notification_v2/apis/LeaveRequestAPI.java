@@ -82,6 +82,11 @@ public class LeaveRequestAPI {
 		return leaveRequestService.getLeaveThisMonth(searchDTO);
 	}
 	
+	@GetMapping("/getAllLeaveThisMonth")
+	public ResponseDTO<List<LeaveRequestDTO>> getAllLeaveThisMonth() {
+		return leaveRequestService.getAllLeaveThisMonth();
+	}
+	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@GetMapping("")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
