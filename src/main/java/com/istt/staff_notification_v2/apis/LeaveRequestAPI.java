@@ -74,10 +74,10 @@ public class LeaveRequestAPI {
 //				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
 //	}
 	
-	@GetMapping("/getApprovedThisWeek")
-	public ResponseDTO<List<LeaveRequestDTO>> test() {
+	@GetMapping("/getLeaveThisMonth")
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth() {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.getApprovedThisWeek()).build();
+				.data(leaveRequestService.getLeaveThisMonth()).build();
 	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_ACCESS')")

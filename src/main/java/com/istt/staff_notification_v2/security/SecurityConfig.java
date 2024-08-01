@@ -70,22 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/auth/**") // dev
 				// **
 				.permitAll().anyRequest().authenticated()
-				.and()
-//				.logout() 
-//                .logoutSuccessHandler(myLogoutSuccessHandler)
-//                .invalidateHttpSession(false)
-//                .logoutSuccessUrl("/logout.html?logSucc=true")
-////                .deleteCookies("JSESSIONID")
-//                .permitAll()
-				
-//				.logout()
-//                .logoutSuccessUrl("/login?logout")
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .permitAll();
-				
-				
-				
 				;
 //
 //		// Add our custom JWT security filter

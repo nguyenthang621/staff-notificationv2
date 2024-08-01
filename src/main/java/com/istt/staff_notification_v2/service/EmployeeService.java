@@ -46,6 +46,7 @@ import com.istt.staff_notification_v2.configuration.EmployeeComparator;
 import com.istt.staff_notification_v2.configuration.EmployeeHireDateComparator;
 import com.istt.staff_notification_v2.dto.EmployeeDTO;
 import com.istt.staff_notification_v2.dto.EmployeeDependence;
+import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
 import com.istt.staff_notification_v2.dto.EmployeeRelationshipResponse;
 import com.istt.staff_notification_v2.dto.LevelDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
@@ -123,6 +124,8 @@ public interface EmployeeService {
 	
 	List<Employee> setLevelIfLevelNull();
 	List<EmployeeDTO> testLevel();
+	
+	List<EmployeeDTO> countOffMinus();
 
 }
 
@@ -424,9 +427,12 @@ class EmployeeServiceImpl implements EmployeeService {
 		String email = null;
 		String department = null;
 		String status = null;
+		float countOfDayOff = 0;
 
+		logger.error("0 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
+		
 		if (StringUtils.hasText(searchDTO.getFilterBys().get("email"))) {
-			System.out.println("1 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
+			logger.error("1 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
 			email = String.valueOf(searchDTO.getFilterBys().get("email"));
 			status = String.valueOf(searchDTO.getFilterBys().get("status"));
 
@@ -440,13 +446,31 @@ class EmployeeServiceImpl implements EmployeeService {
 			responseDTO.setData(employeeDTOs);
 
 			return responseDTO;
-		} else if (StringUtils.hasText(searchDTO.getFilterBys().get("department_name"))) {
+		} else if (StringUtils.hasText(searchDTO.getFilterBys().get("departmentName"))) {
 			status = String.valueOf(searchDTO.getFilterBys().get("status"));
 			System.out.println("3 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
-			department = String.valueOf(searchDTO.getFilterBys().get("department_name"));
-			Page<Employee> page = employeeRepo.searchByFullnameAndDepartment(searchDTO.getValue(), department, status,
+			department = String.valueOf(searchDTO.getFilterBys().get("departmentName"));
+			logger.error(department);
+			Page<Employee> page = employeeRepo.searchByFullnameAndDepartment(searchDTO.getValue(), "Quản trị", status,
 					pageable);
 
+			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+			for (Employee employee : page.getContent()) {
+				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
+				employeeDTOs.add(employeeDTO);
+			}
+			
+			ResponseDTO<List<EmployeeDTO>> responseDTO = new ModelMapper().map(page, ResponseDTO.class);
+			responseDTO.setData(employeeDTOs);
+			return responseDTO;
+
+		}else if (StringUtils.hasText(searchDTO.getFilterBys().get("countOfDayOff"))) {
+			status = String.valueOf(searchDTO.getFilterBys().get("status"));
+			System.out.println("4 " + searchDTO.getFilterBys() + " " + searchDTO.getValue());
+			countOfDayOff = Float.valueOf(searchDTO.getFilterBys().get("countOfDayOff"));
+			logger.error("countOfDayOff:"+countOfDayOff);
+			Page<Employee> page = employeeRepo.searchByFullnameAndCountOff(searchDTO.getValue(), countOfDayOff, status,
+					pageable);
 			List<EmployeeDTO> employeeDTOs = new ArrayList<>();
 			for (Employee employee : page.getContent()) {
 				EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
@@ -905,6 +929,13 @@ class EmployeeServiceImpl implements EmployeeService {
 		System.err.println(employees2.size());
 		if(employees2.size()==0) return null;
 		return employees2.stream().map(em -> mapper.map(em, EmployeeDTO.class)).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public List<EmployeeDTO> countOffMinus() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

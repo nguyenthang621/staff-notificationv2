@@ -58,7 +58,7 @@ public interface LeaveRequestService {
 
 	LeaveRequestDTO get(String id);
 	
-	List<LeaveRequestDTO> getApprovedThisWeek();
+	List<LeaveRequestDTO> getLeaveThisMonth();
 
 //	List<LeaveRequestDTO> testPheduyet(String id);
 	
@@ -388,10 +388,10 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public List<LeaveRequestDTO> getApprovedThisWeek() {
-		DateRange dateRange = utils.getCurrentWeek();
-		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
-		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusResdateDesc(dateRange.getStartDate(), dateRange.getEndDate(), status);
+	public List<LeaveRequestDTO> getLeaveThisMonth() {
+		DateRange dateRange = utils.getCurrentMonth();
+//		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
+		Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusReqdateDesc(dateRange.getStartDate(), dateRange.getEndDate(), "%%");
 		if (resultOp.isEmpty())
 			return new ArrayList<>();
 		return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
@@ -410,15 +410,10 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		for (LeaveRequest leaveRequest : listOp.get()) {
 			EmployeeLeaveDTO employeeLeaveDTO = new EmployeeLeaveDTO();
 			employeeLeaveDTO.setId(leaveRequest.getLeaveqequestId());
-//			logger.error("employee_1:"+leaveRequest.getEmployee().getFullname());
 			employeeLeaveDTO.setEmployeeName(leaveRequest.getEmployee().getFullname());
 			employeeLeaveDTO.setEmployeeDepartment(leaveRequest.getEmployee().getDepartment().getDepartmentName());
 			employeeLeaveDTOs.add(employeeLeaveDTO);
 		}
-//		for (EmployeeLeaveDTO employeeLeaveDTO2 : employeeLeaveDTOs) {
-//			logger.error("employee_service:"+employeeLeaveDTO2.getEmployeeName());
-//		}
-//		System.err.println(employeeLeaveDTOs.size() +"-/-"+listOp.get().size());
 		return employeeLeaveDTOs;
 	}
 

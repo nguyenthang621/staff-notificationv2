@@ -27,10 +27,14 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	Page<Employee> searchByFullnameAndEmail(@Param("x") String name, @Param("y") String email,
 			@Param("s") String status, Pageable pageable);
 
-	@Query("SELECT u.employeeId, u.fullname, u.phone, u.email, u.department, u.avatar, u.status, u.dateofbirth, u.levels FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y AND u.status = :s")
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x AND u.status = :s and u.department.departmentName = :y")
 	Page<Employee> searchByFullnameAndDepartment(@Param("x") String name, @Param("y") String department,
 			@Param("s") String status, Pageable pageable);
 
+	@Query("SELECT u FROM Employee u WHERE u.fullname LIKE :x AND u.status = :s and u.countOfDayOff < :y")
+	Page<Employee> searchByFullnameAndCountOff(@Param("x") String name, @Param("y") float countOff,
+			@Param("s") String status, Pageable pageable);
+	
 	@Query("SELECT e FROM Employee e WHERE e.email = :x ")
 	Employee findByEmail(@Param("x") String value);
 
@@ -57,6 +61,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 
 	@Query("SELECT a from Employee a")
 	List<Employee> getAll();
+	
 	@Query("SELECT a from Employee a where a.jobTitle like :x")
 	List<Employee> filterLevel(@Param("x") String x);
 	
@@ -64,4 +69,12 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	
 	@Query("SELECT a from Employee a where a.parent.employeeId = :x")
 	List<Employee> findByParent(@Param("x") String parentEmployeeId);
+	
+//	@Query("SELECT e FROM Employee e WHERE e.status = :x and e.countOfDayOff <0")
+//	Optional<List<Employee>> getByEmployeeStatusAndCalCountOff(@Param("x") String x);
+
+//	@Query("SELECT u.employeeId, u.fullname, u.phone, u.email, u.department, u.avatar, u.status, u.dateofbirth, u.levels FROM Employee u WHERE u.fullname LIKE :x and u.department.departmentName LIKE :y AND u.status = :s")
+//	Page<Employee> searchByCountOff(@Param("x") String name, @Param("y") String department,
+//			@Param("s") String status, Pageable pageable);
+	
 }
