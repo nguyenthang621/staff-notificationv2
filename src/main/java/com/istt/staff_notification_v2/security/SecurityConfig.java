@@ -65,13 +65,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("**").hasIpAddress("127.0.0.1")
+				.antMatchers("/attendance/special_resource").access("hasIpAddress('127.0.0.1/32')")
 				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
 						"/**/*.css", "/**/*.js").permitAll()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/auth/**","/businessdays/search") // dev
 				.permitAll()				
 				.anyRequest().authenticated()
-				
 				;
 //
 //		// Add our custom JWT security filter

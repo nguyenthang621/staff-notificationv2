@@ -99,6 +99,12 @@ public class AttendanceAPI {
 	public ResponseDTO<List<AttendanceDTO>> search(@RequestBody @Valid SearchAttendence SearchAttendence) {
 		return attendanceService.search(SearchAttendence);
 	}
+	
+	@PostMapping("/special_resource")
+	public ResponseDTO<List<AttendanceDTO>> search2(@RequestBody @Valid SearchAttendence SearchAttendence) {
+		return attendanceService.search(SearchAttendence);
+	}
+	
 //	@PreAuthorize("hasRole('ROLE_ATTENDANCE_SEARCHSTATUS')")
 	@PostMapping("/searchByEmployeeStatus")
 	public ResponseDTO<List<AttendanceDTO>> searchbyName(@RequestBody @Valid SearchDTO searchDTO) {
