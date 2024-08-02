@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.istt.staff_notification_v2.dto.ILeaveMonthDTO;
+import com.istt.staff_notification_v2.dto.LeaveMonthDTO;
 import com.istt.staff_notification_v2.entity.Attendance;
 import com.istt.staff_notification_v2.entity.Employee;
 
@@ -63,6 +65,8 @@ public interface AttendanceRepo extends JpaRepository<Attendance, String> {
 	@Query("Select a from Attendance a where a.employee.employeeId = :e and( a.startDate between :x and :y)")
 	Optional<List<Attendance>> existsAttendance(@Param("x") Date startDate, @Param("y") Date endDate, @Param("e") String employeeId);
 
+	@Query("Select COUNT(DISTINCT c.employee.employeeId) as countEmployee, c.month as month, c.year as year from Attendance c where c.year = :x group by c.month order by c.month desc")
+	Optional<List<ILeaveMonthDTO>> countLeaveMonth(@Param("x") Long year);
 	
 	
 }

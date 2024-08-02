@@ -98,6 +98,9 @@ class MailServiceImpl implements MailService {
 
 			javaMailSender.send(email);
 			
+//			logger.error(helper.getMimeMessage().getSubject());
+			
+			
 			logger.error("Email sent successful ");
 
 		} catch (MessagingException e) {

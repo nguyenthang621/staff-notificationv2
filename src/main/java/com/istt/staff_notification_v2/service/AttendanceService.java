@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,8 @@ import com.istt.staff_notification_v2.configuration.ApplicationProperties;
 import com.istt.staff_notification_v2.configuration.ApplicationProperties.StatusEmployeeRef;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
 import com.istt.staff_notification_v2.dto.EmployeeLeaveDTO;
+import com.istt.staff_notification_v2.dto.ILeaveMonthDTO;
+import com.istt.staff_notification_v2.dto.LeaveMonthDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
@@ -70,6 +74,8 @@ public interface AttendanceService {
 	List<AttendanceDTO> getByCurrentEmployee(String id);
 	
 	Set<EmployeeLeaveDTO> getEmployeeLeave();
+	
+	List<LeaveMonthDTO> countLeaveMont(Long year);
 
 }
 
@@ -94,6 +100,7 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Autowired 
 	private UserRepo userRepo;
 	
+	private static final Logger logger = LogManager.getLogger(AttendanceServiceImpl.class);
 	
 
 	private static final String ENTITY_NAME = "isttAttendance";
@@ -379,6 +386,23 @@ class AttendanceServiceImpl implements AttendanceService {
 			employeeLeaveDTOs.add(employeeLeaveDTO);
 		}
 		return employeeLeaveDTOs;
+	}
+
+	@Override
+	public List<LeaveMonthDTO> countLeaveMont(Long year) {
+		Optional<List<ILeaveMonthDTO>> countLeaveMonth = attendanceRepo.countLeaveMonth(year);
+		List<LeaveMonthDTO> list = new ArrayList<LeaveMonthDTO>();
+		if(countLeaveMonth.isPresent()) {
+			for (ILeaveMonthDTO iLeaveMonthDTO : countLeaveMonth.get()) {
+				LeaveMonthDTO leaveMonthDTO = new LeaveMonthDTO();
+				leaveMonthDTO.setCountEmployee(iLeaveMonthDTO.getCountEmployee());
+				leaveMonthDTO.setYear(iLeaveMonthDTO.getYear());
+				leaveMonthDTO.setMonth(iLeaveMonthDTO.getMonth());
+				leaveMonthDTO.setId(leaveMonthDTO.getMonth().toString()+leaveMonthDTO.getYear());
+				list.add(leaveMonthDTO);
+			}
+		}
+		return list;
 	}
 	
 

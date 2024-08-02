@@ -203,7 +203,6 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 			// Excute send mail
 			if (!sendNotification(mailRequestEachEmployee))
 				throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("ERROR SEND MAIL").build();
-			logger.error("mail sending");
 			// Commit leaveRequest
 			leaveRequestRepo.save(leaveRequest);
 			return mailRequestDTO;

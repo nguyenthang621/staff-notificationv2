@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.istt.staff_notification_v2.apis.errors.BadRequestAlertException;
 import com.istt.staff_notification_v2.dto.AttendanceDTO;
+import com.istt.staff_notification_v2.dto.LeaveMonthDTO;
 import com.istt.staff_notification_v2.dto.ResponseDTO;
 import com.istt.staff_notification_v2.dto.SearchAttendence;
 import com.istt.staff_notification_v2.dto.SearchDTO;
@@ -38,6 +41,8 @@ public class AttendanceAPI {
 	private AttendanceService attendanceService;
 
 	private static final String ENTITY_NAME = "isttAttendance";
+	private static final Logger logger = LogManager.getLogger(AttendanceAPI.class);
+
 
 	
 //	@PreAuthorize("hasRole('ROLE_ATTENDANCE_CREATE')&& has('ROLE_ATTENDANCE_ACCESS')")
@@ -165,6 +170,14 @@ public class AttendanceAPI {
 		List<AttendanceDTO> attendanceDTOs =
 		attendanceService.getByCurrentEmployee(currentUser.getUser_id());
 		return ResponseDTO.<List<AttendanceDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceDTOs)
+				.build();
+	}
+	
+	@GetMapping("/test/{year}")
+	public ResponseDTO<List<LeaveMonthDTO>> test(@PathVariable(value = "year") Long year)
+			throws URISyntaxException {
+		
+		return ResponseDTO.<List<LeaveMonthDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceService.countLeaveMont(year))
 				.build();
 	}
 
