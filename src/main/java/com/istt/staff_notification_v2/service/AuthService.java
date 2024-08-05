@@ -114,7 +114,6 @@ class AuthServiceImpl implements AuthService {
 	@Override
 	public ResponseDTO<String> signin(LoginRequest loginRequest, User user) {
 		try {
-//			System.err.println("saveuser");
 
 			Authentication authentication = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), null));
@@ -124,24 +123,26 @@ class AuthServiceImpl implements AuthService {
 			String accessToken = tokenProvider.generateAccessToken(authentication);
 			String refreshToken = tokenProvider.generateRefreshToken(user.getUsername());
 			
-//			List<String> response = getOdooSession(loginRequest);
-//			if (response == null)
-//				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
-//			String session_id = response.get(0);
-//			Long expired = Long.valueOf(response.get(1));
-//
-//			if (session_id == null || session_id.isEmpty()) {
-//				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
-//			}
+			List<String> response = getOdooSession(loginRequest);
+			if (response == null)
+				throw new BadRequestAlertException("Bad request: response is null !!!", ENTITY_NAME, "Password wrong");
+			String session_id = response.get(0);
+			Long expired = Long.valueOf(response.get(1));
+
+			if (session_id == null || session_id.isEmpty()) {
+				throw new BadRequestAlertException("Bad request: Not session_id !!!", ENTITY_NAME, "Password wrong");
+			}
 
 //			user.setAccessToken(accessToken);
-//			user.setRefreshToken(refreshToken);
-//			userRepo.save(user);
+			user.setRefreshToken(refreshToken);
+			user.setSessionId(session_id);
+			
+			userRepo.save(user);
 
-//			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
-//					.sessionId(session_id).refreshToken(refreshToken).build();
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
-					.refreshToken(refreshToken).build();
+					.sessionId(session_id).refreshToken(refreshToken).build();
+//			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
+//					.refreshToken(refreshToken).build();
 
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();

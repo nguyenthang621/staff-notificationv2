@@ -391,9 +391,15 @@ class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public List<LeaveMonthDTO> countLeaveMont(Long year) {
 		Optional<List<ILeaveMonthDTO>> countLeaveMonth = attendanceRepo.countLeaveMonth(year);
-		List<LeaveMonthDTO> list = new ArrayList<LeaveMonthDTO>(
-				
-				);
+		List<LeaveMonthDTO> list = new ArrayList<LeaveMonthDTO>();
+		for (int i = 1; i <13; i++) {
+			LeaveMonthDTO leaveMonthDTO = new LeaveMonthDTO();
+			leaveMonthDTO.setCountEmployee(0);
+			leaveMonthDTO.setYear(year);
+			leaveMonthDTO.setMonth((long) i);
+			leaveMonthDTO.setId(leaveMonthDTO.getMonth().toString()+leaveMonthDTO.getYear());
+			list.add(leaveMonthDTO);
+		}
 		if(countLeaveMonth.isPresent()) {
 			for (ILeaveMonthDTO iLeaveMonthDTO : countLeaveMonth.get()) {
 				LeaveMonthDTO leaveMonthDTO = new LeaveMonthDTO();
