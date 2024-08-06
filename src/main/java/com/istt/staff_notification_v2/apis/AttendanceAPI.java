@@ -45,7 +45,7 @@ public class AttendanceAPI {
 
 
 	
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_CREATE')&& has('ROLE_ATTENDANCE_ACCESS')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_CREATE')&& hasRole('ROLE_ATTENDANCE_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<AttendanceDTO> create(@RequestBody @Valid AttendanceDTO attendanceDTO)
 			throws URISyntaxException {
@@ -57,7 +57,7 @@ public class AttendanceAPI {
 		return ResponseDTO.<AttendanceDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(attendanceDTO)
 				.build();
 	}
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_DELETE')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_DELETE')&& hasRole('ROLE_ATTENDANCE_ACCESS')")
 	@DeleteMapping("/deletebyList")
 	public ResponseDTO<Void> delete(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 		if (ids == null) {
@@ -66,7 +66,7 @@ public class AttendanceAPI {
 		attendanceService.deletebylistId(ids);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_DELETE')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_DELETE')&& hasRole('ROLE_ATTENDANCE_ACCESS')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		if (id == null) {
@@ -76,7 +76,7 @@ public class AttendanceAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_GET')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/{id}")
 	public ResponseDTO<AttendanceDTO> get(@PathVariable(value = "id") String id) {
 		if (id == null) {
@@ -85,7 +85,7 @@ public class AttendanceAPI {
 		return ResponseDTO.<AttendanceDTO>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(attendanceService.get(id)).build();
 	}
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_GETTYPE')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/type/{type}")
 	public ResponseDTO<List<AttendanceDTO>> getStatus(@PathVariable(value = "type") String type) {
 		if (type == null) {
@@ -94,7 +94,7 @@ public class AttendanceAPI {
 		return ResponseDTO.<List<AttendanceDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(attendanceService.getStatus(type)).build();
 	}
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_SEARCH')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@PostMapping("/search")
 	public ResponseDTO<List<AttendanceDTO>> search(@RequestBody @Valid SearchAttendence SearchAttendence) {
 		return attendanceService.search(SearchAttendence);
@@ -105,13 +105,13 @@ public class AttendanceAPI {
 		return attendanceService.search(SearchAttendence);
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_SEARCHSTATUS')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@PostMapping("/searchByEmployeeStatus")
 	public ResponseDTO<List<AttendanceDTO>> searchbyName(@RequestBody @Valid SearchDTO searchDTO) {
 		return attendanceService.searchByEmployeeName(searchDTO);
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_UPDATE')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_UPDATE')")
 	@PutMapping("")
 	public ResponseDTO<AttendanceDTO> update(@RequestBody @Valid AttendanceDTO attendanceDTO)
 			throws URISyntaxException {
@@ -124,13 +124,13 @@ public class AttendanceAPI {
 				.build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_GETALL')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/getAll")
 	public List<AttendanceDTO> getAll() {
 		return attendanceService.getAll();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_DAY')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/api/days-in-period")
 	public long getDaysInPeriod(@RequestParam int startDay, @RequestParam int endDay, @RequestParam int month,
 			@RequestParam int year) {
@@ -155,7 +155,7 @@ public class AttendanceAPI {
 		}
 	}
 
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_MONTH')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/api/days-in-month")
 	public int getDaysInMonth(@RequestParam int year, @RequestParam int month) {
 		try {
@@ -166,7 +166,7 @@ public class AttendanceAPI {
 		}
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')")
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')")
 	@GetMapping("/get")
 	public ResponseDTO<List<AttendanceDTO>> myattendance(@CurrentUser UserPrincipal currentUser)
 			throws URISyntaxException {
@@ -179,6 +179,7 @@ public class AttendanceAPI {
 				.build();
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ATTENDANCE_ACCESS')&&hasRole('ROLE_ATTENDANCE_VIEW')")
 	@GetMapping("/test/{year}")
 	public ResponseDTO<List<LeaveMonthDTO>> test(@PathVariable(value = "year") Long year)
 			throws URISyntaxException {

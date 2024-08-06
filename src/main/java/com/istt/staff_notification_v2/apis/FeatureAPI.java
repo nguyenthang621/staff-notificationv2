@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,13 +34,14 @@ public class FeatureAPI {
 
 	private static final String ENTITY_NAME = "isttFeature";
 	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@GetMapping("/{id}")
 	public ResponseDTO<FeatureDTO> get(@PathVariable(value = "id") String id) {
 		if(id == null) throw new BadRequestAlertException("Not Found Id", ENTITY_NAME, "exists");
 		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.get(id))
 				.build();
 	}
-	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<FeatureDTO> create(@RequestBody @Valid FeatureDTO featureDTO)
 			throws URISyntaxException {
@@ -47,7 +49,7 @@ public class FeatureAPI {
 		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureDTO)
 				.build();
 	}
-	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@GetMapping("/getAll")
 	public ResponseDTO<List<FeatureDTO>> getAll()
 			throws URISyntaxException {
@@ -57,7 +59,7 @@ public class FeatureAPI {
 				.build();
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@GetMapping("/filter/{id}")
 	public ResponseDTO<FeatureDTO> filter(@PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -65,7 +67,7 @@ public class FeatureAPI {
 		return ResponseDTO.<FeatureDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterRole(id))
 				.build();
 	}
-	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@GetMapping("/filterall")
 	public ResponseDTO<List<FeatureDTO>> filterall()
 			throws URISyntaxException {
@@ -73,7 +75,7 @@ public class FeatureAPI {
 		return ResponseDTO.<List<FeatureDTO>>builder().code(String.valueOf(HttpStatus.OK.value())).data(featureService.filterALL())
 				.build();
 	}
-	
+	@PreAuthorize("hasRole('ROLE_FEATURE_VIEW')&&hasRole('ROLE_FEATURE_ACCESS')")
 	@GetMapping("/getFeature")
 	public ResponseDTO<List<FeatureDTO>> getFeatureFromUser(@CurrentUser UserPrincipal currentuser)
 			throws URISyntaxException {

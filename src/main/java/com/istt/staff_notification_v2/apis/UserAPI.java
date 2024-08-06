@@ -35,7 +35,7 @@ public class UserAPI {
 
 	private static final String ENTITY_NAME = "isttUser";
 
-//	@PreAuthorize("hasRole('ROLE_USER_CREATE')")
+	@PreAuthorize("hasRole('ROLE_USER_CREATE')&&hasRole('ROLE_USER_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<UserDTO> create(@RequestBody UserDTO userDTO) throws URISyntaxException {
 //		System.out.println("=========================username: " + userDTO.getUsername());
@@ -47,7 +47,7 @@ public class UserAPI {
 
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER_GET')")
+	@PreAuthorize("hasRole('ROLE_USER_VIEW')&&hasRole('ROLE_USER_ACCESS')")
 	@GetMapping("/{id}")
 	// @PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseDTO<UserResponse> get(@PathVariable(value = "id") String id) {
@@ -55,20 +55,20 @@ public class UserAPI {
 				.build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER_UPDATE_PASSWORD')")
+	@PreAuthorize("hasRole('ROLE_USER_UPDATE')&&hasRole('ROLE_USER_ACCESS')")
 	@PutMapping("/update-password")
 	public ResponseDTO<Void> updatePassword(@RequestBody @Valid UpdatePassword updatePassword) throws IOException {
 		userService.updatePassword(updatePassword);
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER_SEARCH')")
+	@PreAuthorize("hasRole('ROLE_USER_VIEW')&&hasRole('ROLE_USER_ACCESS')")
 	@PostMapping("/search")
 	public ResponseDTO<List<UserResponse>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return userService.search(searchDTO);
 	}
 
-//	@PreAuthorize("hasRole('ROLE_USER_DELETE')")
+	@PreAuthorize("hasRole('ROLE_USER_DELETE')&&hasRole('ROLE_USER_ACCESS')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		if (id == null) {

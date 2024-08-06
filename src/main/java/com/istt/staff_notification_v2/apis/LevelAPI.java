@@ -44,7 +44,7 @@ public class LevelAPI {
 	private ExcelReadService excelReadService;
 
 	@PostMapping("")
-//	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_CREATE')&&hasRole('ROLE_LEVEL_ACCESS')")
 	public ResponseDTO<LevelDTO> create(@RequestBody LevelDTO levelDTO) throws URISyntaxException {
 		if (levelDTO.getLevelCode() == null || levelDTO.getLevelName() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
@@ -53,7 +53,7 @@ public class LevelAPI {
 		return ResponseDTO.<LevelDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(levelDTO).build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')&&hasRole('ROLE_LEVEL_ACCESS')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "id") String id)
 			throws URISyntaxException {
@@ -64,13 +64,13 @@ public class LevelAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_LEVEL_SEARCH')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_VIEW')&&hasRole('ROLE_LEVEL_ACCESS')")
 	@PostMapping("/search")
 	public ResponseDTO<List<LevelDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return levelService.search(searchDTO);
 	}
 
-//	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_DELETE')&&hasRole('ROLE_LEVEL_ACCESS')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 
@@ -81,7 +81,7 @@ public class LevelAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
-//	@PreAuthorize("hasRole('ROLE_LEVEL_UPDATE')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_UPDATE')&&hasRole('ROLE_LEVEL_ACCESS')")
 	@PutMapping("/")
 	public ResponseDTO<LevelDTO> update(@RequestBody @Valid LevelDTO levelDTO) throws IOException {
 		levelService.update(levelDTO);
@@ -89,7 +89,7 @@ public class LevelAPI {
 
 	}
 
-//	@PreAuthorize("hasRole('ROLE_LEVEL_GETALL')")
+	@PreAuthorize("hasRole('ROLE_LEVEL_VIEW')&&hasRole('ROLE_LEVEL_ACCESS')")
 	@GetMapping("/all")
 	public ResponseDTO<List<LevelDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<LevelDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
