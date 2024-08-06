@@ -60,8 +60,10 @@ public interface LeaveRequestService {
 //	LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO);
 	MailRequestDTO create(@RequestBody MailRequestDTO mailRequestDTO);
 
+	//gắn với role_update
 	ResponseLeaveRequest changeStatusLeaveRequest(@RequestBody ResponseLeaveRequest responseLeaveRequeest);
 
+	//gắn với role create
 	LeaveRequestDTO update(LeaveRequestDTO leaveRequest);
 
 	LeaveRequestDTO delete(String id);

@@ -69,7 +69,7 @@ public class AuthAPI {
 
 		Optional<User> userOptional = userRepo.findByUsername(loginRequest.getUsername());
 		if (userOptional.isEmpty()) {
-			throw new BadRequestAlertException("Bad request: User not found.", ENTITY_NAME, "Not Found");
+			throw new BadRequestAlertException("Bad request: Not Found Email.", ENTITY_NAME, "Not Found");
 		}
 		
 

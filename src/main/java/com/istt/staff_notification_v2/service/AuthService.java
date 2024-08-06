@@ -116,7 +116,7 @@ class AuthServiceImpl implements AuthService {
 		try {
 
 			Authentication authentication = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), null));
+					.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),null));
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -125,12 +125,12 @@ class AuthServiceImpl implements AuthService {
 			
 			List<String> response = getOdooSession(loginRequest);
 			if (response == null)
-				throw new BadRequestAlertException("Bad request: response is null !!!", ENTITY_NAME, "Password wrong");
+				throw new BadRequestAlertException("Bad request: Password wrong!!!", ENTITY_NAME, "Password wrong");
 			String session_id = response.get(0);
 			Long expired = Long.valueOf(response.get(1));
 
 			if (session_id == null || session_id.isEmpty()) {
-				throw new BadRequestAlertException("Bad request: Not session_id !!!", ENTITY_NAME, "Password wrong");
+				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
 			}
 
 //			user.setAccessToken(accessToken);
