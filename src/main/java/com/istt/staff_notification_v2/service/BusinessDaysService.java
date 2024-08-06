@@ -33,6 +33,7 @@ import com.istt.staff_notification_v2.entity.BusinessDays;
 import com.istt.staff_notification_v2.entity.Employee;
 import com.istt.staff_notification_v2.repository.BusinessDaysRepo;
 import com.istt.staff_notification_v2.repository.EmployeeRepo;
+import com.istt.staff_notification_v2.repository.UserRepo;
 import com.istt.staff_notification_v2.utils.utils;
 
 public interface BusinessDaysService {
@@ -133,11 +134,15 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 				logger.error("Invalid TYPE BUSINESSDAYS");
 				throw new BadRequestAlertException("Invalid TYPE BUSINESSDAYS", ENTITY_NAME, "Invalid");
 			}
+			Employee employee = employeeRepo.findByEmail("nnkhanh@istt.com.vn");
+			logger.error("truoc khi tru phep"+employee.getCountOfDayOff());
 			//neu update lai type
 			if(!businessDaysDTO.getType().equals(businessDays.getType())) {
 				//neu update tu co luong sang khong luong thi tru ngay phep di
-				if(businessDaysDTO.getType().equals("K"))
+				if(businessDaysDTO.getType().equals("K")) {
 					employeeService.calListDayOff(1, false);
+					logger.error("sau khi tru phep"+employee.getCountOfDayOff());
+				}
 				//neu update tu khong luong sang co luong thi cong ngay phep vao
 				else employeeService.calListDayOff(1, true);
 			}

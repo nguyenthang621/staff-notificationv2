@@ -183,5 +183,12 @@ public class EmployeeAPI {
         return ResponseDTO.<List<EmployeeDependence>>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeService.getDE(employee.getEmployeeId()))
 				.build();
     }
+	
+	@PutMapping("/updateStaff")
+	public ResponseDTO<EmployeeDTO> updateStaff(@RequestBody @Valid EmployeeDTO employeeDTO) throws IOException {
+		return ResponseDTO.<EmployeeDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(employeeService.updateStaff(employeeDTO)).build();
+	}
+	
+	
 
 }

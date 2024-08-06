@@ -79,6 +79,8 @@ public interface EmployeeService {
 	EmployeeDTO getEmployeeByEmployeename(String employeename);
 
 	EmployeeDTO update(EmployeeDTO employeeDTO);
+	
+	EmployeeDTO updateStaff(EmployeeDTO employeeDTO);
 
 	Boolean delete(String id);
 
@@ -124,8 +126,6 @@ public interface EmployeeService {
 	
 	List<Employee> setLevelIfLevelNull();
 	List<EmployeeDTO> testLevel();
-	
-	List<EmployeeDTO> countOffMinus();
 
 }
 
@@ -327,14 +327,12 @@ class EmployeeServiceImpl implements EmployeeService {
 								"Invalid");
 				}
 			}
-
 			Set<LevelDTO> levels = new HashSet<LevelDTO>();
 			for (LevelDTO level : employeeDTO.getLevels()) {
 				levels.add(new ModelMapper().map(
 						levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new),
 						LevelDTO.class));
 			}
-
 			employeeDTO.setLevels(levels);
 			ModelMapper mapper = new ModelMapper();
 
@@ -926,16 +924,25 @@ class EmployeeServiceImpl implements EmployeeService {
 				logger.error(employee.getFullname()+"/"+ employee.getLevels().size());
 			}
 		}
-		System.err.println(employees2.size());
+//		System.err.println(employees2.size());
 		if(employees2.size()==0) return null;
 		return employees2.stream().map(em -> mapper.map(em, EmployeeDTO.class)).collect(Collectors.toList());
 	}
 
 
+	//service chỉ sửa các trường level, employeeDefendence, countofdayoff
+	@Transactional
 	@Override
-	public List<EmployeeDTO> countOffMinus() {
-		// TODO Auto-generated method stub
-		return null;
+	public EmployeeDTO updateStaff(EmployeeDTO employeeDTO) {
+		ModelMapper modelMapper = new ModelMapper();
+		Employee employee = employeeRepo.findById(employeeDTO.getEmployeeId()).orElseThrow(NoResultException::new);
+		employee.setEmployeeDependence(employeeDTO.getEmployeeDependence());
+		Set<Level> levels = employeeDTO.getLevels().stream().map(level -> modelMapper.map(level, Level.class))
+				.collect(Collectors.toSet());
+		employee.setLevels(levels);
+		employee.setCountOfDayOff(employeeDTO.getCountOfDayOff());
+		employeeRepo.save(employee);
+		return modelMapper.map(employee, EmployeeDTO.class);
 	}
 	
 	
