@@ -57,7 +57,6 @@ public interface GroupService {
 	GroupUserDTO getUser(String id);
 	GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO);
 	Boolean addAllRole(String username);
-	GroupDTO getMinGroupFromUser(String userId);
 }
 
 @Service
@@ -282,17 +281,6 @@ class GroupRoleServiceImpl implements GroupService{
 		group.getUsers().add(user);
 		groupRepo.save(group);
 		return true;
-	}
-	@Override
-	public GroupDTO getMinGroupFromUser(String userId) {
-		GroupDTO groupDTO = new GroupDTO();
-		User user = userRepo.findById(userId).orElseThrow(NoResultException::new);
-		if(user.getGroups().size()>0) {
-			Long min = getMaxGroupLevel(user);
-			Group group = groupRepo.findByGroupLevel(min).get();
-			return new ModelMapper().map(group, GroupDTO.class);
-		}
-		return groupDTO;
 	}
 	
 }

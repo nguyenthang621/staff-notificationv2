@@ -2381,3 +2381,34 @@ Identify and stop the process that's listening on port 5050 or configure this ap
 2024-08-07 15:58:15.421 ERROR Camilla --- [         task-1] c.i.s.s.MailServiceImpl                  : Email sent successful 
 2024-08-07 15:59:27.986 ERROR Camilla --- [nio-5050-exec-5] c.i.s.s.LeaveRequestServiceImpl          : mail start send
 2024-08-07 15:59:32.824 ERROR Camilla --- [         task-2] c.i.s.s.MailServiceImpl                  : Email sent successful 
+2024-08-07 16:07:50.580  INFO Camilla --- [kground-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 6.2.5.Final
+2024-08-07 16:07:50.623  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Starting StaffNotificationV2Application using Java 11.0.17 on Camilla with PID 3024 (D:\Eclipse\java\staff2\staff-notificationv2\target\classes started by admin in D:\Eclipse\java\staff2\staff-notificationv2)
+2024-08-07 16:07:50.627  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : No active profile set, falling back to 1 default profile: "default"
+2024-08-07 16:07:50.668  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-08-07 16:07:50.669  INFO Camilla --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-08-07 16:07:51.509  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-07 16:07:51.606  INFO Camilla --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 89 ms. Found 12 JPA repository interfaces.
+2024-08-07 16:07:52.531  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port(s): 5050 (http)
+2024-08-07 16:07:52.551  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-5050"]
+2024-08-07 16:07:52.554  INFO Camilla --- [  restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-08-07 16:07:52.554  INFO Camilla --- [  restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/9.0.78]
+2024-08-07 16:07:52.686  INFO Camilla --- [  restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-08-07 16:07:52.688  INFO Camilla --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2019 ms
+2024-08-07 16:07:52.909  WARN Camilla --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-08-07 16:07:52.973  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-08-07 16:07:53.195  INFO Camilla --- [  restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-08-07 16:07:53.244  INFO Camilla --- [  restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-07 16:07:53.290  INFO Camilla --- [  restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 5.6.15.Final
+2024-08-07 16:07:53.431  INFO Camilla --- [  restartedMain] o.h.a.c.Version                          : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-08-07 16:07:53.529  INFO Camilla --- [  restartedMain] o.h.d.Dialect                            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2024-08-07 16:07:54.498  INFO Camilla --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-08-07 16:07:54.508  INFO Camilla --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-07 16:07:55.980  INFO Camilla --- [  restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@27e8f23e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3e18cf89, org.springframework.security.web.context.SecurityContextPersistenceFilter@639554e0, org.springframework.security.web.header.HeaderWriterFilter@2f2c7a40, org.springframework.web.filter.CorsFilter@32cf15d4, org.springframework.security.web.authentication.logout.LogoutFilter@74c4e436, com.istt.staff_notification_v2.security.securityv2.JwtAuthenticationFilter@6ff4d549, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@421ef321, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7fa5d307, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@317422c0, org.springframework.security.web.session.SessionManagementFilter@189cd872, org.springframework.security.web.access.ExceptionTranslationFilter@119cad4a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5e3c3561]
+2024-08-07 16:07:57.229  INFO Camilla --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-08-07 16:07:57.259  INFO Camilla --- [  restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-5050"]
+2024-08-07 16:07:57.290  INFO Camilla --- [  restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat started on port(s): 5050 (http) with context path ''
+2024-08-07 16:07:57.302  INFO Camilla --- [  restartedMain] c.i.s.StaffNotificationV2Application     : Started StaffNotificationV2Application in 7.056 seconds (JVM running for 8.164)
+2024-08-07 16:08:04.994  INFO Camilla --- [nio-5050-exec-1] o.a.c.c.C.[.[.[/]                        : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-08-07 16:08:04.994  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Initializing Servlet 'dispatcherServlet'
+2024-08-07 16:08:04.996  INFO Camilla --- [nio-5050-exec-1] o.s.w.s.DispatcherServlet                : Completed initialization in 2 ms
+2024-08-07 16:08:18.886 ERROR Camilla --- [nio-5050-exec-5] c.i.s.s.LeaveRequestServiceImpl          : c3042e075f1d40c68559ab4a75e3b2b7
