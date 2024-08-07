@@ -1,6 +1,7 @@
 package com.istt.staff_notification_v2.service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -91,6 +92,8 @@ class BusinessDaysServiceImpl implements BusinessDaysService {
 	public BusinessDaysDTO create(BusinessDaysDTO businessDaysDTO) {
 		try {
 			int count=0;
+			if(businessDaysDTO.getStartdate().getYear()!= new Date().getYear()||businessDaysDTO.getEnddate().getYear()!= new Date().getYear())
+				throw new BadRequestAlertException("Only this year", ENTITY_NAME, "logic data");
 			BusinessDays businessDays = new ModelMapper().map(businessDaysDTO, BusinessDays.class);
 			businessDays.setBussinessdaysId(UUID.randomUUID().toString().replaceAll("-", ""));
 			if (!props.getTYPE_BUSINESSDAYS().contains(businessDaysDTO.getType())) {

@@ -63,7 +63,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, String> {
 	List<Employee> getAll();
 	
 	@Query("SELECT a from Employee a where a.jobTitle like :x")
-	List<Employee> filterLevel(@Param("x") String x);
+	List<Employee> findByJobTitle(@Param("x") String x);
 	
 	List<Employee> findByOrderByHiredateAsc();
 	

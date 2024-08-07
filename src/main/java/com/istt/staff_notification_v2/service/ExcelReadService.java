@@ -56,10 +56,10 @@ public class ExcelReadService {
             
             DataFormatter dataFormatter = new DataFormatter();
             for (Row row: sheet) {
+            	if(row.getCell(0).getStringCellValue().trim().toString().isEmpty()) break;
             	String name = row.getCell(0).getStringCellValue();
             	Long code = (long) row.getCell(1).getNumericCellValue();
             	String des =  row.getCell(2).getStringCellValue();
-            	
             	
             	Level level = new Level();
             	level.setLevelId(UUID.randomUUID().toString().replaceAll("-", ""));

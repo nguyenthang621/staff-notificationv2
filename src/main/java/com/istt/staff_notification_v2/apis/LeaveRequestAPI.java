@@ -65,7 +65,7 @@ public class LeaveRequestAPI {
 				.data(responseLeaveRequest).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("/getLeaveRequest")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest(@RequestBody SearchLeaveRequest searchLeaveRequest) {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))

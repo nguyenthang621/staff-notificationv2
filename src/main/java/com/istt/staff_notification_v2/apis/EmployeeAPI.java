@@ -145,7 +145,7 @@ public class EmployeeAPI {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE_VIEW')&&hasRole('ROLE_EMPLOYEE_ACCESS')")
 	@GetMapping("/getAll")
     public List<EmployeeDTO> getAll() {
-        return employeeService.getAll();
+        return employeeService.testLevel();
     }
 	
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE_UPDATE')&&hasRole('ROLE_EMPLOYEE_ACCESS')")

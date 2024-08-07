@@ -120,6 +120,8 @@ public interface EmployeeService {
 	
 	Boolean filterLevel();
 	
+	Level filterLevel(Employee employee);
+	
 	Boolean filterEmployeeDepend();
 	
 	List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId);
@@ -246,9 +248,10 @@ class EmployeeServiceImpl implements EmployeeService {
 
 			employee.setEmployeeId(UUID.randomUUID().toString().replaceAll("-", ""));
 			Set<Level> levels = new HashSet<Level>();
-			for (LevelDTO level : employeeDTO.getLevels()) {
-				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
-			}
+//			for (LevelDTO level : employeeDTO.getLevels()) {
+//				levels.add(levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new));
+//			}
+			levels.add(filterLevel(employee));
 			employee.setLevels(levels);
 
 			if (!props.getSTATUS_EMPLOYEE().contains(employee.getStatus())) {
@@ -327,19 +330,16 @@ class EmployeeServiceImpl implements EmployeeService {
 								"Invalid");
 				}
 			}
-			Set<LevelDTO> levels = new HashSet<LevelDTO>();
-			for (LevelDTO level : employeeDTO.getLevels()) {
-				levels.add(new ModelMapper().map(
-						levelRepo.findByLevelId(level.getLevelId()).orElseThrow(NoResultException::new),
-						LevelDTO.class));
-			}
-			employeeDTO.setLevels(levels);
+
 			ModelMapper mapper = new ModelMapper();
 
 			mapper.createTypeMap(EmployeeDTO.class, Employee.class).setProvider(p -> employeeRepo
 					.findByEmployeeId(employeeDTO.getEmployeeId()).orElseThrow(NoResultException::new));
 
 			Employee employee = mapper.map(employeeDTO, Employee.class);
+			Set<Level> levels = new HashSet<Level>();
+			levels.add(filterLevel(employee));
+			employee.setLevels(levels);
 			employee.setEmployeeId(employeeInDB.getEmployeeId());
 			employee.setParent(parnet);
 			employee.setStaffId(staff_id);
@@ -375,6 +375,9 @@ class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeDTO get(String id) {
 		try {
 			Employee employee = employeeRepo.findByEmployeeId(id).orElseThrow(NoResultException::new);
+			if (employee.getJobTitle().contains("thực tập")||employee.getJobTitle().contains("intern")) {
+				logger.error(employee.getJobTitle());
+			}
 			EmployeeDTO employeeDTO = new ModelMapper().map(employee, EmployeeDTO.class);
 			return employeeDTO;
 
@@ -773,7 +776,7 @@ class EmployeeServiceImpl implements EmployeeService {
 	public Employee calDayOff(String employeeId, float duration, boolean type) {
 		ModelMapper modelMapper = new ModelMapper();
 		Employee employee = employeeRepo.findById(employeeId).orElseThrow(NoResultException::new);
-		if (getMaxLevelCode(employee) == 0) {
+		if (employee.getJobTitle().contains("thực tập")||employee.getJobTitle().contains("intern")) {
 			return employee;
 		}
 		float count =0;
@@ -845,7 +848,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		for (Level level : allLevel) {
 			filterEmployeeByJobTitleLevel(level.getLevelId());
 		}
-		
+		setLevelIfLevelNull();
 		return true;
 	}
 	
@@ -854,20 +857,21 @@ class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> filterEmployeeByJobTitleLevel(String levelId) {
+		//tìm level
 		Level level = levelRepo.findById(levelId).orElseThrow(NoResultException::new);
 		List<Employee> employees = new ArrayList<Employee>();
-		employees = employeeRepo.filterLevel(level.getDescription());
-		if(employees.size()==0) {
-			employeeRepo.filterLevel("%"+level.getDescription()+"%");
-		}
 		
+		String[] jobTitles = level.getDescription().split(",");
+
+		for (String string : jobTitles) {
+			employees = employeeRepo.findByJobTitle(string.trim().toString());
+		}
 		if(employees.size()>0) {
 			for (Employee employee:employees) {
 				employee.getLevels().add(level);
 				employeeRepo.save(employee);
 			}
 		}
-		setLevelIfLevelNull();
 		return employees.stream()
 				.map(e -> new ModelMapper().map(e, EmployeeDTO.class)).collect(Collectors.toList());
 	}
@@ -905,10 +909,11 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employee> setLevelIfLevelNull() {
 		List<Employee> employees = employeeRepo.findAll();
-		Level level = levelRepo.findByLevelNameorDes("NV", "Nhân viên").orElseThrow(NoResultException::new);
+		Level level = levelRepo.findByLevelDes("NV").orElseThrow(NoResultException::new);
 		for (Employee employee : employees) {
 			if(employee.getLevels().size()==0) employee.getLevels().add(level);
 		}
+		employeeRepo.saveAll(employees);
 		return employees;
 	}
 
@@ -917,16 +922,18 @@ class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeDTO> testLevel() {
 		ModelMapper mapper = new ModelMapper();
 		List<Employee> employees = employeeRepo.findAll();
-		List<Employee> employees2 = new ArrayList<Employee>();
+//		List<Employee> employees2 = new ArrayList<Employee>();
 		for (Employee employee : employees) {
-			if(employee.getLevels().size()!= 1) {
-				employees2.add(employee);
-				logger.error(employee.getFullname()+"/"+ employee.getLevels().size());
+			String name = employee.getFullname();
+			for (Level level : employee.getLevels()) {
+				name +="/"+level.getLevelName();
 			}
+			logger.error(name);
 		}
 //		System.err.println(employees2.size());
-		if(employees2.size()==0) return null;
-		return employees2.stream().map(em -> mapper.map(em, EmployeeDTO.class)).collect(Collectors.toList());
+		
+//		if(employees2.size()==0) return null;
+		return employees.stream().map(em -> mapper.map(em, EmployeeDTO.class)).collect(Collectors.toList());
 	}
 
 
@@ -943,6 +950,17 @@ class EmployeeServiceImpl implements EmployeeService {
 		employee.setCountOfDayOff(employeeDTO.getCountOfDayOff());
 		employeeRepo.save(employee);
 		return modelMapper.map(employee, EmployeeDTO.class);
+	}
+
+
+	@Override
+	public Level filterLevel(Employee employee) {
+		List<Level> levels = levelRepo.findAll();
+		Level l = levelRepo.findByLevelDes("NV").orElseThrow(NoResultException::new);
+		for (Level level : levels) {
+			if(level.getDescription().contains(employee.getJobTitle())) return level;
+		}
+		return l;
 	}
 	
 	
