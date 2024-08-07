@@ -67,7 +67,7 @@ public class LeaveRequestAPI {
 				.build();
 	}
 	
-	@GetMapping("/test/{id}")
+	@GetMapping("/{id}")
 	public ResponseDTO<LeaveRequestDTO> get(@PathVariable(value = "id") String id){
 		if (id == null) {
 			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
