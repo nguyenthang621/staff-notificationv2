@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class LeaveRequestAPI {
 
 	private static final String ENTITY_NAME = "isttLeaveRequest";
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<MailRequestDTO> create(@RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
 		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
@@ -51,6 +52,27 @@ public class LeaveRequestAPI {
 		leaveRequestService.create(mailRequestDTO);
 		return ResponseDTO.<MailRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(mailRequestDTO)
 				.build();
+	}
+	
+	@PutMapping("")
+	public ResponseDTO<MailRequestDTO> update(@RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
+		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
+				|| mailRequestDTO.getLeaveRequestDTO().getReason() == null
+				|| mailRequestDTO.getLeaveRequestDTO().getLeavetype() == null
+				|| mailRequestDTO.getLeaveRequestDTO().getEmployee() == null) {
+			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
+		}
+		leaveRequestService.update(mailRequestDTO);
+		return ResponseDTO.<MailRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(mailRequestDTO)
+				.build();
+	}
+	
+	@GetMapping("/test/{id}")
+	public ResponseDTO<LeaveRequestDTO> get(@PathVariable(value = "id") String id){
+		if (id == null) {
+			throw new BadRequestAlertException("Bad request: missing id", ENTITY_NAME, "missing_id");
+		}
+		return ResponseDTO.<LeaveRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.get(id)).build();
 	}
 
 	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_UPDATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")

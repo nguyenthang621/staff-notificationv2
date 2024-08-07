@@ -63,8 +63,8 @@ public interface LeaveRequestService {
 	//gắn với role_update
 	ResponseLeaveRequest changeStatusLeaveRequest(@RequestBody ResponseLeaveRequest responseLeaveRequeest);
 
-	//gắn với role create
-	LeaveRequestDTO update(LeaveRequestDTO leaveRequest);
+//	LeaveRequestDTO create(LeaveRequestDTO leaveRequestDTO);
+	MailRequestDTO update(@RequestBody MailRequestDTO mailRequestDTO);
 
 	LeaveRequestDTO delete(String id);
 
@@ -216,11 +216,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	}
 
-	@Override
-	public LeaveRequestDTO update(LeaveRequestDTO leaveRequest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public LeaveRequestDTO delete(String id) {
@@ -230,8 +226,15 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Override
 	public LeaveRequestDTO get(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		ModelMapper mapper = new ModelMapper();
+		Optional<LeaveRequest> leaveOptional = leaveRequestRepo.findById(id);
+		if(leaveOptional.isEmpty()) {
+			throw new NoResultException();
+		}
+		LeaveRequestDTO leaveRequestDTO = mapper.map(leaveOptional.get(), LeaveRequestDTO.class);
+		logger.error(leaveRequestDTO.getLeaveqequestId());
+		return leaveRequestDTO;
+		
 	}
 
 	@Override
@@ -492,6 +495,76 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		ResponseDTO<List<LeaveAprroveDTO>> responseDTO = mapper.map(leaveRequestDTOs, ResponseDTO.class);
 		responseDTO.setData(leaveRequestDTOs);
 		return responseDTO;
+	}
+
+	@Override
+	public MailRequestDTO update(MailRequestDTO mailRequestDTO) {
+		try {
+			LeaveRequestDTO leaveRequestDTO = mailRequestDTO.getLeaveRequestDTO();
+			ModelMapper mapper = new ModelMapper();
+			if(leaveRequestRepo.findById(leaveRequestDTO.getLeaveqequestId()).isEmpty()) {
+				throw new BadRequestAlertException("Not Found LeaveRequest", ENTITY_NAME, "missing data");
+			}
+			LeaveRequest leaveRequest = mapper.map(leaveRequestDTO, LeaveRequest.class);
+			// Validate duration:
+			if (leaveRequestDTO.getDuration() <= 0.0 || leaveRequestDTO.getDuration() % 0.5 != 0.0)
+				throw new BadRequestAlertException("Bad request: Invalid duration", ENTITY_NAME, "Invalid");
+			
+			Date requestDate = new Date();
+			leaveRequest.setRequestDate(requestDate);
+			
+			// Validate employeeId in leaveRequest
+			if (leaveRequestDTO.getEmployee().getEmployeeId() == null)
+				throw new BadRequestAlertException("Bad request: Employee not found!", ENTITY_NAME, "Not Found!");
+
+			// map employee if true
+			Employee employee = employeeRepo.findByEmployeeId(leaveRequestDTO.getEmployee().getEmployeeId())
+					.orElseThrow(NoResultException::new);
+			leaveRequest.setEmployee(employee);
+
+			if (leaveRequestDTO.getLeavetype().getLeavetypeId() == null)
+				throw new BadRequestAlertException("Bad request: Missing LeaveTypeId", ENTITY_NAME, "Missing");
+			
+			leaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
+			
+			//valid receiver in dependences
+			
+			if(!employee.getEmployeeDependence().contains(mailRequestDTO.getRecceiverList().get(0).getEmployeeId())) {
+				throw new BadRequestAlertException("Bad request: Can only send to superior", ENTITY_NAME, "Invalid");
+			}
+			
+			// Valid only send to a employee
+			if (mailRequestDTO.getRecceiverList().size() != 1)
+				throw new BadRequestAlertException("Bad request: Can only be sent to 1 person", ENTITY_NAME, "Invalid");
+			leaveRequest.setReceiver(mailRequestDTO.getRecceiverList().get(0).getEmployeeId());
+			
+
+			// Get in receiver request
+			Optional<List<Employee>> employeeDependences = employeeRepo.findByEmployeeIds(mailRequestDTO
+					.getRecceiverList().stream().map(item -> item.getEmployeeId()).collect(Collectors.toList()));
+
+			if (employeeDependences.isEmpty())
+				throw new BadRequestAlertException("Bad request: Not found employee dependence in employee` department",
+						ENTITY_NAME, "Not found");
+			
+			
+			MailRequestDTO mailRequestEachEmployee = new MailRequestDTO();
+			mailRequestEachEmployee.setLeaveRequestDTO(leaveRequestDTO);
+			mailRequestEachEmployee.setRecceiverList(employeeDependences.get().stream()
+					.map(item -> new ModelMapper().map(item, EmployeeDTO.class)).collect(Collectors.toList()));
+			mailRequestEachEmployee.setSubject(mailRequestDTO.getSubject());
+
+			// Excute send mail
+			if (!sendNotification(mailRequestEachEmployee))
+				throw Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR).withDetail("ERROR SEND MAIL").build();
+			// Commit leaveRequest
+			leaveRequestRepo.save(leaveRequest);
+			return mailRequestDTO;
+		} catch (ResourceAccessException e) {
+			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
+		} catch (HttpServerErrorException | HttpClientErrorException e) {
+			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
+		}
 	}
 
 }

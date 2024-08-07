@@ -794,6 +794,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> employees = employeeRepo.getByEmployeeStatus("ACTIVE").get();
 		if(employees.size()>0) {
 			for (Employee employee : employees) {
+				logger.error(employee.getFullname()+ employee.getEmployeeId());
 				calDayOff(employee.getEmployeeId(), duration, type);
 			}
 		}
