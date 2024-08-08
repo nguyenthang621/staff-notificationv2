@@ -329,13 +329,14 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	@Override
 	public List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
+		List<LeaveRequestDTO> leaves = new ArrayList<LeaveRequestDTO>();
 		try {
 			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null
 					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
 				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findEmail(searchLeaveRequest.getEmail());
 				if (resultOp.isEmpty())
 					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
+				leaves = resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 						.collect(Collectors.toList());
 
 			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
@@ -393,6 +394,17 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 				return new ArrayList<>();
 			return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
 					.collect(Collectors.toList());
+			}
+//			logger.error("leave:"+leaves.size());
+			if(leaves.size()>0) {
+				for (int i = 0; i < leaves.size(); i++) {
+					LeaveRequestDTO leaveDto = leaves.get(i);
+					logger.error(leaveDto.getReceiver());
+					Employee employee = employeeRepo.findByEmployeeId(leaveDto.getReceiver()).get();
+					leaveDto.setReceiver(employee.getFullname());
+					leaves.set(i, leaveDto);
+				}
+				return leaves;
 			}
 			return new ArrayList<>();
 

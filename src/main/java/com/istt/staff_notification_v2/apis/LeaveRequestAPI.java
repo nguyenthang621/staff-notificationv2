@@ -75,7 +75,7 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<LeaveRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(leaveRequestService.get(id)).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_UPDATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_UPDATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("/changeStatusLeaveRequest")
 	public ResponseDTO<ResponseLeaveRequest> changeStatusLeaveRequest(
 			@RequestBody ResponseLeaveRequest responseLeaveRequest) throws URISyntaxException {
@@ -93,25 +93,20 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
-//	@PostMapping("/test")
-//	public ResponseDTO<List<LeaveRequestDTO>> test(@RequestBody SearchLeaveRequest searchLeaveRequest) {
-//		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-//				.data(leaveRequestService.test(searchLeaveRequest.getStatus())).build();
-//	}
 	
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("/getLeaveThisMonth")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(@RequestBody @Valid SearchDTO searchDTO) {
 		return leaveRequestService.getLeaveThisMonth(searchDTO);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@GetMapping("/getAllLeaveThisMonth")
 	public ResponseDTO<List<LeaveRequestDTO>> getAllLeaveThisMonth() {
 		return leaveRequestService.getAllLeaveThisMonth();
 	}
 	
-	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@GetMapping("")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
 		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
@@ -121,4 +116,8 @@ public class LeaveRequestAPI {
 		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
 				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
 	}
+	
+//	@GetMapping("/leave_history")
+//	public ResponseDTO<List<LeaveRequestDTO>> getMyLeave
+	
 }

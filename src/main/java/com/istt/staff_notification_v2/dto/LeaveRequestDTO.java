@@ -39,5 +39,7 @@ public class LeaveRequestDTO {
 	private Date responseDate;
 	
 	private String placeOff;
+	
+//	private String receiverName;
 
 }
