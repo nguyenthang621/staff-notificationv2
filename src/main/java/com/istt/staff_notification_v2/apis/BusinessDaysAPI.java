@@ -103,7 +103,7 @@ public class BusinessDaysAPI {
 //		logger.info("Create by" + currentuser.getUsername());
 		return businessDaysService.searchByType(searchDTO);
 	}
-	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_VIEW')&&hasRole('ROLE_BUSINESSDAYS_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_BUSINESSDAYS_VIEW')&&hasRole('ROLE_BUSINESSDAYS_ACCESS')")
 	@PostMapping("/search")
 	public ResponseDTO<List<BusinessDaysDTO>> search(@RequestBody @Valid SearchAttendence searchDTO) {
 //		logger.info("Create by"+ currentuser.getUsername());

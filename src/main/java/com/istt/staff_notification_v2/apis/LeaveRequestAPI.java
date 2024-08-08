@@ -42,13 +42,16 @@ public class LeaveRequestAPI {
 
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_CREATE')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("")
-	public ResponseDTO<MailRequestDTO> create(@RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
+	public ResponseDTO<MailRequestDTO> create(@CurrentUser UserPrincipal currentuser, @RequestBody MailRequestDTO mailRequestDTO) throws URISyntaxException {
 		if (mailRequestDTO.getLeaveRequestDTO().getRequestDate() == null
 				|| mailRequestDTO.getLeaveRequestDTO().getReason() == null
 				|| mailRequestDTO.getLeaveRequestDTO().getLeavetype() == null
 				|| mailRequestDTO.getLeaveRequestDTO().getEmployee() == null) {
 			throw new BadRequestAlertException("Bad request: missing data", ENTITY_NAME, "missing_level");
 		}
+		User user = userRepo.findById(currentuser.getUser_id()).get();
+		if(!mailRequestDTO.getLeaveRequestDTO().getEmployee().getEmployeeId().equals(user.getEmployee().getEmployeeId()))
+			throw new BadRequestAlertException("You can only send your leave request", ENTITY_NAME, "missing data");
 		leaveRequestService.create(mailRequestDTO);
 		return ResponseDTO.<MailRequestDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(mailRequestDTO)
 				.build();
