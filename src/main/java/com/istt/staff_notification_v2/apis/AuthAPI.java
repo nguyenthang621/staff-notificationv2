@@ -69,7 +69,7 @@ public class AuthAPI {
 
 		Optional<User> userOptional = userRepo.findByUsername(loginRequest.getUsername());
 		if (userOptional.isEmpty()) {
-			throw new BadRequestAlertException("Đăng nhập thất bại", ENTITY_NAME, "missing data");
+			throw new BadRequestAlertException("Login Failed!!!", ENTITY_NAME, "missing data");
 		}
 		
 
