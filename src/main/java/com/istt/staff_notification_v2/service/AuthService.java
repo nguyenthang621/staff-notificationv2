@@ -125,15 +125,14 @@ class AuthServiceImpl implements AuthService {
 			
 			List<String> response = getOdooSession(loginRequest);
 			if (response == null)
-				throw new BadRequestAlertException("Bad request: Password wrong!!!", ENTITY_NAME, "Password wrong");
+				throw new BadRequestAlertException("Login Failed!!!", ENTITY_NAME, "missing data");
 			String session_id = response.get(0);
 			Long expired = Long.valueOf(response.get(1));
 
 			if (session_id == null || session_id.isEmpty()) {
-				throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
+				throw new BadRequestAlertException("Login Failed!!!", ENTITY_NAME, "missing data");
 			}
 
-//			user.setAccessToken(accessToken);
 			user.setRefreshToken(refreshToken);
 			user.setSessionId(session_id);
 			
@@ -141,8 +140,6 @@ class AuthServiceImpl implements AuthService {
 
 			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
 					.sessionId(session_id).refreshToken(refreshToken).build();
-//			return ResponseDTO.<String>builder().code(String.valueOf(HttpStatus.OK.value())).accessToken(accessToken)
-//					.refreshToken(refreshToken).build();
 
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();

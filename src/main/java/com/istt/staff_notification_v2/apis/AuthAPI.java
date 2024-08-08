@@ -69,22 +69,12 @@ public class AuthAPI {
 
 		Optional<User> userOptional = userRepo.findByUsername(loginRequest.getUsername());
 		if (userOptional.isEmpty()) {
-			throw new BadRequestAlertException("Bad request: Not Found Email.", ENTITY_NAME, "Not Found");
+			throw new BadRequestAlertException("Đăng nhập thất bại", ENTITY_NAME, "missing data");
 		}
 		
 
 		User user = userOptional.get();
-
-//		Set<Role> roles = user.getGroupRole().getRoles();
-//		for (Role role : roles) {
-//			System.err.println(role.getRole());
-//		}
 		
-//		System.err.println(user.getGroupRole().getRoles().toString());
-		
-//		Boolean compare_password = BCrypt.checkpw(loginRequest.getPassword(), user.getPassword());
-//		if (!compare_password)
-//			throw new BadRequestAlertException("Bad request: Password wrong !!!", ENTITY_NAME, "Password wrong");
 		return authService.signin(loginRequest, user);
 
 	}

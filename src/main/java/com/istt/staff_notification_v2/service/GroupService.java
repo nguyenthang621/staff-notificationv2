@@ -57,6 +57,7 @@ public interface GroupService {
 	GroupUserDTO getUser(String id);
 	GroupUserDTO addUserToGroup(GroupUserDTO groupUserDTO);
 	Boolean addAllRole(String username);
+//	GroupDTO getMinGroupFromUser(String userId);
 }
 
 @Service
@@ -84,15 +85,15 @@ class GroupRoleServiceImpl implements GroupService{
 	private static final String ENTITY_NAME = "isttGroupRole";
 	private static final Logger logger = LogManager.getLogger(GroupService.class);
 	
-	private static Long getMaxGroupLevel(User user) {
-		ModelMapper mapper = new ModelMapper();
-		Long min = Long.MIN_VALUE;
-		List<GroupDTO> groupDTOs = user.getGroups().stream().map(group -> mapper.map(group, GroupDTO.class)).collect(Collectors.toList());
-		for (GroupDTO groupDTO : groupDTOs) {
-			if(min < groupDTO.getGroupLevel()) min = groupDTO.getGroupLevel();
-		}
-		return min;
-	}
+//	private static Long getMaxGroupLevel(User user) {
+//		ModelMapper mapper = new ModelMapper();
+//		Long min = Long.MIN_VALUE;
+//		List<GroupDTO> groupDTOs = user.getGroups().stream().map(group -> mapper.map(group, GroupDTO.class)).collect(Collectors.toList());
+//		for (GroupDTO groupDTO : groupDTOs) {
+//			if(min < groupDTO.getGroupLevel()) min = groupDTO.getGroupLevel();
+//		}
+//		return min;
+//	}
 	
 	@Override
 	public List<GroupDTO> getAll() {
@@ -282,5 +283,16 @@ class GroupRoleServiceImpl implements GroupService{
 		groupRepo.save(group);
 		return true;
 	}
+//	@Override
+//	public GroupDTO getMinGroupFromUser(String userId) {
+//		GroupDTO groupDTO = new GroupDTO();
+//		User user = userRepo.findById(userId).orElseThrow(NoResultException::new);
+//		if(user.getGroups().size()>0) {
+//			Long min = getMaxGroupLevel(user);
+//			Group group = groupRepo.findByGroupLevel(min).get();
+//			return new ModelMapper().map(group, GroupDTO.class);
+//		}
+//		return groupDTO;
+//	}
 	
 }
