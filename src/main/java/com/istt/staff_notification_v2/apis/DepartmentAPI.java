@@ -32,7 +32,7 @@ public class DepartmentAPI {
 
 	private static final String ENTITY_NAME = "isttDepartment";
 
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_CREATE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_CREATE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@PostMapping("")
 	public ResponseDTO<DepartmentDTO> create(@RequestBody @Valid DepartmentDTO departmentDTO)
 			throws URISyntaxException {
@@ -43,7 +43,7 @@ public class DepartmentAPI {
 		return ResponseDTO.<DepartmentDTO>builder().code(String.valueOf(HttpStatus.OK.value())).data(departmentDTO)
 				.build();
 	}
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@DeleteMapping("/{id}")
 	public ResponseDTO<Void> delete(@PathVariable(value = "id") String id) throws URISyntaxException {
 		if (id == null) {
@@ -53,13 +53,13 @@ public class DepartmentAPI {
 		return ResponseDTO.<Void>builder().code(String.valueOf(HttpStatus.OK.value())).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_VIEW')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_VIEW')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@PostMapping("/search")
 	public ResponseDTO<List<DepartmentDTO>> search(@RequestBody @Valid SearchDTO searchDTO) {
 		return departmentService.search(searchDTO);
 	}
 
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_DELETE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@DeleteMapping("/ids")
 	public ResponseDTO<List<String>> deletebyListId(@RequestBody @Valid List<String> ids) throws URISyntaxException {
 
@@ -70,7 +70,7 @@ public class DepartmentAPI {
 		return ResponseDTO.<List<String>>builder().code(String.valueOf(HttpStatus.OK.value())).data(ids).build();
 	}
 
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_UPDATE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_UPDATE')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@PutMapping("/")
 	public ResponseDTO<DepartmentDTO> update(@RequestBody @Valid DepartmentDTO departmentDTO) throws IOException {
 		departmentService.update(departmentDTO);
@@ -79,7 +79,7 @@ public class DepartmentAPI {
 
 	}
 
-	@PreAuthorize("hasRole('ROLE_DEPARTMENT_VIEW')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
+//	@PreAuthorize("hasRole('ROLE_DEPARTMENT_VIEW')&&hasRole('ROLE_DEPARTMENT_ACCESS')")
 	@GetMapping("/all")
 	public ResponseDTO<List<DepartmentDTO>> getAll() throws IOException {
 		return ResponseDTO.<List<DepartmentDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))

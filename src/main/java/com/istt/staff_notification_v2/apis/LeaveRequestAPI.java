@@ -93,8 +93,7 @@ public class LeaveRequestAPI {
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
 	@PostMapping("/getLeaveRequest")
 	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest(@RequestBody SearchLeaveRequest searchLeaveRequest) {
-		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
+		return leaveRequestService.searchLeaveRequest(searchLeaveRequest);
 	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
@@ -110,17 +109,23 @@ public class LeaveRequestAPI {
 	}
 	
 //	@PreAuthorize("hasRole('ROLE_LEAVEREQUEST_VIEW')&&hasRole('ROLE_LEAVEREQUEST_ACCESS')")
-	@GetMapping("")
-	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
-		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
-		SearchLeaveRequest searchLeaveRequest = new SearchLeaveRequest();
-		User user = userRepo.findById(currentuser.getUser_id()).get();
-		searchLeaveRequest.setMailReciver(user.getEmployee().getEmployeeId());
-		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
-				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
-	}
+//	@GetMapping("")
+//	public ResponseDTO<List<LeaveRequestDTO>> getLeaveRequest2(@CurrentUser UserPrincipal currentuser) {
+//		if(currentuser==null) throw new BadRequestAlertException("User not found", ENTITY_NAME,"missing data");
+//		SearchLeaveRequest searchLeaveRequest = new SearchLeaveRequest();
+//		User user = userRepo.findById(currentuser.getUser_id()).get();
+//		searchLeaveRequest.setMailReciver(user.getEmployee().getEmployeeId());
+//		return ResponseDTO.<List<LeaveRequestDTO>>builder().code(String.valueOf(HttpStatus.OK.value()))
+//				.data(leaveRequestService.searchLeaveRequest(searchLeaveRequest)).build();
+//	}
 	
-//	@GetMapping("/leave_history")
-//	public ResponseDTO<List<LeaveRequestDTO>> getMyLeave
+	@PostMapping("/getLeaveHistory")
+	public ResponseDTO<List<LeaveRequestDTO>> getLeaveHistory(@CurrentUser UserPrincipal currentuser,SearchLeaveRequest searchLeaveRequest) {
+		if(currentuser == null) {
+			throw new BadRequestAlertException("Missing id", ENTITY_NAME, "missing data");
+		}
+		searchLeaveRequest.setEmail(currentuser.getUsername());
+		return leaveRequestService.searchLeaveRequest(searchLeaveRequest);
+	}
 	
 }

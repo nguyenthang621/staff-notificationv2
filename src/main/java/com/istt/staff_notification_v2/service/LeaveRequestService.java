@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -71,9 +72,10 @@ public interface LeaveRequestService {
 	LeaveRequestDTO get(String id);
 	
 	ResponseDTO<List<LeaveRequestDTO>> getLeaveThisMonth(SearchDTO searchDTO);
+	
 	ResponseDTO<List<LeaveRequestDTO>> getAllLeaveThisMonth();
 	
-	List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
+	ResponseDTO<List<LeaveRequestDTO>> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest);
 
 	Set<EmployeeLeaveDTO> getApproved(String email);
 	
@@ -134,6 +136,14 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	public MailRequestDTO create(@RequestBody MailRequestDTO mailRequestDTO) {
 		try {
 
+			DateRange dateRange= utils.getDate(new Date());
+			Optional<List<LeaveRequest>> leaveOp = leaveRequestRepo.findByReqDateAndEmployeeId(
+					mailRequestDTO.getLeaveRequestDTO().getEmployee().getEmployeeId(),
+					dateRange.getStartDate(), 
+					dateRange.getEndDate());
+			if(leaveOp.isPresent()&&leaveOp.get().size()>3) {
+				throw new BadRequestAlertException("You can send 10 leaves/day", ENTITY_NAME, "Spam");
+			}
 			LeaveRequestDTO leaveRequestDTO = mailRequestDTO.getLeaveRequestDTO();
 			ModelMapper mapper = new ModelMapper();
 			LeaveRequest leaveRequest = mapper.map(leaveRequestDTO, LeaveRequest.class);
@@ -328,91 +338,62 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public List<LeaveRequestDTO> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
-		List<LeaveRequestDTO> leaves = new ArrayList<LeaveRequestDTO>();
+	public ResponseDTO<List<LeaveRequestDTO>> searchLeaveRequest(SearchLeaveRequest searchLeaveRequest) {
 		try {
-			if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null
-					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findEmail(searchLeaveRequest.getEmail());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				leaves = resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
+				ModelMapper mapper = new ModelMapper();
+				Pageable pageable = PageRequest.of(searchLeaveRequest.getPage(), searchLeaveRequest.getSize());
+				Page<LeaveRequest> page = new PageImpl<>(Collections.emptyList());
+				if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() == null
+						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
+					page = leaveRequestRepo.findEmail(searchLeaveRequest.getEmail(), pageable);
+				} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
+						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
+					page = leaveRequestRepo
+							.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus(), pageable);
+					
+				} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
+						&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getMailReciver() == null) {
+					page = leaveRequestRepo.find(searchLeaveRequest.getEmail(),
+							searchLeaveRequest.getStatus(), searchLeaveRequest.getStartDate(), pageable);
 
-			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo
-						.findEmailAndStatus(searchLeaveRequest.getEmail(), searchLeaveRequest.getStatus());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
-
-			} else if (searchLeaveRequest.getEmail() != null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getMailReciver() == null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.find(searchLeaveRequest.getEmail(),
-						searchLeaveRequest.getStatus(), searchLeaveRequest.getStartDate());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
-
-			} else if (searchLeaveRequest.getEmail() == null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByStatusOrderByResponseDateDesc(searchLeaveRequest.getStatus());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
-
-			} else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() != null
-					&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getEmail() != null) {
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiver(
-						searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus(),
-						searchLeaveRequest.getStartDate());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
-			}
-			else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
+				} else if (searchLeaveRequest.getEmail() == null && searchLeaveRequest.getStatus() != null
+						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getMailReciver() == null) {
+					page = leaveRequestRepo.findByStatusOrderByResponseDateDesc(searchLeaveRequest.getStatus(), pageable);
+					
+				} else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() != null
+						&& searchLeaveRequest.getStartDate() != null && searchLeaveRequest.getEmail() != null) {
+					page = leaveRequestRepo.findByReceiver(
+							searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus(),
+							searchLeaveRequest.getStartDate(), pageable);
+				}else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
 						&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEmail() == null) {
+					Employee employee = employeeRepo.findByEmail(searchLeaveRequest.getMailReciver());
+					logger.error(employee.getEmail()+"/"+ employee.getFullname());
 					searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
-					Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiverStatus(
-							searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus());
-				if (resultOp.isEmpty())
-					return new ArrayList<>();
-				return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-						.collect(Collectors.toList());
-			}
-			else if (searchLeaveRequest.getMailReciver() != null && searchLeaveRequest.getStatus() == null
-					&& searchLeaveRequest.getStartDate() == null && searchLeaveRequest.getEmail() == null) {
-				searchLeaveRequest.setStatus(props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal()));
-				Optional<List<LeaveRequest>> resultOp = leaveRequestRepo.findByReceiverStatus(
-						searchLeaveRequest.getMailReciver(), searchLeaveRequest.getStatus());
-			if (resultOp.isEmpty())
-				return new ArrayList<>();
-			return resultOp.get().stream().map(l -> new ModelMapper().map(l, LeaveRequestDTO.class))
-					.collect(Collectors.toList());
-			}
-//			logger.error("leave:"+leaves.size());
-			if(leaves.size()>0) {
-				for (int i = 0; i < leaves.size(); i++) {
-					LeaveRequestDTO leaveDto = leaves.get(i);
-					logger.error(leaveDto.getReceiver());
-					Employee employee = employeeRepo.findByEmployeeId(leaveDto.getReceiver()).get();
-					leaveDto.setReceiver(employee.getFullname());
-					leaves.set(i, leaveDto);
+					page = leaveRequestRepo.findByReceiverStatus(
+							employee.getEmployeeId(), searchLeaveRequest.getStatus(), pageable);
+				
 				}
-				return leaves;
-			}
-			return new ArrayList<>();
-
+				List<LeaveRequestDTO> leaveRequestDTOs = new ArrayList<>();
+				if(!page.getContent().isEmpty()) {
+					leaveRequestDTOs = page.getContent().stream().map(leave-> mapper.map(leave, LeaveRequestDTO.class)).collect(Collectors.toList());
+					for (int i = 0; i < leaveRequestDTOs.size(); i++) {
+						LeaveRequestDTO leaveDto = leaveRequestDTOs.get(i);
+						logger.error(leaveDto.getReceiver());
+						Employee employee = employeeRepo.findByEmployeeId(leaveDto.getReceiver()).get();
+						leaveDto.setReceiver(employee.getFullname());
+						leaveRequestDTOs.set(i, leaveDto);
+					}
+				}
+				ResponseDTO<List<LeaveRequestDTO>> responseDTO = mapper.map(page, ResponseDTO.class);
+				responseDTO.setData(leaveRequestDTOs);
+				return responseDTO;
 		} catch (ResourceAccessException e) {
 			throw Problem.builder().withStatus(Status.EXPECTATION_FAILED).withDetail("ResourceAccessException").build();
 		} catch (HttpServerErrorException | HttpClientErrorException e) {
 			throw Problem.builder().withStatus(Status.SERVICE_UNAVAILABLE).withDetail("SERVICE_UNAVAILABLE").build();
 		}
+			
 	}
 
 
@@ -422,7 +403,7 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		Set<EmployeeLeaveDTO> employeeLeaveDTOs = new HashSet<EmployeeLeaveDTO>();
 		if(employee==null) throw new BadRequestAlertException("not found employee", ENTITY_NAME, "missing data");
 		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.WAITING.ordinal());
-		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverStatus(employee.getEmployeeId(), status);
+		Optional<List<LeaveRequest>> listOp = leaveRequestRepo.findByReceiverandStatus(employee.getEmployeeId(), status);
 		if(listOp.isEmpty()) return null;
 		
 		for (LeaveRequest leaveRequest : listOp.get()) {
@@ -491,7 +472,6 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		DateRange dateRange = utils.getDate(new Date());
 		String status = props.getSTATUS_LEAVER_REQUEST().get(StatusLeaveRequestRef.APPROVED.ordinal());
 		Optional<List<LeaveRequest>> leaveOptional = leaveRequestRepo.findByResponsedate(dateRange.getStartDate(), dateRange.getEndDate(), status);
-//		logger.error(dateRange);
 		if(leaveOptional.isPresent()) {
 			for (LeaveRequest leaveRequest : leaveOptional.get()) {
 				LeaveAprroveDTO leaveAprroveDTO = new LeaveAprroveDTO();
@@ -579,4 +559,5 @@ class LeaveRequestServiceImpl implements LeaveRequestService {
 		}
 	}
 
+	
 }

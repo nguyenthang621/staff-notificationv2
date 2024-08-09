@@ -30,8 +30,6 @@ public class LeaveRequestDTO {
 	
 	private String leavePlace;
 
-	// @JsonFormat(pattern = "dd/MM/yyyy")
-	// @DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date startDate;
 
 	private String receiver;
@@ -41,5 +39,6 @@ public class LeaveRequestDTO {
 	private String placeOff;
 	
 //	private String receiverName;
+	
 
 }
